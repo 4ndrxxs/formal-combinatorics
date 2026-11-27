@@ -218,7 +218,7 @@ def sources():
 def verify(project, directory, jobs):
     lake = shutil.which("lake") or str(Path.home() / ".elan/bin" / ("lake.exe" if os.name == "nt" else "lake"))
     subprocess.run([lake, "build", MODULE, "Quantum.Hadamard.ProjectiveSplitComparison", "Quantum.Hadamard.ProjectiveNonsplitTorus",
-                    "Quantum.Hadamard.LinPhoaSourceArray"], cwd=project, check=True, stdout=subprocess.DEVNULL)
+                    "Quantum.Hadamard.LinPhoaCharacterProduct"], cwd=project, check=True, stdout=subprocess.DEVNULL)
     command = [lake, "env", sys.executable, "-c", "import json,os;print(json.dumps(dict(os.environ)))"]
     env = json.loads(subprocess.check_output(command, cwd=project, text=True))
     with TemporaryDirectory(prefix="lean-field-models-") as temporary:
@@ -248,7 +248,7 @@ def verify(project, directory, jobs):
                             "Hadamard.NonsplitTorus.every_field_torus"}
             elif name == "PaleyLinPhoa":
                 expected = {"Hadamard.LinPhoa." + s for s in ("source_array_det", "source_array_four_fifths",
-                                                               "every_field_source_array")}
+                                                               "every_field_source_array", "two_jacobi_bounds")}
             else:
                 raise ValueError("Unrecognized certificate module " + name)
             allowed = {"propext", "Classical.choice", "Quot.sound"}

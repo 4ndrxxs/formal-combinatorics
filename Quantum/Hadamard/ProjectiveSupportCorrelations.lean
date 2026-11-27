@@ -146,11 +146,9 @@ theorem incidence_gram {w y z : F} (hc : ringChar F≠2) (q4 : Fintype.card F%4=
 #print axioms incidence_gram
 
 
-/-- The row sums of the two signed incidence sequences. The second signed
-sequence is balanced for each choice of its cyclotomic class. -/
-theorem incidence_sums {w : F} (hc : ringChar F≠2) (q4 : Fintype.card F%4=1)
-    (hw : quadraticChar F w= -1) (i j : Bool) :
-    sumSquares (incidence (1:F) i) = -1-cosetSign i ∧ sumSquares (incidence w j)=0 := by
+/-- The trivial Fourier coefficient of the quadratic difference kernel on squares. -/
+theorem square_shift_sum (hc : ringChar F≠2) (q4 : Fintype.card F%4=1) :
+    sumSquares (fun x : F ↦ quadraticChar F (x-1))= -1 := by
   let χ := quadraticChar F
   have minus : χ (-1)=1 :=
     (quadraticChar_one_iff_isSquare (neg_ne_zero.mpr one_ne_zero)).mpr
@@ -169,10 +167,23 @@ theorem incidence_sums {w : F} (hc : ringChar F≠2) (q4 : Fintype.card F%4=1)
       ring
   have weighted := sum_congr (s₁:=univ) rfl (fun x _ ↦ term x)
   simp only [sum_sub_distrib,sum_add_distrib,←mul_sum,corr,shifted,add_zero] at weighted
-  have direct : sumSquares (fun x : F ↦ χ (x-1))= -1 := by
-    change (∑ x : F, if χ x=1 then χ (x-1) else 0)= -1
-    simp at weighted
-    omega
+  change (∑ x : F, if χ x=1 then χ (x-1) else 0)= -1
+  simp at weighted
+  omega
+
+/-- The row sums of the two signed incidence sequences. The second signed
+sequence is balanced for each choice of its cyclotomic class. -/
+theorem incidence_sums {w : F} (hc : ringChar F≠2) (q4 : Fintype.card F%4=1)
+    (hw : quadraticChar F w= -1) (i j : Bool) :
+    sumSquares (incidence (1:F) i) = -1-cosetSign i ∧ sumSquares (incidence w j)=0 := by
+  let χ := quadraticChar F
+  have minus : χ (-1)=1 :=
+    (quadraticChar_one_iff_isSquare (neg_ne_zero.mpr one_ne_zero)).mpr
+      (FiniteField.isSquare_neg_one_iff.mpr (by omega))
+  have shifted : ∑ x : F, χ (x-1)=0 :=
+    ((Equiv.subRight (1:F)).sum_comp χ).trans (quadraticChar_sum_zero hc)
+  have direct := square_shift_sum hc q4
+  change sumSquares (fun x : F ↦ χ (x-1))= -1 at direct
   have rest := sum_split hw (fun x : F ↦ χ (x-1))
   simp only [direct,shifted,zero_sub,minus] at rest
   have wn : w≠0 := by intro eq; subst w; simp at hw
@@ -207,6 +218,7 @@ theorem incidence_sums {w : F} (hc : ringChar F≠2) (q4 : Fintype.card F%4=1)
     change (∑ x : F, if χ x=1 then incidence w j x else 0)=_
     rw [s,total,mul_zero]
 
+#print axioms square_shift_sum
 #print axioms incidence_sums
 
 end Hadamard.MSXCore

@@ -36,7 +36,7 @@ def main():
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion',
         'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations', 'ProjectiveSplitComparison',
-        'ProjectiveNonsplitTorus', 'LinPhoaSourceArray', 'LinPhoaJacobi')]
+        'ProjectiveNonsplitTorus', 'LinPhoaSourceArray', 'LinPhoaJacobi', 'LinPhoaCharacterProduct')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -62,7 +62,8 @@ def main():
                 expected = ['Hadamard.NearBorder.' + name for name in
                             ('abs_det_of_border_blocks', 'bordering_rigidity', 'two_circulant_borders')]
             if rel.name == 'ProjectiveSupportCorrelations.lean':
-                expected = ['Hadamard.MSXCore.incidence_gram', 'Hadamard.MSXCore.incidence_sums']
+                expected = ['Hadamard.MSXCore.incidence_gram', 'Hadamard.MSXCore.incidence_sums',
+                            'Hadamard.MSXCore.square_shift_sum']
             if rel.name == 'ProjectiveSplitComparison.lean':
                 expected = ['Hadamard.MSXCore.' + name for name in ('reference_gram', 'compare_incidence_border',
                             'source_layout_gram', 'compare_source_layout', 'source_pair_sums', 'exists_square_enumeration')]
@@ -75,6 +76,10 @@ def main():
             if rel.name == 'LinPhoaJacobi.lean':
                 expected = ['Hadamard.LinPhoa.' + name for name in ('square_fourier_jacobi', 'difference_character',
                             'bulk_character_entry', 'bulk_jacobi_mode', 'full_jacobi_mode', 'constant_action', 'constant_det')]
+            if rel.name == 'LinPhoaCharacterProduct.lean':
+                expected = ['Hadamard.LinPhoa.' + name for name in ('det_in_characters', 'cyclic_difference',
+                            'bulk_character_product', 'scalar_border_det', 'core_det_ratio', 'array_character_product',
+                            'exists_character_lift', 'array_jacobi_product', 'exists_jacobi_products')]
             if expected:
                 compact = ' '.join(out.stdout.split())
                 for theorem in expected:

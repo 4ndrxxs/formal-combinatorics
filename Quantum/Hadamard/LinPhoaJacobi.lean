@@ -39,7 +39,7 @@ theorem square_fourier_jacobi (q4 : Fintype.card F%4=1) (ψ : MulChar F ℂ) :
 
 variable {m : ℕ} [NeZero m]
 
-private theorem enum_add (e : Fin m ≃ SquareIndex F)
+theorem enum_add (e : Fin m ≃ SquareIndex F)
     (cyc : ∀ k l, (e (k-l)).val=(e k).val/(e l).val) (t k : Fin m) :
     (e (t+k)).val=(e t).val*(e k).val := by
   have nz : (e k).val≠0 := by intro h; have z := (e k).property; rw [h] at z; norm_num at z
@@ -48,7 +48,7 @@ private theorem enum_add (e : Fin m ≃ SquareIndex F)
   exact ((eq_div_iff nz).mp h).symm
 
 omit [NeZero m] in
-private theorem fourier_by_enumeration (ψ : MulChar F ℂ) (e : Fin m ≃ SquareIndex F) :
+theorem fourier_by_enumeration (ψ : MulChar F ℂ) (e : Fin m ≃ SquareIndex F) :
     (∑ t, ψ (e t).val*eta F ((e t).val-1))=squareFourier ψ := by
   let S := (univ : Finset F).filter (fun x ↦ quadraticChar F x=1)
   have memS (x : F) : x∈S ↔ quadraticChar F x=1 := by simp [S]

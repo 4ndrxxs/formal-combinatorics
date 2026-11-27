@@ -240,7 +240,7 @@ def sourcePair (w : F) (i j : Bool) (e : Fin m ≃ SquareIndex F) : Bool → Fin
   | false,k => (incidence 1 i (e k).val:ℝ)
   | true,k => (incidence w j (e k).val:ℝ)
 
-private theorem sum_by_coords (e : Fin m ≃ SquareIndex F) (f : F → ℤ) :
+theorem sum_by_coords (e : Fin m ≃ SquareIndex F) (f : F → ℤ) :
     (∑ k, f (e k).val)=sumSquares f := by
   let S := (univ : Finset F).filter (fun x ↦ quadraticChar F x=1)
   have memS (x : F) : x∈S ↔ quadraticChar F x=1 := by simp [S]
@@ -290,7 +290,7 @@ theorem compare_source_layout [NeZero m] (hc : ringChar F≠2) (q4 : Fintype.car
 #print axioms compare_source_layout
 
 
-private def squareUnits (F : Type) [Field F] [Fintype F] [DecidableEq F] : Subgroup Fˣ where
+def squareUnits (F : Type) [Field F] [Fintype F] [DecidableEq F] : Subgroup Fˣ where
   carrier := {x | quadraticChar F (x:F)=1}
   one_mem' := by simp
   mul_mem' := by
@@ -303,7 +303,7 @@ private def squareUnits (F : Type) [Field F] [Fintype F] [DecidableEq F] : Subgr
     rw [map_mul,show quadraticChar F (x:F)=1 from hx,one_mul,map_one] at h
     exact h
 
-private def squareUnitEquiv : squareUnits F ≃ SquareIndex F where
+def squareUnitEquiv : squareUnits F ≃ SquareIndex F where
   toFun x := ⟨(x.val:F),x.property⟩
   invFun x := ⟨Units.mk0 x.val (by intro h; have t:=x.property; rw [h] at t; norm_num at t),x.property⟩
   left_inv _ := Subtype.ext (Units.ext rfl)

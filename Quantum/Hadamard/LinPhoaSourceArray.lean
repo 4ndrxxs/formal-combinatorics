@@ -41,7 +41,7 @@ theorem corner_sign (c : Bool) : Signs (corner c) := by
 def gram (c : Bool) (f : Bool → Fin m → ℝ) := array c f*(array c f).transpose
 
 omit [NeZero m] in
-private theorem gram_sym (c : Bool) (f : Bool → Fin m → ℝ) (i j : Index m) :
+theorem gram_sym (c : Bool) (f : Bool → Fin m → ℝ) (i j : Index m) :
     gram c f i j=gram c f j i := by simp [gram,Matrix.mul_apply,mul_comm]
 
 private theorem reflected_product (f g : Fin m → ℝ) (k l : Fin m) :
@@ -63,12 +63,12 @@ theorem bulk_cross (c : Bool) (f : Bool → Fin m → ℝ) (k l : Fin m) :
   ring
 
 omit [NeZero m] in
-private theorem rim_cross (c : Bool) (f : Bool → Fin m → ℝ) :
+theorem rim_cross (c : Bool) (f : Bool → Fin m → ℝ) :
     gram c f (rim false) (rim true)=0 := by
   cases c <;> simp [gram,array,Matrix.mul_apply,bordered,rim,Fintype.sum_sum_type,
     Fintype.sum_prod_type,strip,corner,orientation]
 
-private theorem mixed (c : Bool) (f : Bool → Fin m → ℝ) (r : ℝ) (sr : (∑t,f false t)=r)
+theorem mixed (c : Bool) (f : Bool → Fin m → ℝ) (r : ℝ) (sr : (∑t,f false t)=r)
     (sz : (∑t,f true t)=0) (a b : Bool) (k : Fin m) :
     gram c f (bulk a k) (rim b)=
       (if a then -r*strip b true else r) + (if a=b then 2*orientation c else 0) := by
