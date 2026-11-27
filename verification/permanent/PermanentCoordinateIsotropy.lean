@@ -1,4 +1,5 @@
 import PermanentGenericFrame
+import PermanentGridWeights
 import QuinticIsotropicDirections
 import RationalIsotropicSpecialization
 
@@ -10,21 +11,21 @@ namespace PermanentFive
 variable {K n I : Type*} [Field K] [CharZero K] [Fintype n] [DecidableEq n]
   [Fintype I] [DecidableEq I]
 
-theorem normalized_frame_isotropy (b c : n → Cell → K) (D : n → n → Cell → K)
+theorem normalized_frame_isotropy_weighted (weights : GridWeights) (b c : n → Cell → K) (D : n → n → Cell → K)
     (rep : per K Idx = regularDet b c D) (S : Finset Cell)
     (card : S.card = finrank K (endpoints b c).ker)
     (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
-    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S)
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weights.cell S)
     (v : I → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j) (y : Cell → K[X]) :
     ∃ Q : I → Cell → K[X],
       (∀ i j, firstJet K (Q i j) = (Pi.single (v i) 1 : Cell → DualNumber K) j) ∧
       ∃ W : Submodule (RatFunc K) (I → RatFunc K), 25 ≤ finrank (RatFunc K) W + Fintype.card n ∧
         W ≤ ((algebraMap K[X] (RatFunc K)).mapMatrix (frameHessian y Q)).toBilin'.orthogonal W := by
   classical
-  obtain ⟨Q,atJet,spans⟩ := padded_generic_frame b c S card lift paths v cover
+  obtain ⟨Q,atJet,spans⟩ := padded_generic_frame_weighted weights.cell b c S card lift paths v cover
   let f := algebraMap K[X] (RatFunc K)
   let τ := f X
-  let g (j : Cell) := τ^(2*weight j)
+  let g (j : Cell) := τ^(2*weights.cell j)
   have nt : τ ≠ 0 := fun h ↦ Polynomial.X_ne_zero (RatFunc.algebraMap_injective K (h.trans f.map_zero.symm))
   have ng (j : Cell) : g j ≠ 0 := pow_ne_zero _ nt
   let centre (j : Cell) := f (y j) / g j
@@ -42,7 +43,7 @@ theorem normalized_frame_isotropy (b c : n → Cell → K) (D : n → n → Cell
   rw [show W.map F = J from Submodule.map_comap_eq_self onto] at dw
   change 25 ≤ _ at dim
   refine ⟨Q,atJet,W,dim.trans (Nat.add_le_add_right dw _),?_⟩
-  obtain ⟨a,law⟩ := weight_twist (τ^2)
+  obtain ⟨a,law⟩ := weights.twist_character (τ^2)
   have scale : twist g (per (RatFunc K) Idx) = MvPolynomial.C a * per (RatFunc K) Idx := by
     simpa only [g,pow_mul] using law
   have cy : (fun j ↦ g j*centre j) = f ∘ y := by
@@ -69,16 +70,28 @@ theorem normalized_frame_isotropy (b c : n → Cell → K) (D : n → n → Cell
   change a * H (F z) (F x) = 0
   rw [show H (F z) (F x) = 0 from iso hx _ hz,mul_zero]
 
-theorem coordinate_frame_isotropy (b c : n → Cell → K) (D : n → n → Cell → K)
+theorem normalized_frame_isotropy (b c : n → Cell → K) (D : n → n → Cell → K)
     (rep : per K Idx = regularDet b c D) (S : Finset Cell)
     (card : S.card = finrank K (endpoints b c).ker)
     (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
     (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S)
+    (v : I → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j) (y : Cell → K[X]) :
+    ∃ Q : I → Cell → K[X],
+      (∀ i j, firstJet K (Q i j) = (Pi.single (v i) 1 : Cell → DualNumber K) j) ∧
+      ∃ W : Submodule (RatFunc K) (I → RatFunc K), 25 ≤ finrank (RatFunc K) W + Fintype.card n ∧
+        W ≤ ((algebraMap K[X] (RatFunc K)).mapMatrix (frameHessian y Q)).toBilin'.orthogonal W := by
+  exact normalized_frame_isotropy_weighted standardGridWeights b c D rep S card lift paths v cover y
+
+theorem coordinate_frame_isotropy_weighted (weights : GridWeights) (b c : n → Cell → K) (D : n → n → Cell → K)
+    (rep : per K Idx = regularDet b c D) (S : Finset Cell)
+    (card : S.card = finrank K (endpoints b c).ker)
+    (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weights.cell S)
     (v : I → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j) (z : Cell → K) :
     ∃ V : Submodule K (I → K), 25 ≤ finrank K V + Fintype.card n ∧
       V ≤ ((hessian (per K Idx) z).submatrix v v).toBilin'.orthogonal V := by
   classical
-  obtain ⟨Q,atJet,W,dim,iso⟩ := normalized_frame_isotropy b c D rep S card lift paths v cover (C ∘ z)
+  obtain ⟨Q,atJet,W,dim,iso⟩ := normalized_frame_isotropy_weighted weights b c D rep S card lift paths v cover (C ∘ z)
   let e := evalRingHom (0 : K)
   have ez : e ∘ C ∘ z = z := by ext j; simp [e]
   have eq : (fun i ↦ e ∘ Q i) = fun i ↦ Pi.single (v i) (1 : K) := by
@@ -92,6 +105,16 @@ theorem coordinate_frame_isotropy (b c : n → Cell → K) (D : n → n → Cell
   change V ≤ (e.mapMatrix (frameHessian (C ∘ z) Q)).toBilin'.orthogonal V at orth
   rw [frameHessian_map,ez,eq,frameHessian_units] at orth
   exact orth
+
+theorem coordinate_frame_isotropy (b c : n → Cell → K) (D : n → n → Cell → K)
+    (rep : per K Idx = regularDet b c D) (S : Finset Cell)
+    (card : S.card = finrank K (endpoints b c).ker)
+    (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S)
+    (v : I → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j) (z : Cell → K) :
+    ∃ V : Submodule K (I → K), 25 ≤ finrank K V + Fintype.card n ∧
+      V ≤ ((hessian (per K Idx) z).submatrix v v).toBilin'.orthogonal V := by
+  exact coordinate_frame_isotropy_weighted standardGridWeights b c D rep S card lift paths v cover z
 
 #print axioms coordinate_frame_isotropy
 end PermanentFive

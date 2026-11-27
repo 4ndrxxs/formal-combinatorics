@@ -13,16 +13,16 @@ open Matrix Module MvPolynomial QuinticPencil
 namespace PermanentFive
 variable {K n : Type*} [Field K] [CharZero K] [Fintype n] [DecidableEq n]
 
-private theorem line_over_parameters (b c : n → Cell → Rectangle.Ext K)
+private theorem line_over_parameters (weights : GridWeights) (b c : n → Cell → Rectangle.Ext K)
     (D : n → n → Cell → Rectangle.Ext K) (rep : per (Rectangle.Ext K) Idx = regularDet b c D)
     (small : Fintype.card n ≤ 20) (S : Finset Cell)
     (card : S.card = finrank (Rectangle.Ext K) (endpoints b c).ker)
     (lift : ∀ z : Cell → Rectangle.Ext K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
-    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S) : ContainsFullLine S := by
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weights.cell S) : ContainsFullLine S := by
   let E := Rectangle.Ext K
   let L := (endpoints b c).ker
-  have sym (t : E) (_ : t ≠ 0) : ∃ a : E, twist (fun i ↦ t^(weight i)) (per E Idx) =
-      C a * per E Idx := weight_twist t
+  have sym (t : E) (_ : t ≠ 0) : ∃ a : E, twist (fun i ↦ t^(weights.cell i)) (per E Idx) =
+      C a * per E Idx := weights.twist_character t
   have prop (z : Cell → E) (hz : z ∈ L) :
       (∀ i, MvPolynomial.eval z (pderiv i (per E Idx)) = 0) ∧
       Fintype.card Cell + (hessian (per E Idx) z).rank + 1 ≤ (Fintype.card n+1) + finrank E L := by
@@ -32,40 +32,47 @@ private theorem line_over_parameters (b c : n → Cell → Rectangle.Ext K)
   have ambient (z : Cell → E) (hz : ∀ j ∉ S, z j = 0) :
       (∀ i, MvPolynomial.eval z (pderiv i (per E Idx)) = 0) ∧
         26 + (hessian (per E Idx) z).rank ≤ (Fintype.card n+1) + S.card := by
-    obtain ⟨g,h⟩ := coordinate_kernel_at_support (Fintype.card n+1) L prop weight sym S card paths z hz
+    obtain ⟨g,h⟩ := coordinate_kernel_at_support (Fintype.card n+1) L prop weights.cell sym S card paths z hz
     change 25 + (hessian (per E Idx) z).rank + 1 ≤ _ at h
     exact ⟨g,by omega⟩
   rcases line_tests_over_extension K S (coordinate_matching_bound S _ ambient) with full|witt|ten|⟨rank,bound⟩
   · exact full
-  · exact (normalized_excludes_index_four b c D rep small S card lift paths witt).elim
-  · exact (normalized_excludes_simple_zero 5 b c D rep (by omega) S card lift paths ten).elim
+  · exact (normalized_excludes_index_four_weighted weights b c D rep small S card lift paths witt).elim
+  · exact (normalized_excludes_simple_zero_weighted weights 5 b c D rep (by omega) S card lift paths ten).elim
   · obtain ⟨z,hz,eight⟩ := rank
     have h := (ambient z hz).2
     have eight' : 8 ≤ (hessian (per E Idx) z).rank := eight
     omega
 
-private theorem normalized_data_over (E : Type*) [Field E] [Algebra K E] (b c : n → Cell → K)
+private theorem normalized_data_over (weights : GridWeights) (E : Type*) [Field E] [Algebra K E] (b c : n → Cell → K)
     (D : n → n → Cell → K) (rep : per K Idx = regularDet b c D) (S : Finset Cell)
     (card : S.card = finrank K (endpoints b c).ker)
     (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
-    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S) :
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weights.cell S) :
     ∃ (b' c' : n → Cell → E) (D' : n → n → Cell → E), per E Idx = regularDet b' c' D' ∧
       S.card = finrank E (endpoints b' c').ker ∧
       (∀ z : Cell → E, ∃ x ∈ (endpoints b' c').ker, ∀ i ∈ S, x i = z i) ∧
-      PermanentDegeneration.HasCoordinatePaths (endpoints b' c').ker weight S := by
+      PermanentDegeneration.HasCoordinatePaths (endpoints b' c').ker weights.cell S := by
   let f := algebraMap K E
   have eq := congrArg (MvPolynomial.map f) rep
   rw [mapped_permanent,mapped_regular_det] at eq
-  exact ⟨_,_,_,eq,extend_endpoint_pivots b c weight S card lift paths⟩
+  exact ⟨_,_,_,eq,extend_endpoint_pivots b c weights.cell S card lift paths⟩
+
+theorem normalized_full_line_weighted (weights : GridWeights) (b c : n → Cell → K) (D : n → n → Cell → K)
+    (rep : per K Idx = regularDet b c D) (small : Fintype.card n ≤ 20) (S : Finset Cell)
+    (card : S.card = finrank K (endpoints b c).ker)
+    (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weights.cell S) : ContainsFullLine S := by
+  obtain ⟨b₁,c₁,D₁,eq₁,card₁,lift₁,paths₁⟩ := normalized_data_over weights (RatFunc K) b c D rep S card lift paths
+  obtain ⟨b₂,c₂,D₂,eq₂,card₂,lift₂,paths₂⟩ := normalized_data_over weights (Rectangle.Ext K) b₁ c₁ D₁ eq₁ S card₁ lift₁ paths₁
+  exact line_over_parameters weights b₂ c₂ D₂ eq₂ small S card₂ lift₂ paths₂
 
 theorem normalized_full_line (b c : n → Cell → K) (D : n → n → Cell → K)
     (rep : per K Idx = regularDet b c D) (small : Fintype.card n ≤ 20) (S : Finset Cell)
     (card : S.card = finrank K (endpoints b c).ker)
     (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
     (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S) : ContainsFullLine S := by
-  obtain ⟨b₁,c₁,D₁,eq₁,card₁,lift₁,paths₁⟩ := normalized_data_over (RatFunc K) b c D rep S card lift paths
-  obtain ⟨b₂,c₂,D₂,eq₂,card₂,lift₂,paths₂⟩ := normalized_data_over (Rectangle.Ext K) b₁ c₁ D₁ eq₁ S card₁ lift₁ paths₁
-  exact line_over_parameters b₂ c₂ D₂ eq₂ small S card₂ lift₂ paths₂
+  exact normalized_full_line_weighted standardGridWeights b c D rep small S card lift paths
 
 theorem normalized_surjective_line (b c : n → Cell → K) (D : n → n → Cell → K)
     (rep : per K Idx = regularDet b c D) (small : Fintype.card n ≤ 20) :

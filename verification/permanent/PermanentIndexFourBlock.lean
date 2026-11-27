@@ -42,16 +42,24 @@ theorem HasIndexFourBlock.relabel {S T : Finset Cell} (h : HasIndexFourBlock K T
     change J ≤ ((hessian p (z ∘ e.symm)).submatrix (e ∘ v) (e ∘ v)).toBilin'.orthogonal J at iso
     rwa [← Matrix.submatrix_submatrix,he] at iso
 
+theorem normalized_excludes_index_four_weighted (weights : GridWeights) [CharZero K] (b c : n → Cell → K) (D : n → n → Cell → K)
+    (rep : per K Idx = regularDet b c D) (small : Fintype.card n ≤ 20) (S : Finset Cell)
+    (card : S.card = finrank K (endpoints b c).ker)
+    (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weights.cell S) :
+    ¬ HasIndexFourBlock K S := by
+  rintro ⟨v,z,cover,idx⟩
+  obtain ⟨J,dim,iso⟩ := coordinate_frame_isotropy_weighted weights b c D rep S card lift paths v cover z
+  have bound := idx J iso
+  omega
+
 theorem normalized_excludes_index_four [CharZero K] (b c : n → Cell → K) (D : n → n → Cell → K)
     (rep : per K Idx = regularDet b c D) (small : Fintype.card n ≤ 20) (S : Finset Cell)
     (card : S.card = finrank K (endpoints b c).ker)
     (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
     (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S) :
     ¬ HasIndexFourBlock K S := by
-  rintro ⟨v,z,cover,idx⟩
-  obtain ⟨J,dim,iso⟩ := coordinate_frame_isotropy b c D rep S card lift paths v cover z
-  have bound := idx J iso
-  omega
+  exact normalized_excludes_index_four_weighted standardGridWeights b c D rep small S card lift paths
 
 #print axioms normalized_excludes_index_four
 end PermanentFive

@@ -123,18 +123,19 @@ private theorem point_le (L : Matrix (Slot H) (Slot H) (MvPolynomial U K)) (A : 
   rw [hp,hb,map_zero,map_zero] at eq
   exact Ideal.Quotient.eq_zero_iff_mem.mp eq
 
-/-- An isolated intersection with the corank-two locus can use at most
+/-- An intersection isolated at the specified point with the corank-two locus can use at most
 four input parameters. The proof uses Krull's height theorem. -/
-theorem isolated_graph_card_le (L : Matrix (Slot H) (Slot H) (MvPolynomial U K)) (A : Matrix H (Slot H) K)
+theorem isolated_graph_card_le_local (L : Matrix (Slot H) (Slot H) (MvPolynomial U K)) (A : Matrix H (Slot H) K)
     (at0 : ∀ i j, MvPolynomial.eval 0 (L i j) = fullOrigin K H A i j)
-    (isolated : ∀ J : Ideal (Coord K U H), J.IsPrime → graph K U H L ≤ J → ∀ u, input K U H u ∈ J) :
+    (isolated : ∀ J : Ideal (Coord K U H), J.IsPrime → graph K U H L ≤ J →
+      J ≤ RingHom.ker (atOrigin K U H A) → ∀ u, input K U H u ∈ J) :
     Fintype.card U ≤ 4 := by
   classical
   let M := RingHom.ker (atOrigin K U H A)
   have minimal : M ∈ (graph K U H L).minimalPrimes := by
     refine ⟨⟨RingHom.ker_isPrime _,graph_at K U H L A at0⟩,?_⟩
-    intro J hJ _
-    exact point_le K U H L A at0 J hJ.2 (isolated J hJ.1 hJ.2)
+    intro J hJ sub
+    exact point_le K U H L A at0 J hJ.2 (isolated J hJ.1 hJ.2 sub)
   have upper := Ideal.height_le_card_of_mem_minimalPrimes_span_finset (s := generators K U H L) minimal
   have card : (generators K U H L).card ≤ Fintype.card (Slot H × Slot H) := by
     simpa [generators] using (Finset.card_image_le (s := (univ : Finset (Slot H × Slot H)))
@@ -146,6 +147,14 @@ theorem isolated_graph_card_le (L : Matrix (Slot H) (Slot H) (MvPolynomial U K))
   have natural : Fintype.card (Key U H) ≤ Fintype.card (Slot H × Slot H) := by exact_mod_cast both
   simp [Key,Slot] at natural
   nlinarith
+
+/-- An isolated intersection with the corank-two locus can use at most
+four input parameters. The proof uses Krull's height theorem. -/
+theorem isolated_graph_card_le (L : Matrix (Slot H) (Slot H) (MvPolynomial U K)) (A : Matrix H (Slot H) K)
+    (at0 : ∀ i j, MvPolynomial.eval 0 (L i j) = fullOrigin K H A i j)
+    (isolated : ∀ J : Ideal (Coord K U H), J.IsPrime → graph K U H L ≤ J → ∀ u, input K U H u ∈ J) :
+    Fintype.card U ≤ 4 := by
+  exact isolated_graph_card_le_local K U H L A at0 fun J prime incl _ ↦ isolated J prime incl
 
 #print axioms isolated_graph_card_le
 end DeterminantalRegularity.RankParam

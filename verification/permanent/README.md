@@ -75,3 +75,18 @@ lake env leanchecker -v PermanentLineStatement
 python verification/permanent/check_quintic_rectangle.py
 python verification/permanent/check_quintic_line_cover.py
 ```
+
+## Possible kernel dimensions and pivot boards
+
+In a normalized size-21 representation, the common kernel of the endpoint maps has dimension in `{5,6,7,8,9,10,11,15}`. For every ordering by distinct weights of the form $a_i+b_j$, the pivot cells belong to one of twelve types up to row and column permutations and transposition. The test considers 58 boards and uses four integral Hessian minors. These are necessary conditions. [Shapes and dimension theorem](PermanentShapeClassification.lean) · [Twelve models](PermanentShapeBoards.lean) · [Deletion proof](PermanentShapeGraph.lean)
+
+For any sets of rows and columns, the kernel contains at least the smaller of their cardinalities in independent matrices supported on their union. In particular, each of the 25 nine-cell crosses carries a nonzero endpoint relation. [Cross theorem](PermanentCross.lean) · [Complex statement](PermanentEndpointStatement.lean)
+
+For every size, a polynomial matrix with determinant equal to the five-by-five permanent has corank at most one at every input. This recovers the geometric regularity criterion of Alper, Bogart and Velasco in this case. In an affine regular normal form, the internal matrix is nilpotent in every common endpoint-kernel direction. [Polynomial regularity](PermanentUnrestricted.lean) · [Nilpotence](PermanentTransferNilpotent.lean)
+
+```sh
+lake build QuinticPermanent
+lake env leanchecker -v PermanentShapeClassification
+lake env leanchecker -v PermanentEndpointStatement
+python verification/permanent/check_quintic_shapes.py
+```

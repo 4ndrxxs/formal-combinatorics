@@ -88,13 +88,15 @@ def HasCoordinatePaths (L : Submodule K (I → K)) (w : I → ℕ) (S : Finset I
     (∀ j, (q j).eval 0 = z j) ∧
     ∀ t : K, t ≠ 0 → ∃ x ∈ L, ∀ j, (q j).eval t = t^(w j) * x j
 
-theorem coordinate_paths (L : Submodule K (I → K))
+theorem coordinate_paths_with_leading (L : Submodule K (I → K))
     (w : I → ℕ) (injective : Function.Injective w) :
     ∃ S : Finset I, S.card = finrank K L ∧
-      (∀ z : I → K, ∃ x ∈ L, ∀ i ∈ S, x i = z i) ∧ HasCoordinatePaths L w S := by
+      (∀ z : I → K, ∃ x ∈ L, ∀ i ∈ S, x i = z i) ∧
+      (∀ i ∈ S, ∃ x ∈ L, x i = 1 ∧ ∀ j, w j < w i → x j = 0) ∧
+      HasCoordinatePaths L w S := by
   classical
   obtain ⟨S,subset,card⟩ := Finset.exists_subset_card_eq (pivot_count L w)
-  refine ⟨S,card,lift_pivots L w injective S subset,?_⟩
+  refine ⟨S,card,lift_pivots L w injective S subset,fun _ hi ↦ mem_pivots.mp (subset hi),?_⟩
   intro z supported
   have leading (i : S) : Pivot L w i := mem_pivots.mp (subset i.property)
   choose v hv one lower using leading
@@ -133,6 +135,32 @@ theorem coordinate_paths (L : Submodule K (I → K))
       field_simp
     · simp [lower i j (lt_of_not_ge le)]
   exact ⟨q,at_zero,away⟩
+
+theorem coordinate_paths (L : Submodule K (I → K))
+    (w : I → ℕ) (injective : Function.Injective w) :
+    ∃ S : Finset I, S.card = finrank K L ∧
+      (∀ z : I → K, ∃ x ∈ L, ∀ i ∈ S, x i = z i) ∧ HasCoordinatePaths L w S := by
+  obtain ⟨S,card,lift,_,paths⟩ := coordinate_paths_with_leading L w injective
+  exact ⟨S,card,lift,paths⟩
+
+/-- A set of distinct leading coordinates gives a surjection onto their values. -/
+theorem lift_leading (L : Submodule K (I → K)) (w : I → ℕ) (inj : Function.Injective w)
+    (S : Finset I) (leading : ∀ i ∈ S, ∃ x ∈ L, x i = 1 ∧ ∀ j, w j < w i → x j = 0)
+    (z : I → K) : ∃ x ∈ L, ∀ i ∈ S, x i = z i :=
+  lift_pivots L w inj S (fun i hi ↦ mem_pivots.mpr (leading i hi)) z
+
+/-- The number of distinct leading coordinates is a lower bound for dimension. -/
+theorem card_le_finrank_of_leading (L : Submodule K (I → K)) (w : I → ℕ)
+    (inj : Function.Injective w) (S : Finset I)
+    (leading : ∀ i ∈ S, ∃ x ∈ L, x i = 1 ∧ ∀ j, w j < w i → x j = 0) :
+    S.card ≤ finrank K L := by
+  classical
+  let e : L →ₗ[K] (S → K) := LinearMap.pi fun j ↦ (LinearMap.proj (j : I)).comp L.subtype
+  have onto : Function.Surjective e := by
+    intro z
+    obtain ⟨x,hx,eq⟩ := lift_leading L w inj S leading (fun j ↦ if h : j ∈ S then z ⟨j,h⟩ else 0)
+    exact ⟨⟨x,hx⟩,funext fun j ↦ by simpa [e,j.property] using eq j.val j.property⟩
+  simpa using e.finrank_le_finrank_of_surjective onto
 
 omit [Fintype I] in
 theorem specialization_of_paths [Infinite K] {L : Submodule K (I → K)} {w : I → ℕ} {S : Finset I}

@@ -1,4 +1,4 @@
-import PermanentGenericFrame
+import PermanentCoordinateIsotropy
 import QuinticIsotropicDirections
 import QuinticSignedGram
 
@@ -10,18 +10,18 @@ open Matrix Module Polynomial QuinticPencil
 namespace PermanentFive
 variable {K n : Type*} [Field K] [CharZero K] [Fintype n] [DecidableEq n]
 
-theorem normalized_excludes_simple_zero (d : ℕ) (b c : n → Cell → K) (D : n → n → Cell → K)
+theorem normalized_excludes_simple_zero_weighted (weights : GridWeights) (d : ℕ) (b c : n → Cell → K) (D : n → n → Cell → K)
     (rep : per K Idx = regularDet b c D) (small : Fintype.card n + d ≤ 25) (S : Finset Cell)
     (card : S.card = finrank K (endpoints b c).ker)
     (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
-    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S) :
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weights.cell S) :
     ¬ HasSimpleZeroBlock K (2*d) S := by
   classical
   rintro ⟨v,Y,cover,zero,slope⟩
-  obtain ⟨Q,atJet,spans⟩ := padded_generic_frame b c S card lift paths v cover
+  obtain ⟨Q,atJet,spans⟩ := padded_generic_frame_weighted weights.cell b c S card lift paths v cover
   let f := algebraMap K[X] (RatFunc K)
   let τ := f X
-  let g (j : Cell) := τ^(2*weight j)
+  let g (j : Cell) := τ^(2*weights.cell j)
   have nt : τ ≠ 0 := fun h ↦ Polynomial.X_ne_zero (RatFunc.algebraMap_injective K (h.trans f.map_zero.symm))
   have ng (j : Cell) : g j ≠ 0 := pow_ne_zero _ nt
   let y (j : Cell) := liftJet (Y j)
@@ -41,7 +41,7 @@ theorem normalized_excludes_simple_zero (d : ℕ) (b c : n → Cell → K) (D : 
     rw [MvPolynomial.pderiv_comm j i]
     rfl
   have sq := gram_signed_square_from_half d H sym u (Fintype.card_fin _) J half (inKer.trans spans) iso
-  obtain ⟨a,law⟩ := weight_twist (τ^2)
+  obtain ⟨a,law⟩ := weights.twist_character (τ^2)
   have scale : twist g (per (RatFunc K) Idx) = MvPolynomial.C a * per (RatFunc K) Idx := by
     simpa only [g,pow_mul] using law
   have cy : (fun j ↦ g j*centre j) = f ∘ y := by
@@ -86,6 +86,14 @@ theorem normalized_excludes_simple_zero (d : ℕ) (b c : n → Cell → K) (D : 
   apply jet_nonsquare poly _ _ square
   · simp [signed,zero]
   · simp [signed,slope,nsign]
+
+theorem normalized_excludes_simple_zero (d : ℕ) (b c : n → Cell → K) (D : n → n → Cell → K)
+    (rep : per K Idx = regularDet b c D) (small : Fintype.card n + d ≤ 25) (S : Finset Cell)
+    (card : S.card = finrank K (endpoints b c).ker)
+    (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
+    (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S) :
+    ¬ HasSimpleZeroBlock K (2*d) S := by
+  exact normalized_excludes_simple_zero_weighted standardGridWeights d b c D rep small S card lift paths
 
 #print axioms normalized_excludes_simple_zero
 end PermanentFive

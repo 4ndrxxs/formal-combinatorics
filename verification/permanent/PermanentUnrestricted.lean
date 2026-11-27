@@ -16,17 +16,12 @@ private lemma rank_lt_of_det_zero (A : Matrix n n K) (hz : A.det = 0) : A.rank <
   have sur : Function.Surjective A.mulVec := LinearMap.range_eq_top.mp full
   exact ((Matrix.isUnit_iff_isUnit_det A).mp (Matrix.mulVec_surjective_iff_isUnit.mp sur)).ne_zero hz
 
-/-- Any polynomial matrix whose determinant is the generic permanent of
-order five has corank exactly one at the origin in characteristic zero. -/
-theorem polynomial_regularity [CharZero K] (P : Matrix n n (MvPolynomial Cell K))
-    (rep : per K Idx = P.det) :
-    Fintype.card n = ((MvPolynomial.eval 0).mapMatrix P).rank + 1 := by
-  let A := (MvPolynomial.eval 0).mapMatrix P
-  change Fintype.card n = A.rank + 1
-  have zero : A.det = 0 := by
-    rw [show A.det = (MvPolynomial.eval 0) P.det from (RingHom.map_det _ _).symm,← rep]
-    simp [per,Matrix.permanent,PermanentCuts.generic]
-  have lt := rank_lt_of_det_zero A zero
+/-- A polynomial matrix whose determinant is the generic quintic permanent has corank at most one at every input. -/
+theorem polynomial_corank_le_one [CharZero K] (P : Matrix n n (MvPolynomial Cell K))
+    (rep : per K Idx = P.det) (z₀ : Cell → K) :
+    Fintype.card n ≤ ((MvPolynomial.eval z₀).mapMatrix P).rank + 1 := by
+  let A := (MvPolynomial.eval z₀).mapMatrix P
+  change Fintype.card n ≤ A.rank + 1
   by_contra ne
   have two : 2 ≤ Fintype.card n - A.rank := by omega
   obtain ⟨V,U,q,hV,hU,red⟩ := Matrix.exists_rank_normal_form A
@@ -38,9 +33,9 @@ theorem polynomial_regularity [CharZero K] (P : Matrix n n (MvPolynomial Cell K)
   let e := z.trans q.symm
   let T := (MvPolynomial.C.mapMatrix V * P * MvPolynomial.C.mapMatrix U).submatrix e e
   let top : Matrix H (Slot H) K := Matrix.of (fun i j ↦ (V*A*U) (e (.inl i)) (e j))
-  have atT (i j : Slot H) : MvPolynomial.eval 0 (T i j) = (V*A*U) (e i) (e j) := by
+  have atT (i j : Slot H) : MvPolynomial.eval z₀ (T i j) = (V*A*U) (e i) (e j) := by
     simp [T,A,Matrix.submatrix,Matrix.mul_apply]
-  have rows (i j : Slot H) : MvPolynomial.eval 0 (T i j) = fullOrigin K H top i j := by
+  have rows (i j : Slot H) : MvPolynomial.eval z₀ (T i j) = fullOrigin K H top i j := by
     rw [atT]
     cases i with
     | inl i => rfl
@@ -61,7 +56,28 @@ theorem polynomial_regularity [CharZero K] (P : Matrix n n (MvPolynomial Cell K)
     rw [Matrix.det_submatrix_equiv_self,Matrix.det_mul,Matrix.det_mul,
       ← RingHom.map_det,← RingHom.map_det,← rep]
     simp [c,mul_left_comm,mul_comm]
-  exact no_two_zero_rows K H T top rows c hc detT
+  exact no_two_zero_rows_at K H z₀ T top rows c hc detT
+
+/-- At every zero of the permanent the evaluated polynomial matrix has corank exactly one. -/
+theorem polynomial_regularity_at [CharZero K] (P : Matrix n n (MvPolynomial Cell K))
+    (rep : per K Idx = P.det) (z : Cell → K) (zero : MvPolynomial.eval z (per K Idx) = 0) :
+    Fintype.card n = ((MvPolynomial.eval z).mapMatrix P).rank + 1 := by
+  have le := polynomial_corank_le_one P rep z
+  have det : ((MvPolynomial.eval z).mapMatrix P).det = 0 := by
+    rw [← RingHom.map_det,← rep,zero]
+  have lt := rank_lt_of_det_zero _ det
+  omega
+
+/-- Any polynomial matrix whose determinant is the generic permanent of
+order five has corank exactly one at the origin in characteristic zero. -/
+theorem polynomial_regularity [CharZero K] (P : Matrix n n (MvPolynomial Cell K))
+    (rep : per K Idx = P.det) :
+    Fintype.card n = ((MvPolynomial.eval 0).mapMatrix P).rank + 1 := by
+  apply polynomial_regularity_at P rep 0
+  simp [per,Matrix.permanent,PermanentCuts.generic]
+
+#print axioms polynomial_corank_le_one
+#print axioms polynomial_regularity_at
 
 /-- Over every characteristic-zero field, every affine determinantal
 representation of the generic permanent of order five has size at least 16. -/

@@ -124,5 +124,61 @@ theorem slice_isolated {K : Type*} [CommRing K] [IsDomain K] [CharZero K] (x : I
     (fun r c ↦ (quartic_shift x t r c).trans (zero _ _))
   simpa using ht
 
+/-- One quadratic monomial multiplying an ambient gradient entry in the slice certificate. -/
+structure SliceCoeffTerm where
+  coeff : ℤ
+  first : Idx
+  second : Idx
+  entry : Cell
+
+def sliceCoeffTerms : List SliceCoeffTerm :=
+  [⟨8,0,0,(0,0)⟩,
+   ⟨2,2,3,(0,0)⟩,
+   ⟨-3,0,1,(0,1)⟩,
+   ⟨-11,0,2,(0,2)⟩,
+   ⟨-4,1,1,(0,2)⟩,
+   ⟨-2,3,4,(0,2)⟩,
+   ⟨1,0,3,(0,3)⟩,
+   ⟨4,1,2,(0,3)⟩,
+   ⟨-11,0,4,(0,4)⟩,
+   ⟨-6,1,3,(0,4)⟩,
+   ⟨6,0,4,(1,0)⟩,
+   ⟨6,2,2,(1,0)⟩,
+   ⟨-4,0,0,(1,1)⟩,
+   ⟨-4,1,4,(1,1)⟩,
+   ⟨-4,2,3,(1,1)⟩,
+   ⟨4,0,1,(1,2)⟩,
+   ⟨-2,2,4,(1,2)⟩,
+   ⟨4,0,2,(1,3)⟩,
+   ⟨-4,3,4,(1,3)⟩,
+   ⟨6,1,2,(1,4)⟩,
+   ⟨4,4,4,(1,4)⟩,
+   ⟨6,0,3,(2,0)⟩,
+   ⟨-10,1,2,(2,0)⟩,
+   ⟨4,1,3,(2,1)⟩,
+   ⟨-4,2,2,(2,1)⟩,
+   ⟨2,0,0,(2,2)⟩,
+   ⟨6,1,4,(2,2)⟩,
+   ⟨4,2,3,(2,2)⟩,
+   ⟨4,0,2,(2,4)⟩,
+   ⟨2,1,1,(2,4)⟩]
+
+def sliceCombine (x : Idx → R) (g : Cell → R) : R :=
+  (sliceCoeffTerms.map (fun a ↦ (a.coeff : R)*x a.first*x a.second*g a.entry)).sum
+
+/-- Each sixth power belongs to the gradient ideal with homogeneous quadratic coefficients. -/
+theorem slice_power_combination (x : Idx → R) (t : Idx) :
+    8*(x t)^6 = sliceCombine (fun j ↦ x (j+t))
+      (fun e ↦ gradAt (slice x) (e.1+t,e.2+2*t)) := by
+  calc
+    8*(x t)^6 = 8*((fun j : Idx ↦ x (j+t)) 0)^6 := by simp
+    _ = _ := (power_identity (fun j ↦ x (j+t))).trans (by
+      simp only [sliceCombine,sliceCoeffTerms,List.map_cons,List.map_nil,List.sum_cons,List.sum_nil,
+        grad_quartic,quartic_shift]
+      push_cast
+      ring)
+
+#print axioms slice_power_combination
+
 #print axioms slice_isolated
 end PermanentFive
