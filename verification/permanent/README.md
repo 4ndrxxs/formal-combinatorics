@@ -61,3 +61,17 @@ python verification/permanent/check_quintic_restricted.py
 python verification/permanent/check_quintic_discriminant.py
 python verification/permanent/check_quintic_layout.py
 ```
+
+## Endpoint directions at size twenty-one
+
+For a hypothetical size-21 expression, the common kernel of its two normalized endpoint maps projects onto all five entries of some input row or column. If that kernel has dimension five, it equals the five-dimensional space supported on a single row or column. The exact minimum size over the complex numbers remains between 21 and 31. [Field theorems](PermanentFullLine.lean) · [Complex endpoint equations](PermanentLineStatement.lean)
+
+The proof specializes rational isotropic spaces and computes a twelve-direction Hessian of Witt index four over a two-variable rational function field. A deletion graph with 29 boards and 90 edges combines this form with ten simple-zero certificates and four ambient minors. [Specialization](RationalIsotropicSpecialization.lean) · [Rectangle calculation](PermanentRectangleBound.lean) · [Finite covering proof](PermanentLineDeletions.lean) · [Ten integral witnesses](line-ten-data.json)
+
+```sh
+lake build QuinticPermanent
+lake env leanchecker -v PermanentFullLine
+lake env leanchecker -v PermanentLineStatement
+python verification/permanent/check_quintic_rectangle.py
+python verification/permanent/check_quintic_line_cover.py
+```

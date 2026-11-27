@@ -1,7 +1,7 @@
 import PermanentJetFrame
 
 /-! Integer row and column operations give short certificates for a simple
-zero of a twelve-cell principal Hessian. All field-specific conclusions
+zero of a principal Hessian. All field-specific conclusions
 follow by mapping one integral first-order calculation. -/
 
 noncomputable section
@@ -22,19 +22,19 @@ private theorem pack_right (A B L : Matrix I I R) :
   ext1 i j
   apply TrivSqZeroExt.ext <;> simp [pack,Matrix.mul_apply,fst_sum,snd_sum] <;> rfl
 
-private theorem transformed_jet (A B L V : Matrix (Fin 12) (Fin 12) ℤ) (d : ℤ) (nd : d ≠ 0)
-    (straight : ∀ i j, (L*A*V) i j = if i=j ∧ i≠11 then d else 0)
-    (slope : (L*B*V) 11 11 ≠ 0) :
+private theorem transformed_jet {n : ℕ} (r : Fin n) (A B L V : Matrix (Fin n) (Fin n) ℤ) (d : ℤ) (nd : d ≠ 0)
+    (straight : ∀ i j, (L*A*V) i j = if i=j ∧ i≠r then d else 0)
+    (slope : (L*B*V) r r ≠ 0) :
     (pack A B).det.fst = 0 ∧ (pack A B).det.snd ≠ 0 := by
   let M := pack (L*A*V) (L*B*V)
-  have off (i j : Fin 12) (ne : i ≠ j) : (M i j).fst = 0 := by
+  have off (i j : Fin n) (ne : i ≠ j) : (M i j).fst = 0 := by
     change (L*A*V) i j = 0
     simp [straight,ne]
-  have f0 : (M 11 11).fst = 0 := by change (L*A*V) 11 11 = 0; simp [straight]
-  have diag (i : Fin 12) (hi : i ≠ 11) : (M i i).fst = d := by
+  have f0 : (M r r).fst = 0 := by change (L*A*V) r r = 0; simp [straight]
+  have diag (i : Fin n) (hi : i ≠ r) : (M i i).fst = d := by
     change (L*A*V) i i = d
     simp [straight,hi]
-  let rest := ∏ i ∈ Finset.univ.erase (11 : Fin 12), M i i
+  let rest := ∏ i ∈ Finset.univ.erase (r : Fin n), M i i
   have nonzero : rest.fst ≠ 0 := by
     change (TrivSqZeroExt.fstHom ℤ ℤ ℤ) rest ≠ 0
     dsimp only [rest]
@@ -44,9 +44,9 @@ private theorem transformed_jet (A B L V : Matrix (Fin 12) (Fin 12) ℤ) (d : �
     change (M i i).fst ≠ 0
     rw [diag i (Finset.mem_erase.mp hi).1]
     exact nd
-  have MD : M.det = M 11 11 * rest := by
+  have MD : M.det = M r r * rest := by
     rw [diagonal_jet_det M off]
-    exact (Finset.mul_prod_erase Finset.univ (fun i ↦ M i i) (Finset.mem_univ (11 : Fin 12))).symm
+    exact (Finset.mul_prod_erase Finset.univ (fun i ↦ M i i) (Finset.mem_univ (r : Fin n))).symm
   have nz : M.det.snd ≠ 0 := by
     rw [MD,DualNumber.snd_mul,f0,zero_mul,zero_add]
     exact mul_ne_zero slope nonzero
@@ -65,12 +65,12 @@ private theorem transformed_jet (A B L V : Matrix (Fin 12) (Fin 12) ℤ) (d : �
   exact ⟨((mul_eq_zero.mp ((mul_eq_zero.mp e0).resolve_right n.2)).resolve_left
     (mul_ne_zero_iff.mp n.1).1),(mul_ne_zero_iff.mp n.1).2⟩
 
-theorem odd_block_of_integers {K : Type*} [Field K] [CharZero K]
-    (S : Finset Cell) (v : Fin 12 → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j)
-    (y : Cell → DualNumber ℤ) (A B L V : Matrix (Fin 12) (Fin 12) ℤ)
+theorem simple_zero_of_integers {n : ℕ} (r : Fin n) {K : Type*} [Field K] [CharZero K]
+    (S : Finset Cell) (v : Fin n → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j)
+    (y : Cell → DualNumber ℤ) (A B L V : Matrix (Fin n) (Fin n) ℤ)
     (entries : ∀ i j, secondAt y (v i) (v j) = (⟨A i j,B i j⟩ : DualNumber ℤ))
-    (d : ℤ) (nd : d ≠ 0) (straight : ∀ i j, (L*A*V) i j = if i=j ∧ i≠11 then d else 0)
-    (slope : (L*B*V) 11 11 ≠ 0) : HasOddBlock K S := by
+    (d : ℤ) (nd : d ≠ 0) (straight : ∀ i j, (L*A*V) i j = if i=j ∧ i≠r then d else 0)
+    (slope : (L*B*V) r r ≠ 0) : HasSimpleZeroBlock K n S := by
   let f := jetMap (Int.castRingHom K)
   refine ⟨v,f ∘ y,cover,?_⟩
   have eq : (hessian (per (DualNumber K) Idx) (f ∘ y)).submatrix v v = f.mapMatrix (pack A B) := by
@@ -79,9 +79,17 @@ theorem odd_block_of_integers {K : Type*} [Field K] [CharZero K]
     rw [second_formula,second_map,entries]
     rfl
   rw [eq,← RingHom.map_det]
-  obtain ⟨zero,nz⟩ := transformed_jet A B L V d nd straight slope
+  obtain ⟨zero,nz⟩ := transformed_jet r A B L V d nd straight slope
   change ((pack A B).det.fst : K) = 0 ∧ ((pack A B).det.snd : K) ≠ 0
   exact ⟨by exact_mod_cast zero,by exact_mod_cast nz⟩
+
+theorem odd_block_of_integers {K : Type*} [Field K] [CharZero K]
+    (S : Finset Cell) (v : Fin 12 → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j)
+    (y : Cell → DualNumber ℤ) (A B L V : Matrix (Fin 12) (Fin 12) ℤ)
+    (entries : ∀ i j, secondAt y (v i) (v j) = (⟨A i j,B i j⟩ : DualNumber ℤ))
+    (d : ℤ) (nd : d ≠ 0) (straight : ∀ i j, (L*A*V) i j = if i=j ∧ i≠11 then d else 0)
+    (slope : (L*B*V) 11 11 ≠ 0) : HasOddBlock K S :=
+  simple_zero_of_integers 11 S v cover y A B L V entries d nd straight slope
 
 #print axioms odd_block_of_integers
 end PermanentFive

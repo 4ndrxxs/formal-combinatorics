@@ -153,5 +153,31 @@ theorem small_covered_block (S : Finset Cell) (small : S.card ≤ 13)
     ⟨fun w h ↦ w.mono h,fun w e h sub ↦ w.relabel e (h.rename K) sub⟩
   exact small_cover_property rule S small matching row col cross mixed
 
+/-- The unrestricted three-line covering argument, before any cardinality cutoff. -/
+theorem three_line_cover_property (rule : CoverRule P) (S : Finset Cell)
+    (matching : ∀ p : Perm Idx, (univ.filter (fun i ↦ p i ∈ PermanentCover.neighbors S i)).card ≤ 3)
+    (rows : P threeRows) (mixed : P mixedBoard) : P S := by
+  obtain ⟨R,C,cost,covers⟩ := PermanentCover.cover (PermanentCover.neighbors S) 3 (by decide) matching
+  have cov (i : Cell) (hi : i ∈ S) : i.1 ∈ R ∨ i.2 ∈ C :=
+    covers i.1 i.2 (by simpa [PermanentCover.neighbors] using hi)
+  have place (B : Finset Cell) (U V : Finset Idx) (cost : U.card+V.card ≤ 3) (order : V.card ≤ U.card)
+      (sub : ∀ i ∈ B, i.1 ∈ U ∨ i.2 ∈ V) : P B := by
+    by_cases zero : V.card = 0
+    · obtain ⟨T,_,within,back⟩ := align_cover rule B U V 3 0 (by rw [head3]; omega)
+        (by rw [head0]; omega) sub
+      exact back (rule.mono rows (fun i hi ↦ by simpa [threeRows] using within i hi))
+    · obtain ⟨T,_,within,back⟩ := align_cover rule B U V 2 1 (by rw [head2]; omega)
+        (by rw [head1]; omega) sub
+      exact back (rule.mono mixed (fun i hi ↦ by simpa [mixedBoard] using within i hi))
+  by_cases order : C.card ≤ R.card
+  · exact place S R C cost order cov
+  · let e := Equiv.prodComm Idx Idx
+    let T := S.map e.toEmbedding
+    have sub (i : Cell) (hi : i ∈ T) : i.1 ∈ C ∨ i.2 ∈ R := by
+      obtain ⟨j,hj,rfl⟩ := mem_map.mp hi
+      exact (cov j hj).symm
+    exact rule.relabel (place T C R (by omega) (by omega) sub) e.symm .transpose
+      (fun j hj ↦ mem_map.mpr ⟨j,hj,rfl⟩)
+
 #print axioms small_covered_block
 end PermanentFive

@@ -39,10 +39,24 @@ def support_text(z):
 OPTIONS = "set_option maxRecDepth 26000 in\nset_option maxHeartbeats 24000000 in\n"
 
 
-def jet_certificate(index, data):
-    parent = PURE if data["cover"] == [3, 0] else MIXED
-    cells = [i for i in parent if i not in data["holes"]]
-    assert len(cells) == 12
+def jet_certificate(index, data, *, line_cover=False):
+    if "cells" in data:
+        cells = data["cells"]
+        n, shape, shape_module = 10, "tenShape", "PermanentTenShapes"
+        if line_cover:
+            shape, shape_module = "lineTen", "PermanentLineBoards"
+            name, thm = f"PermanentLineJet{index:02}", f"line_ten_odd_{index}"
+        else:
+            name, thm = "PermanentTenJet" + "ABCD"[index], "ten_odd_" + str(index)
+        principal_det = data["principal_nine_determinant"]
+    else:
+        parent = PURE if data["cover"] == [3, 0] else MIXED
+        cells = [i for i in parent if i not in data["holes"]]
+        n, shape, shape_module = 12, "twelveShape", "PermanentTwelveShapes"
+        name, thm = "PermanentJet" + JET_NAMES[index], "twelve_odd_" + str(index)
+        principal_det = data["principal_eleven_determinant"]
+    assert len(cells) == n
+    last = n - 1
     z = [int(i not in data["simple_zero_centre_zeros"]) for i in CELLS]
     a = minor(derivatives(z)[1], cells, cells)
     direction = data["direction"]
@@ -51,28 +65,26 @@ def jet_certificate(index, data):
     b = [[v - w for v, w in zip(row, base)] for row, base in zip(plus, a)]
     u = data["kernel"]
     assert all(sum(x*y for x, y in zip(row, u)) == 0 for row in a)
-    keep = [i for i in range(12) if i != data["deleted_local_index"]]
+    keep = [i for i in range(n) if i != data["deleted_local_index"]]
     det, denominator, inv = inverse_certificate(minor(a, keep, keep))
-    assert det == data["principal_eleven_determinant"] and u[data["deleted_local_index"]]
-    v = [[int(i == j) for j in keep] + [u[i]] for i in range(12)]
-    g = [row + [0] for row in inv] + [[0]*11 + [1]]
+    assert det == principal_det and u[data["deleted_local_index"]]
+    v = [[int(i == j) for j in keep] + [u[i]] for i in range(n)]
+    g = [row + [0] for row in inv] + [[0]*last + [1]]
     left = times(g, list(zip(*v)))
     la = times(left, a)
     diagonal = times(la, v)
-    assert diagonal == [[denominator * (i == j and i != 11) for j in range(12)] for i in range(12)]
-    slope = times(times(left, b), v)[11][11]
+    assert diagonal == [[denominator * (i == j and i != last) for j in range(n)] for i in range(n)]
+    slope = times(times(left, b), v)[last][last]
     assert slope == data["kernel_derivative"] != 0
-    name = "PermanentJet" + JET_NAMES[index]
-    thm = "twelve_odd_" + str(index)
     s = f"""import PermanentIntegralJet
-import PermanentTwelveShapes
+import {shape_module}
 
 /-! Integer row and column operations certify the first-order determinant
-on the twelve directions below. The last diagonal first derivative is {slope}. -/
+on the {n} directions below. The last diagonal first derivative is {slope}. -/
 
 namespace PermanentFive
 open Matrix QuinticPencil
-private def directions : Fin 12 → Cell :=
+private def directions : Fin {n} → Cell :=
   {vector(map(coordinate, cells))}
 private def centre (x : Cell) : DualNumber ℤ :=
   ⟨if x ∈ ({support_text(data['simple_zero_centre_zeros'])} : Finset Cell) then 0 else 1,
@@ -81,8 +93,10 @@ private def centre (x : Cell) : DualNumber ℤ :=
     for key, matrix in [("constantPart", a), ("linearPart", b), ("leftChange", left),
                         ("rightChange", v), ("leftTimesConstant", la)]:
         s += matrix_def(key, matrix)
+    conclusion = f"HasOddBlock K ({shape} {index})" if n == 12 else f"HasSimpleZeroBlock K {n} ({shape} {index})"
+    constructor = "odd_block_of_integers" if n == 12 else f"simple_zero_of_integers {last}"
     s += f"""
-{OPTIONS}private theorem entries : ∀ i j : Fin 12,
+{OPTIONS}private theorem entries : ∀ i j : Fin {n},
     secondAt centre (directions i) (directions j) =
       (⟨constantPart i j,linearPart i j⟩ : DualNumber ℤ) := by
   intro i j
@@ -92,25 +106,25 @@ private def centre (x : Cell) : DualNumber ℤ :=
   ext i j
   fin_cases i <;> fin_cases j <;> decide +kernel
 
-{OPTIONS}private theorem diagonal_check : ∀ i j : Fin 12,
+{OPTIONS}private theorem diagonal_check : ∀ i j : Fin {n},
     (leftChange * constantPart * rightChange) i j =
-      if i=j ∧ i≠11 then ({denominator} : ℤ) else 0 := by
+      if i=j ∧ i≠{last} then ({denominator} : ℤ) else 0 := by
   rw [left_check]
   intro i j
   fin_cases i <;> fin_cases j <;> decide +kernel
 
-{OPTIONS}private theorem slope_check : (leftChange * linearPart * rightChange) 11 11 ≠ 0 := by decide +kernel
+{OPTIONS}private theorem slope_check : (leftChange * linearPart * rightChange) {last} {last} ≠ 0 := by decide +kernel
 
-{OPTIONS}private theorem cover_check : ∀ j ∈ twelveShape {index}, ∃ i, directions i = j := by decide +kernel
+{OPTIONS}private theorem cover_check : ∀ j ∈ {shape} {index}, ∃ i, directions i = j := by decide +kernel
 
-theorem {thm} (K : Type*) [Field K] [CharZero K] : HasOddBlock K (twelveShape {index}) :=
-  odd_block_of_integers _ directions cover_check centre constantPart linearPart leftChange rightChange
+theorem {thm} (K : Type*) [Field K] [CharZero K] : {conclusion} :=
+  {constructor} _ directions cover_check centre constantPart linearPart leftChange rightChange
     entries {denominator} (by decide) diagonal_check slope_check
 
 #print axioms {thm}
 end PermanentFive
 """
-    print(f"{name}: 11-minor det {det}, denominator {denominator}, last diagonal slope {slope}")
+    print(f"{name}: {last}-minor det {det}, denominator {denominator}, last diagonal slope {slope}")
     return name, s
 
 
@@ -134,16 +148,21 @@ def independent_minor(a, order):
     raise ValueError("required ambient rank not attained")
 
 
-def ambient_certificate(index, parent):
+def ambient_certificate(index, parent, *, line_cover=False):
     h = derivatives([int(i in parent) for i in CELLS])[1]
     rows, cols = independent_minor(h, 8)
     a = minor(h, rows, cols)
     det, denominator, inv = inverse_certificate(a)
-    name = "PermanentAmbient" + AMBIENT_NAMES[index]
-    thm = "thirteen_ambient_" + str(index)
-    s = f"""import PermanentAmbientEight
+    if line_cover:
+        name, thm = f"PermanentLineAmbient{index:02}", f"line_ambient_{index}"
+        shape, extra = "lineAmbient", "\nimport PermanentLineBoards"
+    else:
+        name, thm = "PermanentAmbient" + AMBIENT_NAMES[index], "thirteen_ambient_" + str(index)
+        shape, extra = "thirteenShape", ""
+    point = "the board indicator" if line_cover else "the indicator of a thirteen-cell board"
+    s = f"""import PermanentAmbientEight{extra}
 
-/-! An eight-by-eight nonsingular ambient minor at the indicator of a thirteen-cell board. -/
+/-! An eight-by-eight nonsingular ambient minor at {point}. -/
 
 namespace PermanentFive
 open Matrix QuinticPencil
@@ -153,7 +172,7 @@ private def cols : Fin 8 → Cell := {vector(map(coordinate, cols))}
     s += matrix_def("block", a) + matrix_def("inverseNumerator", inv)
     s += f"""
 {OPTIONS}private theorem entries : ∀ i j : Fin 8,
-    secondAt (boardPoint (thirteenShape {index})) (rows i) (cols j) = block i j := by
+    secondAt (boardPoint ({shape} {index})) (rows i) (cols j) = block i j := by
   intro i j
   fin_cases i <;> fin_cases j <;> decide +kernel
 
@@ -161,7 +180,7 @@ private def cols : Fin 8 → Cell := {vector(map(coordinate, cols))}
   ext i j
   fin_cases i <;> fin_cases j <;> decide +kernel
 
-theorem {thm} (K : Type*) [Field K] [CharZero K] : HasAmbientEight K (thirteenShape {index}) :=
+theorem {thm} (K : Type*) [Field K] [CharZero K] : HasAmbientEight K ({shape} {index}) :=
   ambient_eight_of_integers K _ rows cols block entries
     (det_ne_zero_of_inverse_certificate block inverseNumerator {denominator} (by decide) inverse_check)
 

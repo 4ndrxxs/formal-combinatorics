@@ -38,21 +38,23 @@ theorem frameHessian_pairing (y : Cell → R) (u : J → Cell → R) (i j : J) :
   change (Matrix.of (secondAt y)).toBilin' _ _ = _
   rw [eq]
 
-def HasOddBlock (K : Type*) [Field K] (S : Finset Cell) : Prop :=
-  ∃ (v : Fin 12 → Cell) (y : Cell → DualNumber K),
+def HasSimpleZeroBlock (K : Type*) [Field K] (n : ℕ) (S : Finset Cell) : Prop :=
+  ∃ (v : Fin n → Cell) (y : Cell → DualNumber K),
     (∀ i ∈ S, ∃ j, v j = i) ∧
     (((hessian (per (DualNumber K) Idx) y).submatrix v v).det).fst = 0 ∧
     (((hessian (per (DualNumber K) Idx) y).submatrix v v).det).snd ≠ 0
 
-variable {K : Type*} [Field K]
-theorem HasOddBlock.mono {S T : Finset Cell} (witness : HasOddBlock K T)
-    (sub : S ⊆ T) : HasOddBlock K S := by
+abbrev HasOddBlock (K : Type*) [Field K] := HasSimpleZeroBlock K 12
+
+variable {K : Type*} [Field K] {n : ℕ}
+theorem HasSimpleZeroBlock.mono {S T : Finset Cell} (witness : HasSimpleZeroBlock K n T)
+    (sub : S ⊆ T) : HasSimpleZeroBlock K n S := by
   obtain ⟨v,y,inside,zero,slope⟩ := witness
   exact ⟨v,y,fun i hi ↦ inside i (sub hi),zero,slope⟩
 
-theorem HasOddBlock.relabel {S T : Finset Cell} (witness : HasOddBlock K T)
+theorem HasSimpleZeroBlock.relabel {S T : Finset Cell} (witness : HasSimpleZeroBlock K n T)
     (e : Perm Cell) (sym : MvPolynomial.rename e (per (DualNumber K) Idx) = per (DualNumber K) Idx)
-    (sub : ∀ i ∈ S, e.symm i ∈ T) : HasOddBlock K S := by
+    (sub : ∀ i ∈ S, e.symm i ∈ T) : HasSimpleZeroBlock K n S := by
   obtain ⟨v,y,inside,zero,slope⟩ := witness
   let p := per (DualNumber K) Idx
   have ev (a : MvPolynomial Cell (DualNumber K)) :
@@ -72,6 +74,14 @@ theorem HasOddBlock.relabel {S T : Finset Cell} (witness : HasOddBlock K T)
   · change (((hessian p (y ∘ e.symm)).submatrix (e ∘ v) (e ∘ v)).det).fst = 0 ∧ _
     rw [← Matrix.submatrix_submatrix,he]
     exact ⟨zero,slope⟩
+
+theorem HasOddBlock.mono {S T : Finset Cell} (witness : HasOddBlock K T)
+    (sub : S ⊆ T) : HasOddBlock K S := HasSimpleZeroBlock.mono witness sub
+
+theorem HasOddBlock.relabel {S T : Finset Cell} (witness : HasOddBlock K T)
+    (e : Perm Cell) (sym : MvPolynomial.rename e (per (DualNumber K) Idx) = per (DualNumber K) Idx)
+    (sub : ∀ i ∈ S, e.symm i ∈ T) : HasOddBlock K S :=
+  HasSimpleZeroBlock.relabel witness e sym sub
 
 def liftJet (a : DualNumber K) : K[X] := Polynomial.C a.fst + X * Polynomial.C a.snd
 

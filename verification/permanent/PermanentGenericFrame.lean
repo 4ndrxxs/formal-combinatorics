@@ -1,8 +1,8 @@
 import QuinticGenericSpan
 import PermanentJetFrame
 
-/-! Pad the pivot paths by constant coordinate vectors to a twelve-vector
-frame. Over the rational function field the pulled-back frame contains
+/-! Pad the pivot paths by constant coordinate vectors to a prescribed
+coordinate frame. Over the rational function field the pulled-back frame contains
 the entire endpoint kernel. Its first jet is the prescribed coordinate frame. -/
 
 noncomputable section
@@ -10,16 +10,16 @@ open Matrix Module Polynomial QuinticPencil
 namespace PermanentFive
 variable {K n : Type*} [Field K] [Infinite K] [Fintype n] [DecidableEq n]
 
-theorem padded_generic_frame (b c : n → Cell → K) (S : Finset Cell)
+theorem padded_generic_frame {J : Type*} (b c : n → Cell → K) (S : Finset Cell)
     (card : S.card = finrank K (endpoints b c).ker)
     (lift : ∀ z : Cell → K, ∃ x ∈ (endpoints b c).ker, ∀ i ∈ S, x i = z i)
     (paths : PermanentDegeneration.HasCoordinatePaths (endpoints b c).ker weight S)
-    (v : Fin 12 → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j) :
-    ∃ Q : Fin 12 → Cell → K[X],
+    (v : J → Cell) (cover : ∀ j ∈ S, ∃ i, v i = j) :
+    ∃ Q : J → Cell → K[X],
       (∀ i j, firstJet K (Q i j) = (Pi.single (v i) 1 : Cell → DualNumber K) j) ∧
       (endpoints (fun a i ↦ algebraMap K (RatFunc K) (b a i))
         (fun a i ↦ algebraMap K (RatFunc K) (c a i))).ker ≤
-        Submodule.span (RatFunc K) (Set.range (fun i : Fin 12 ↦ fun j ↦
+        Submodule.span (RatFunc K) (Set.range (fun i : J ↦ fun j ↦
           (algebraMap K[X] (RatFunc K) (Q i j)) / (algebraMap K[X] (RatFunc K) X)^(2*weight j))) := by
   classical
   have supported (i : S) (j : Cell) (hj : j ∉ S) : (Pi.single i.val 1 : Cell → K) j = 0 := by
@@ -27,10 +27,10 @@ theorem padded_generic_frame (b c : n → Cell → K) (S : Finset Cell)
     simp [ne]
   choose q origin away using fun i : S ↦ paths (Pi.single i.val 1) (supported i)
   let q2 (s : S) (j : Cell) := (q s j).comp (X^2)
-  let base (i : Fin 12) (j : Cell) : K[X] :=
+  let base (i : J) (j : Cell) : K[X] :=
     if h : v i ∈ S then q ⟨v i,h⟩ j else Polynomial.C ((Pi.single (v i) 1 : Cell → K) j)
-  let Q (i : Fin 12) (j : Cell) := (base i j).comp (X^2)
-  have bzero (i : Fin 12) (j : Cell) : (base i j).eval 0 = (Pi.single (v i) 1 : Cell → K) j := by
+  let Q (i : J) (j : Cell) := (base i j).comp (X^2)
+  have bzero (i : J) (j : Cell) : (base i j).eval 0 = (Pi.single (v i) 1 : Cell → K) j := by
     by_cases h : v i ∈ S <;> simp [base,h,origin]
   refine ⟨Q,?_,?_⟩
   · intro i j
