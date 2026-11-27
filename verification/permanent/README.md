@@ -132,3 +132,15 @@ lake build PermanentOrderThreeSpectrum PermanentAmbientSpectrum HollowGridDisjoi
 lake env leanchecker -v PermanentOrderThreeSpectrum
 lake env leanchecker -v PermanentSmoothSpectrum
 ```
+
+## Hessian ranks in order four
+
+The theorem `PermanentOrderFour.all_fields` classifies smooth order-four Hessian ranks over every field. The possible ranks are 4, 6, and 8 through 16 when both 2 and 3 are nonzero, 4, 6, and 8 through 15 in characteristic three, and 8 in characteristic two. The proof of the missing rank seven shows that a smooth zero of rank at most seven has a zero input row or column when 2 is nonzero. At a matrix with a zero line the Hessian has even rank. Three explicit boundary matrices have invertible eight-by-eight principal Hessian submatrices in every characteristic different from two. The order-four witnesses and their integer or finite-field rank certificates are included. [Classification](PermanentFourAllFields.lean) · [Odd-characteristic proof and witnesses](PermanentOrderFourSpectrum.lean) · [Boundary minors](PermanentFourTemplates.lean)
+
+In characteristic two the permanent is the determinant. At every smooth zero of order `n ≥ 2`, its Hessian has rank exactly `2n`. The proof uses left and right changes of basis, equivalence to the corank-one normal form, and the Hessian rank at a diagonal representative. [Fixed-order theorem](PermanentBinaryFixedOrder.lean) · [Linear substitution](PolynomialLinearHessian.lean) · [Determinant action](DeterminantHessianAction.lean)
+
+```sh
+lake build PermanentFourAllFields
+lake env leanchecker -v PermanentFourAllFields
+lake env leanchecker -v PermanentBinaryFixedOrder
+```
