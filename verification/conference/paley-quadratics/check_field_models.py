@@ -217,7 +217,7 @@ def sources():
 
 def verify(project, directory, jobs):
     lake = shutil.which("lake") or str(Path.home() / ".elan/bin" / ("lake.exe" if os.name == "nt" else "lake"))
-    subprocess.run([lake, "build", MODULE, "Quantum.Hadamard.ProjectiveSplitComparison"], cwd=project, check=True, stdout=subprocess.DEVNULL)
+    subprocess.run([lake, "build", MODULE, "Quantum.Hadamard.ProjectiveSplitComparison", "Quantum.Hadamard.ProjectiveNonsplitTorus"], cwd=project, check=True, stdout=subprocess.DEVNULL)
     command = [lake, "env", sys.executable, "-c", "import json,os;print(json.dumps(dict(os.environ)))"]
     env = json.loads(subprocess.check_output(command, cwd=project, text=True))
     with TemporaryDirectory(prefix="lean-field-models-") as temporary:
@@ -242,6 +242,8 @@ def verify(project, directory, jobs):
                 expected = {"PaleyQuadraticStatement.verified"}
             elif name == "PaleySourceBorders":
                 expected = {"Hadamard.MSXCore.source_borders_four_fifths"}
+            elif name == "PaleyNonsplitTorus":
+                expected = {"Hadamard.NonsplitTorus.torus_four_fifths", "Hadamard.NonsplitTorus.exists_torus_four_fifths"}
             else:
                 raise ValueError("Unrecognized certificate module " + name)
             allowed = {"propext", "Classical.choice", "Quot.sound"}
@@ -260,6 +262,7 @@ def verify(project, directory, jobs):
         build("PaleyAllOrders")
         build("PaleyRawStatement")
         build("PaleySourceBorders")
+        build("PaleyNonsplitTorus")
 
 
 def main():

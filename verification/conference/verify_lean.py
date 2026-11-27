@@ -35,7 +35,8 @@ def main():
         'PaleySecond', 'TorusFrobeniusPaley', 'ProjectiveSplitSupports', 'ConferenceShiftedLog', 'ConferenceShiftedThreshold',
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion',
-        'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations', 'ProjectiveSplitComparison')]
+        'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations', 'ProjectiveSplitComparison',
+        'ProjectiveNonsplitTorus')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -65,6 +66,9 @@ def main():
             if rel.name == 'ProjectiveSplitComparison.lean':
                 expected = ['Hadamard.MSXCore.' + name for name in ('reference_gram', 'compare_incidence_border',
                             'source_layout_gram', 'compare_source_layout', 'exists_square_enumeration')]
+            if rel.name == 'ProjectiveNonsplitTorus.lean':
+                expected = ['Hadamard.NonsplitTorus.' + name for name in ('norm_one_generator', 'projective_chart_bijective',
+                            'cyclic_wedge', 'two_circulant_det', 'symmetric_sequences', 'two_circulant_entries', 'sign_entries')]
             if expected:
                 compact = ' '.join(out.stdout.split())
                 for theorem in expected:
