@@ -118,3 +118,17 @@ lake env leanchecker -v PermanentIntervalStatement
 lake env leanchecker -v PencilFourPrime
 python verification/permanent/check_quintic_hessian_curve.py
 ```
+
+## Hessian ranks of permanents
+
+A nonzero separately symmetric grid matrix whose entries vanish on equal row or column indices has rank four or at least six. At rank four its entries factor into two symmetrized products, one on row indices and one on column indices. The support refinement applies in characteristic different from two. [Rank gap](HollowGridSmallRank.lean) · [Factorization criterion](HollowGridDisjoint.lean) · [Sharp binary example](HollowGridBinary.lean)
+
+The Hessian of every square permanent satisfies this grid condition. Adjoining a diagonal one to explicit smooth points of orders two and three gives all admissible positive ranks as the order varies. The theorem on the smooth locus requires order at least two. The ambient and hypersurface spectra agree. [Border formula](PermanentHessianSuspension.lean) · [Integral seeds](PermanentSpectrumSeeds.lean) · [All-characteristic statements](PermanentSmoothSpectrum.lean) · [Ambient spectrum](PermanentAmbientSpectrum.lean)
+
+At fixed order three, integral matrices attain every allowed positive rank in characteristic different from two. Each rank certificate uses an integer column-span identity and an inverse of a principal minor after multiplication by a power of two. [Order-three theorem and certificates](PermanentOrderThreeSpectrum.lean)
+
+```sh
+lake build PermanentOrderThreeSpectrum PermanentAmbientSpectrum HollowGridDisjoint HollowGridBinary
+lake env leanchecker -v PermanentOrderThreeSpectrum
+lake env leanchecker -v PermanentSmoothSpectrum
+```
