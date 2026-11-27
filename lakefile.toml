@@ -570,4 +570,3 @@ roots = [
   "PaleyAllOrders",
   "PaleyRawStatement",
 ]
-globs = ["PaleyRawStatement"]
