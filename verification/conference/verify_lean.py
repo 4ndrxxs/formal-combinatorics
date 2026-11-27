@@ -35,7 +35,7 @@ def main():
         'PaleySecond', 'TorusFrobeniusPaley', 'ProjectiveSplitSupports', 'ConferenceShiftedLog', 'ConferenceShiftedThreshold',
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion',
-        'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders')]
+        'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -60,6 +60,8 @@ def main():
             if rel.name == 'NearHadamardBorders.lean':
                 expected = ['Hadamard.NearBorder.' + name for name in
                             ('abs_det_of_border_blocks', 'bordering_rigidity', 'two_circulant_borders')]
+            if rel.name == 'ProjectiveSupportCorrelations.lean':
+                expected = ['Hadamard.MSXCore.incidence_gram']
             if expected:
                 compact = ' '.join(out.stdout.split())
                 for theorem in expected:
