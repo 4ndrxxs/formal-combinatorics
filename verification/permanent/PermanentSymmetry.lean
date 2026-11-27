@@ -7,7 +7,10 @@ noncomputable section
 open MvPolynomial Matrix Equiv
 namespace PermanentFive
 open QuinticPencil
-variable {K I : Type*} [Field K] [Fintype I] [DecidableEq I]
+variable {K I : Type*} [Fintype I] [DecidableEq I]
+
+section
+variable [CommRing K]
 
 theorem row_column_rename (r c : Perm I) :
     rename (r.prodCongr c) (per K I) = per K I := by
@@ -28,6 +31,10 @@ theorem rename_comp {e g : Perm (I × I)} (he : rename e (per K I) = per K I)
     (hg : rename g (per K I) = per K I) : rename (e.trans g) (per K I) = per K I := by
   change rename (g ∘ e) (per K I) = _
   rw [← MvPolynomial.rename_rename,he,hg]
+
+end
+
+variable [Field K]
 
 /-- Transport a coordinate singular-plane condition back along a symmetry. -/
 theorem transport {J : Type*} [Fintype J] [DecidableEq J] {p : MvPolynomial J K} (e : Perm J)

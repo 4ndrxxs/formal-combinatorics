@@ -38,11 +38,13 @@ The proof computes the mixed determinant coefficient using a Schur complement, i
 
 ## The permanent of order five
 
-Over every field of characteristic zero, a square matrix of affine linear forms whose determinant equals the generic five-by-five permanent has size at least **twenty**. The only hypothesis on the matrix is the polynomial equality `permanent(X) = det(A + Σ xᵢⱼ Fᵢⱼ)`. Over the complex numbers, Grenet's size-31 construction puts the minimum in the interval **20–31**. [Unrestricted theorem](PermanentTwenty.lean) · [Explicit complex statement](PermanentFiveStatement.lean) · [Grenet's construction](https://www-verimag.imag.fr/~grenetb/publis/Gre11.pdf)
+Over every field of characteristic zero, a square matrix of affine linear forms whose determinant equals the generic five-by-five permanent has size at least **twenty-one**. The only hypothesis on the matrix is the polynomial equality `permanent(X) = det(A + Σ xᵢⱼ Fᵢⱼ)`. Over the complex numbers, Grenet's size-31 construction puts the minimum in the interval **21–31**. [Unrestricted theorem](PermanentTwentyOne.lean) · [Explicit complex statement](PermanentFiveStatement.lean) · [Grenet's construction](https://www-verimag.imag.fr/~grenetb/publis/Gre11.pdf)
 
 Write $h=m-1$ and let $a$ be the codimension of the common kernel $L$ of the two endpoint maps of the normalized quintic pencil. At every centre $y$, the Hessian restricted to $L$ has rank at most $2(h-a)$. The ambient Hessian at each point of $L$ has rank at most $h-a$. Polynomial paths give both inequalities on the same coordinate plane. [Liftable directions and their dimension](QuinticDefect.lean) · [Restriction of the Hessian](QuinticRestricted.lean) · [Limit of the Gram matrix](QuinticRestrictedTorus.lean) · [Simultaneous bounds](PermanentSimultaneous.lean)
 
 The gradient excludes a matching of four occupied cells. With at most thirteen cells, a three-line cover places the support inside one of four boards of size thirteen, up to symmetry. Each board has a nonsingular principal Hessian at an explicit integer centre. Deleting a coordinate drops the rank by at most two. With fourteen or fifteen cells, an ambient Hessian minor of order ten suffices. The five integer inverse certificates can be reproduced with the Python standard library. [Cover argument](PermanentBlockCover.lean) · [Rank under coordinate deletion](PermanentPrincipal.lean) · [Integral certificates and independent calculation](check_quintic_restricted.py)
+
+A size-twenty expression would give at least six mutually isotropic Hessian directions at every centre, all inside the fixed endpoint kernel. After scalar extension to the rational function field and a torus degeneration, this forces a square Gram determinant on each twelve-cell frame containing the pivots. Each of the nine possible boards has a point with a simple zero, which excludes a square. On thirteen cells a supported ambient minor has rank eight, and on fourteen or fifteen cells an ambient minor has rank ten. Together these tests exclude every size through twenty. [Square obstruction](PermanentOddObstruction.lean) · [Nine integral simple-zero certificates](twelve-block-data.json) · [Reduction to the nine boards](PermanentTwelveCover.lean) · [Proof details](twelve-discriminant.md)
 
 Regularity at the origin is also proved in Lean. A linear slice with five coordinates meets the zero set of all twenty-five ambient first partials only at the origin. An integer polynomial certificate expresses eight times each sixth power as a combination of the partials. The proof compares this slice with matrices of corank at least two using a parametrization, a chain of prime ideals and Krull's height theorem. In particular a polynomial matrix representing the permanent must have corank one at the origin. The size bound then uses affine linearity. [Slice and polynomial identity](PermanentSlice.lean) · [Height of a point](DeterminantalHeight.lean) · [Parametrization](DeterminantalParametrization.lean) · [Intersection with the graph](DeterminantalGraph.lean) · [First-order vanishing](DeterminantalColumns.lean) · [Derivative of a determinant](DeterminantalDerivative.lean) · [Exclusion of two zero rows](PermanentOrigin.lean)
 
@@ -50,10 +52,12 @@ The general geometric context appears in Proposition 2.1 of Alper, Bogart and Ve
 
 ```sh
 lake build QuinticPermanent
-lake env leanchecker -v PermanentTwenty
+lake env leanchecker -v PermanentTwentyOne
 lake env leanchecker -v PermanentFiveStatement
 python verification/permanent/check_quintic_endpoint.py
 python verification/permanent/check_quintic_slice.py
 python verification/permanent/check_quintic_saturation.py
 python verification/permanent/check_quintic_restricted.py
+python verification/permanent/check_quintic_discriminant.py
+python verification/permanent/check_quintic_layout.py
 ```
