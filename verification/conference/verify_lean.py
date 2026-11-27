@@ -36,7 +36,7 @@ def main():
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion',
         'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations', 'ProjectiveSplitComparison',
-        'ProjectiveNonsplitTorus', 'LinPhoaSourceArray')]
+        'ProjectiveNonsplitTorus', 'LinPhoaSourceArray', 'LinPhoaJacobi')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -72,6 +72,9 @@ def main():
             if rel.name == 'LinPhoaSourceArray.lean':
                 expected = ['Hadamard.LinPhoa.' + name for name in
                             ('bulk_cross', 'source_entry_sign', 'source_partition', 'source_partition_iff')]
+            if rel.name == 'LinPhoaJacobi.lean':
+                expected = ['Hadamard.LinPhoa.' + name for name in ('square_fourier_jacobi', 'difference_character',
+                            'bulk_character_entry', 'bulk_jacobi_mode', 'full_jacobi_mode', 'constant_action', 'constant_det')]
             if expected:
                 compact = ' '.join(out.stdout.split())
                 for theorem in expected:
