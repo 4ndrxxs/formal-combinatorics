@@ -17,6 +17,10 @@ For example, modulo 45, every order congruent to 6 modulo 180 is excluded by its
 
 The prime statement is formulated in [Kuperberg, *Hadamard matrices modulo p and small modular Hadamard matrices*](https://doi.org/10.1002/jcd.21522). Kline's November 2026 preprint proves the prime criterion for odd primes outside the class 1 modulo 8 and supplies design extensions used in this development. [Kline, *Modular Hadamard matrices at large orders*](https://doi.org/10.5281/zenodo.24421216)
 
+## Determinant and permanent coefficients
+
+For every binary partition of the original variables, the generic determinant and permanent have coefficient matrices related by row and column signs over any commutative ring. At every order from four, an explicit three-way partition obstructs even arbitrary local scalar reweighting in characteristic different from two. [Theorems, proof files and reproduction commands](verification/permanent/README.md)
+
 ## Conference matrices and determinants
 
 Let $C$ be a symmetric conference matrix of order $n=2v>2$ and let $W_n=(2n-2)(n-2)^{v-1}$ be the Ehlich–Wojtas bound. At every such order there is a diagonal with $v$ plus signs and $v$ minus signs for which $|\det(C+D)|>(\sqrt e/2)W_n$. Writing $q=n-1$, the mean over these balanced diagonals is at least $(q+1/q)^v$. More generally, the coefficient of $z^k$ in $((q-1)(1+z)^2+4z)^v$ is the exact sum of the absolute determinants over all diagonals with $k$ positive entries. [Exact generating function](Quantum/Hadamard/ConferenceDiagonalAverage.lean) · [Balanced mean and existence theorem](Quantum/Hadamard/ConferenceBalancedMean.lean)

@@ -11,6 +11,12 @@ rev = "v4.36.0"
 name = "Quantum"
 
 [[lean_lib]]
+name = "PermanentCuts"
+srcDir = "verification/permanent"
+roots = ["PermanentCoefficientSigns", "PermanentThreeColour"]
+globs = ["PermanentCoefficientSigns", "PermanentThreeColour"]
+
+[[lean_lib]]
 name = "Designs"
 srcDir = "designs"
 roots = [
