@@ -29,7 +29,9 @@ def main():
     modules = [Path('Quantum/Hadamard') / (name + '.lean') for name in (
         'DeterminantRatioEstimate', 'DeterminantRatioEstimateMatrix',
         'DeterminantRatioEstimateConference', 'DeterminantRatioEstimateLimit',
-        'DeterminantRatioEstimateUnbalanced', 'ConferenceDiagonalAverage', 'ConferenceBalancedMean')]
+        'DeterminantRatioEstimateUnbalanced', 'ConferenceDiagonalAverage', 'ConferenceBalancedMean',
+        'ConferencePrincipalDet', 'ConferenceCubicEstimate', 'ConferenceCubicThreshold',
+        'ConferenceCubicMatrix', 'Basic', 'Paley', 'ProjectiveQuadraticBalance')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)

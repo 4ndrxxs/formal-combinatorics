@@ -21,7 +21,7 @@ The prime statement is formulated in [Kuperberg, *Hadamard matrices modulo p and
 
 Let $C$ be a symmetric conference matrix of order $n=2v>2$ and let $W_n=(2n-2)(n-2)^{v-1}$ be the Ehlich–Wojtas bound. At every such order there is a diagonal with $v$ plus signs and $v$ minus signs for which $|\det(C+D)|>(\sqrt e/2)W_n$. Writing $q=n-1$, the mean over these balanced diagonals is at least $(q+1/q)^v$. More generally, the coefficient of $z^k$ in $((q-1)(1+z)^2+4z)^v$ is the exact sum of the absolute determinants over all diagonals with $k$ positive entries. [Exact generating function](Quantum/Hadamard/ConferenceDiagonalAverage.lean) · [Balanced mean and existence theorem](Quantum/Hadamard/ConferenceBalancedMean.lean)
 
-For individual completions with a fraction of positive signs tending to $a$, the determinant ratio tends to $\exp(2a(1-a))/2$ as the order grows. At balance the limit is $\sqrt e/2$, and every balanced completion attains at least four fifths of $W_n$ when $n-1\ge674$. Problem 15 of Egan, Kotsireas, London and Ó Catháin concerns three specified constructions of Momihara, Suda and Xiang. Their identification with the relevant completions and a finite range of small orders are still open steps in applying these results to that question. [Finite bound for individual balanced completions](Quantum/Hadamard/DeterminantRatioEstimateConference.lean) · [Limit for arbitrary sign proportions](Quantum/Hadamard/DeterminantRatioEstimateUnbalanced.lean) · [Independent Lean statements](verification/conference/Statement.lean)
+For individual completions with a fraction of positive signs tending to $a$, the determinant ratio tends to $\exp(2a(1-a))/2$ as the order grows. At balance the limit is $\sqrt e/2$, and every balanced completion attains at least four fifths of $W_n$ from order 170. For smaller orders starting at 30, one integer inequality involving the cubic trace of the positive principal block suffices. For the Paley matrix, this gives the same bound at every eligible order at least 30 for signings defined by nonsingular projective binary quadratic forms. The finite part uses 108 exact certificates in 18 fields. Identifying the three constructions of Momihara, Suda and Xiang in survey Problem 15 with these signings remains open. [Cubic criterion and universal finite bound](Quantum/Hadamard/ConferenceCubicMatrix.lean) · [Quadratic character balance](Quantum/Hadamard/ProjectiveQuadraticBalance.lean) · [Finite certificates and two arithmetic checkers](verification/conference/paley-quadratics/README.md) · [Independent Lean statements](verification/conference/Statement.lean)
 
 ## Other proof families
 
@@ -48,7 +48,7 @@ lake env lean Statements/CompositeSquareNormStatement.lean
 lake env lean Statements/TwoPrimePowerSpectrumStatement.lean
 lake env lean Statements/KuperbergStatement.lean
 lake env leanchecker -v Quantum.Hadamard.CompositeSquareNorms
-lake env leanchecker -v Quantum.Hadamard.DeterminantRatioEstimateConference
+lake env leanchecker -v Quantum.Hadamard.ConferenceCubicMatrix
 ```
 
 Use the following targets to build additional results individually. The dense finite certificate for moduli 17 and 19 has its own Lake project inside the linked archive.
@@ -61,6 +61,7 @@ lake build Sequences
 lake build Designs
 python verification/conference/verify_lean.py
 python verification/conference/check_diagonal_averages.py
+python verification/conference/paley-quadratics/check_trace.py
 ~~~
 
 The standalone statements print their full theorem types and axiom lists. The square-sum endpoints use `propext`, `Classical.choice`, and `Quot.sound`. The source files include earlier constructions and attribute them in the relevant modules. Computational checking establishes the formal statements under the pinned dependencies. Questions of bibliographic priority and journal review are separate.

@@ -15,7 +15,7 @@ def Estimates : Prop := ∀ (k : ℕ) (C : Matrix (Fin (k+1) ⊕ Fin (k+1))
   let n := 2*((k:ℝ)+1)
   let W := (2*n-2)*(n-2)^k
   let d := |(C+Matrix.diagonal signedDiagonal).det|
-  (674 ≤ n-1 → (4/5:ℝ)*W ≤ d) ∧
+  (169 ≤ n-1 → (4/5:ℝ)*W ≤ d) ∧
     (16 ≤ n → |Real.log (d/W) - (1/2-Real.log 2)| ≤ 4*(Real.sqrt (n-1)+1)/n)
 
 def ProportionEstimate : Prop := ∀ (k a b : ℕ) (C : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℝ),

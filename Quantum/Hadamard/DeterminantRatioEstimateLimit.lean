@@ -106,7 +106,8 @@ theorem conference_principal_abs {C : Matrix K K ℝ} {q : ℝ} (hq : 0 < q)
     rw [smul_sub, smul_smul] at p2
     exact upper_of_shift _ p2 i
 
-private theorem gram_moments {E : Matrix I I ℝ} (k : ℕ) (card : Fintype.card I=k+1)
+/-- Exact first two moments for a zero-diagonal symmetric sign block scaled by two. -/
+theorem gram_moments {E : Matrix I I ℝ} (k : ℕ) (card : Fintype.card I=k+1)
     (herm : E.IsHermitian) (diag : ∀ i, E i i=0) (off : ∀ i j, i≠j → E i j^2=4) :
     (∑ i, herm.eigenvalues i=0) ∧ (∑ i, (herm.eigenvalues i)^2=4*(k:ℝ)*((k:ℝ)+1)) := by
   constructor
@@ -130,7 +131,8 @@ private theorem gram_moments {E : Matrix I I ℝ} (k : ℕ) (card : Fintype.card
 /-- The bound at order `2*(k+1)`, indexed by the exponent of its power term. -/
 def ewBound (k : ℕ) : ℝ := (2 * (2*((k:ℝ)+1)) - 2)*(2*((k:ℝ)+1)-2)^k
 
-private theorem gram_ratio_identity {E : Matrix I I ℝ} (k : ℕ) (card : Fintype.card I=k+1)
+/-- The block determinant divided by the Ehlich–Wojtas bound as a normalized spectral product. -/
+theorem gram_ratio_identity {E : Matrix I I ℝ} (k : ℕ) (card : Fintype.card I=k+1)
     (herm : E.IsHermitian) :
     (((2*((k:ℝ)+1)) • (1 : Matrix I I ℝ) + E).det / ewBound k) =
       (∏ i, (1+herm.eigenvalues i/(2*((k:ℝ)+1)))) /

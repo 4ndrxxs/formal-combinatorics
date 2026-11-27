@@ -1,6 +1,7 @@
 import Statement
 import Quantum.Hadamard.DeterminantRatioEstimateUnbalanced
 import Quantum.Hadamard.ConferenceBalancedMean
+import Quantum.Hadamard.ConferenceCubicMatrix
 
 open Hadamard.DeterminantRatio
 
@@ -17,9 +18,9 @@ theorem verifiedConferenceEstimates : ConferenceAudit.Estimates := by
   have q : 2*((k:ℝ)+1)-1=2*(k:ℝ)+1 := by ring
   constructor
   · intro large
-    have a := balanced_conference_four_fifths k hk (Fintype.card_fin _) (Fintype.card_fin _)
-      (q ▸ large) hc sqr dia (fun i j h ↦ (entry i j h).le)
-    simpa only [mul_assoc, sig] using a
+    have a := balanced_conference_four_fifths_169 k (Fintype.card_fin _) (Fintype.card_fin _)
+      (q ▸ large) hc sqr dia entry
+    simpa only [ewBound, sig] using a
   · intro large
     have a := balanced_conference_log_rate k hk (Fintype.card_fin _) (Fintype.card_fin _) large hc sqr dia entry
     simpa only [q, ewBound, sig] using a
