@@ -1,5 +1,5 @@
 import PaleyAllOrders
-import Quantum.Hadamard.ProjectiveNonsplitTorus
+import Quantum.Hadamard.NonsplitCharacterProduct
 
 /-! Determinant bounds for two explicit circulants from the odd norm-one
 subgroup of a quadratic finite field extension. -/
@@ -88,5 +88,27 @@ theorem every_field_torus (F : Type) [Field F] [Fintype F] [DecidableEq F]
   exact ⟨h,pos,ho,hn,fun α unit ↦ ⟨sign_entries q4 hm h ho hn α unit,torus_four_fifths q4 lo h ho hn α unit⟩⟩
 
 #print axioms every_field_torus
+
+/-- The Gauss products themselves satisfy the four-fifths bound for both
+orientations at every eligible order. -/
+theorem torus_gauss_four_fifths (q4 : Fintype.card F%4=1) (lo : 29≤Fintype.card F)
+    (h : (Ext d)ˣ) [NeZero (orderOf h)] (ho : orderOf h=(Fintype.card F+1)/2)
+    (hn : (h:Ext d).norm=1) :
+    ∃ Ω : AddChar (Fin (orderOf h)) ℂ → MulChar (Ext d) ℂ,
+      (∀ θ s, Ω θ (algebraMap F (Ext d) s)=Hadamard.LinPhoa.eta F s) ∧
+      (∀ θ i, Ω θ (spin h i)=θ i) ∧ (∀ θ, (Ω θ (twiceRoot d))^2= -1) ∧
+      ∀ (ψ : AddChar F ℂ), ψ.IsPrimitive → ∀ α : ℤ, α^2=1 →
+        (4/5:ℝ)*(2*(Fintype.card F:ℝ))*((Fintype.card F:ℝ)-1)^(Fintype.card F/2) ≤
+          ‖∏ θ : AddChar (Fin (orderOf h)) ℂ,
+            ((Fintype.card F:ℂ)+1+(α:ℂ)*gaussCorrection (Ω θ) ψ)‖ := by
+  have hc : ringChar F≠2 := by intro eq; have even := FiniteField.even_card_of_char_two eq; omega
+  have hm : quadraticChar F (-1)=1 := (quadraticChar_one_iff_isSquare (neg_ne_zero.mpr one_ne_zero)).mpr
+    (FiniteField.isSquare_neg_one_iff.mpr (by omega))
+  obtain ⟨Ω,base,spins,phase,prod⟩ := exists_torus_gauss_product hc q4 hm h ho hn
+  refine ⟨Ω,base,spins,phase,fun ψ prim α sign ↦ ?_⟩
+  rw [←prod ψ prim α sign,Complex.norm_real,Real.norm_eq_abs,abs_abs]
+  exact torus_four_fifths q4 lo h ho hn α sign
+
+#print axioms torus_gauss_four_fifths
 
 end Hadamard.NonsplitTorus

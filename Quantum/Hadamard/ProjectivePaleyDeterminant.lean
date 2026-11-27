@@ -60,7 +60,7 @@ variable {F : Type} [Field F] [Fintype F] [DecidableEq F]
 /-- The real Paley matrix on the affine chart and the point at infinity. -/
 def realPaley : Matrix (Option F) (Option F) ℝ := fun x y ↦ (HadamardMod.TorusFrobenius.entry x y : ℤ)
 
-private theorem realPaley_properties (hc : ringChar F≠2) (q4 : Fintype.card F%4=1) :
+theorem realPaley_properties (hc : ringChar F≠2) (q4 : Fintype.card F%4=1) :
     (realPaley (F:=F)).IsHermitian ∧ realPaley (F:=F)*realPaley=(Fintype.card F:ℝ) • 1 ∧
     (∀ i, realPaley (F:=F) i i=0) ∧ (∀ i j, i≠j → realPaley (F:=F) i j^2=1) := by
   let P := HadamardMod.TorusFrobenius.conference (F:=F) hc

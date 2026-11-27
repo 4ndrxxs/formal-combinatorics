@@ -191,7 +191,7 @@ theorem cyclic_wedge (hm : quadraticChar F (-1)=1) (h : (Ext d)ˣ) [NeZero (orde
   cases a <;> cases b <;> simp [cyclicEntry,flip,map_mul,ns]
 
 omit [Fact (¬ IsSquare d)] in
-private theorem wedge_chart (hm : quadraticChar F (-1)=1) (z w : Ext d) :
+theorem wedge_chart (hm : quadraticChar F (-1)=1) (z w : Ext d) :
     quadraticChar F (wedge z w)=quadraticChar F (scale z.re z.im)*quadraticChar F (scale w.re w.im)*
       HadamardMod.TorusFrobenius.entry (point z.re z.im) (point w.re w.im) := by
   have eq : scale z.re z.im * scale w.re w.im * bracket (point z.re z.im) (point w.re w.im)=wedge z w := by

@@ -36,7 +36,8 @@ def main():
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion',
         'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations', 'ProjectiveSplitComparison',
-        'ProjectiveNonsplitTorus', 'LinPhoaSourceArray', 'LinPhoaJacobi', 'LinPhoaCharacterProduct')]
+        'ProjectiveNonsplitTorus', 'LinPhoaSourceArray', 'LinPhoaJacobi', 'LinPhoaCharacterProduct',
+        'NonsplitGauss', 'NonsplitCharacterProduct')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -80,6 +81,13 @@ def main():
                 expected = ['Hadamard.LinPhoa.' + name for name in ('det_in_characters', 'cyclic_difference',
                             'bulk_character_product', 'scalar_border_det', 'core_det_ratio', 'array_character_product',
                             'exists_character_lift', 'array_jacobi_product', 'exists_jacobi_products')]
+            if rel.name == 'NonsplitGauss.lean':
+                expected = ['Hadamard.NonsplitTorus.' + name for name in ('scalar_torus_bijective',
+                            'torus_gauss_difference', 'torus_character_lift', 'normCharacter_eq_quadratic',
+                            'torus_gauss_phase', 'exists_torus_gauss_pair')]
+            if rel.name == 'NonsplitCharacterProduct.lean':
+                expected = ['Hadamard.NonsplitTorus.' + name for name in ('torus_principal_det',
+                            'torus_character_product', 'exists_torus_gauss_product')]
             if expected:
                 compact = ' '.join(out.stdout.split())
                 for theorem in expected:
