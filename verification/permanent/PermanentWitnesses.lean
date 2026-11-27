@@ -124,7 +124,8 @@ private theorem minor_cast (z : Cell → ℤ) {m : Type*} [Fintype m] [Decidable
   change hessian (per K Idx) ((Int.castRingHom K) ∘ z) (r i) (c j) = (Int.castRingHom K) (M i j)
   rw [second_formula,second_map,entries]
 
-private theorem rank_witness (z : Cell → ℤ) {m : Type*} [Fintype m] [DecidableEq m]
+/-- A nonsingular integral minor bounds the Hessian rank over every characteristic-zero field. -/
+theorem integer_hessian_rank (z : Cell → ℤ) {m : Type*} [Fintype m] [DecidableEq m]
     (r c : m → Cell) (M : Matrix m m ℤ)
     (entries : ∀ i j, secondAt z (r i) (c j) = M i j) (nz : M.det ≠ 0) :
     Fintype.card m ≤ (hessian (per K Idx) ((Int.castRingHom K) ∘ z)).rank := by
@@ -137,11 +138,11 @@ private theorem rank_witness (z : Cell → ℤ) {m : Type*} [Fintype m] [Decidab
 
 /-- The complementary four cells detect rank four at a three-edge matching. -/
 theorem match_rank : 4 ≤ (hessian (per K Idx) ((Int.castRingHom K) ∘ matchPoint 3)).rank :=
-  rank_witness K _ square square fourMinor three_entries (by rw [four_det]; decide)
+  integer_hessian_rank K _ square square fourMinor three_entries (by rw [four_det]; decide)
 
 /-- The two omitted rows give a nonsingular five-by-five Hessian minor. -/
 theorem row_rank : 5 ≤ (hessian (per K Idx) ((Int.castRingHom K) ∘ rowPoint)).rank :=
-  rank_witness K _ lowRow highRow fiveMinor row_entries (by rw [five_det]; decide)
+  integer_hessian_rank K _ lowRow highRow fiveMinor row_entries (by rw [five_det]; decide)
 
 #print axioms four_gradient
 #print axioms match_rank

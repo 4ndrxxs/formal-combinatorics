@@ -19,8 +19,8 @@ globs = ["PermanentCoefficientSigns", "PermanentThreeColour"]
 [[lean_lib]]
 name = "QuinticPermanent"
 srcDir = "verification/permanent"
-roots = ["PermanentUnrestricted"]
-globs = ["QuinticEndpoint", "QuinticPencil", "QuinticHomogeneous", "QuinticAffine", "QuinticRank", "QuinticKernel", "QuinticCorner", "QuinticRegular", "PermanentDegeneration", "QuinticDerivatives", "QuinticTorus", "PermanentSupports", "PermanentFive", "PermanentWitnesses", "PermanentSymmetry", "PermanentLowerBound", "PermanentSlice", "DeterminantalHeight", "DeterminantalParametrization", "DeterminantalGraph", "DeterminantalColumns", "DeterminantalDerivative", "PermanentOrigin", "PermanentUnrestricted"]
+roots = ["PermanentSeventeen","PermanentFiveStatement"]
+globs = ["QuinticEndpoint", "QuinticPencil", "QuinticHomogeneous", "QuinticAffine", "QuinticRank", "QuinticKernel", "QuinticCorner", "QuinticRegular", "PermanentDegeneration", "QuinticDerivatives", "QuinticTorus", "PermanentSupports", "PermanentFive", "PermanentWitnesses", "PermanentSymmetry", "PermanentLowerBound", "PermanentSlice", "DeterminantalHeight", "DeterminantalParametrization", "DeterminantalGraph", "DeterminantalColumns", "DeterminantalDerivative", "PermanentOrigin", "PermanentUnrestricted", "QuinticRadial", "QuinticSaturation", "QuinticNormalized", "QuinticEvenTorus", "PermanentCover", "PermanentHoleFit", "PermanentMissingWitness", "PermanentKernelRigidity", "PermanentSeventeen", "PermanentFiveStatement"]
 
 [[lean_lib]]
 name = "Designs"

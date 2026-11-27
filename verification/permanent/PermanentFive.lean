@@ -39,12 +39,18 @@ theorem row_column_twist {K I : Type*} [Field K] [Fintype I] [DecidableEq I]
 
 def weight (c : Cell) := 5*c.1.val+c.2.val
 
-private theorem distinct : Function.Injective weight := by
+theorem weight_injective : Function.Injective weight := by
   rintro ⟨i,j⟩ ⟨k,l⟩ h
   change 5*i.val+j.val = 5*k.val+l.val at h
   apply Prod.ext
   · apply Fin.ext; change i.val = k.val; omega
   · apply Fin.ext; change j.val = l.val; omega
+
+/-- The weight of a cell is the sum of a row weight and a column weight. -/
+theorem weight_twist {K : Type*} [Field K] (t : K) :
+    ∃ a : K, twist (fun i ↦ t^(weight i)) (per K Idx) = C a * per K Idx := by
+  refine ⟨(∏ i : Idx, t^(5*i.val))*(∏ j : Idx, t^j.val),?_⟩
+  simpa [weight,pow_add] using row_column_twist (fun i : Idx ↦ t^(5*i.val)) (fun j : Idx ↦ t^j.val)
 
 /-- The precise necessary condition on coordinate supports for a regular
 determinantal expression of the generic permanent of order five. -/
@@ -55,9 +61,7 @@ theorem regular_coordinate_support {K n : Type*} [Field K] [Infinite K] [Fintype
       (∀ i, MvPolynomial.eval z (pderiv i (per K Idx)) = 0) ∧
       26 + (hessian (per K Idx) z).rank ≤ Fintype.card n + S.card := by
   have hom : (per K Idx).IsHomogeneous 5 := per_homogeneous K Idx
-  obtain ⟨S,hS⟩ := coordinate_kernel A F regular rep hom weight distinct (fun t _ ↦ by
-    refine ⟨(∏ i : Idx, t^(5*i.val))*(∏ j : Idx, t^j.val),?_⟩
-    simpa [weight,pow_add] using row_column_twist (fun i : Idx ↦ t^(5*i.val)) (fun j : Idx ↦ t^j.val))
+  obtain ⟨S,hS⟩ := coordinate_kernel A F regular rep hom weight weight_injective (fun t _ ↦ weight_twist t)
   refine ⟨S,fun z h ↦ ⟨(hS z h).1,?_⟩⟩
   have rank := (hS z h).2
   change 25 + (hessian (per K Idx) z).rank + 1 ≤ Fintype.card n + S.card at rank

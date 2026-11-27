@@ -38,8 +38,9 @@ The proof computes the mixed determinant coefficient using a Schur complement, i
 
 ## The permanent of order five
 
-Over every field of characteristic zero, every affine determinantal expression for the generic five-by-five permanent has size at least **sixteen**. For arbitrary constant matrix $A$ and coefficient matrices $F_{ij}$, the sole hypothesis of `PermanentFive.determinantal_lower_bound` is the polynomial equality
-`permanent(X) = det(A + Σ xᵢⱼ Fᵢⱼ)`. Its conclusion is `16 ≤ Fintype.card n`, where `n` indexes the rows and columns of the representation. Both polynomials use Mathlib's definitions. The theorem rules out sizes through fifteen. Whether sixteen is attainable remains open in this work. [Unrestricted theorem and normalization](PermanentUnrestricted.lean) · [Lower bound for regular representations](PermanentLowerBound.lean)
+Over every field of characteristic zero, every affine determinantal expression for the generic five-by-five permanent has size at least **seventeen**. For arbitrary constant and coefficient matrices, the hypothesis is the polynomial equality `permanent(X) = det(A + Σ xᵢⱼ Fᵢⱼ)`. The conclusion is `17 ≤ Fintype.card n`, where `n` indexes the rows and columns of the representation. Grenet's construction over the complex numbers gives size 31. The exact minimum remains open in this work. [Unrestricted theorem](PermanentSeventeen.lean) · [Explicit complex statement](PermanentFiveStatement.lean) · [Grenet's upper bound](https://www-verimag.imag.fr/~grenetb/publis/Gre11.pdf)
+
+At size sixteen the Hessian tests force the common endpoint kernel to have dimension ten. The endpoint image is then maximal isotropic. Polarizing the cubic and quartic identities of the normalized pencil forces the even second difference of the permanent to vanish in its kernel directions. After coordinate degeneration two disjoint occupied cells, completed to a permutation, give a second difference of two. [Half-dimensional endpoint and polarization](QuinticSaturation.lean) · [Radial transfer identities](QuinticRadial.lean) · [Cancellation for the actual pencil](QuinticNormalized.lean) · [Specialization](QuinticEvenTorus.lean) · [Cell cover](PermanentCover.lean) · [Hessian minor of order six](PermanentMissingWitness.lean) · [Dimension and finite contradiction](PermanentLowerBound.lean)
 
 The proof rewrites the mixed derivative as the symbolic Hessian. It degenerates the subspace in the quintic estimate to a coordinate subspace and preserves the vanishing of the gradient and the Hessian minors. Every large support then either contains four matching cells or contains explicit points whose Hessian ranks violate the estimate. The finite witnesses are checked by the Lean kernel. [Derivatives](QuinticDerivatives.lean) · [Coordinate degeneration](PermanentDegeneration.lean) · [Hessian rank under degeneration](QuinticTorus.lean) · [Application to the generic permanent](PermanentFive.lean) · [Support counting](PermanentSupports.lean) · [Finite minors](PermanentWitnesses.lean) · [Symmetries](PermanentSymmetry.lean)
 
@@ -49,7 +50,9 @@ The general geometric context appears in Proposition 2.1 of Alper, Bogart and Ve
 
 ```sh
 lake build QuinticPermanent
-lake env leanchecker -v PermanentUnrestricted
+lake env leanchecker -v PermanentSeventeen
+lake env leanchecker -v PermanentFiveStatement
 python verification/permanent/check_quintic_endpoint.py
 python verification/permanent/check_quintic_slice.py
+python verification/permanent/check_quintic_saturation.py
 ```

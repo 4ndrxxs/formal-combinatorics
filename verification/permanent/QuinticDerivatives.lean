@@ -105,6 +105,25 @@ theorem regular_partial_kernel (A : Matrix n n K) (F : I → Matrix n n K)
   rw [← first_partial]
   exact X_pow_dvd_iff.mp (sing _) 1 (by decide)
 
+/-- The endpoint kernel of the specified normalized pencil has the
+gradient and Hessian bounds, with the same kernel in both statements. -/
+theorem normalized_partial_kernel {p : MvPolynomial I K} (hp : p.IsHomogeneous 5)
+    (b c : n → I → K) (D : n → n → I → K) (rep : p = regularDet b c D)
+    (z : I → K) (hz : z ∈ (endpoints b c).ker) :
+    (∀ i, MvPolynomial.eval z (MvPolynomial.pderiv i p) = 0) ∧
+    Fintype.card I + (hessian p z).rank ≤ Fintype.card n + finrank K (endpoints b c).ker := by
+  obtain ⟨H,hH,hr⟩ := quintic_rank hp b c D rep z hz
+  refine ⟨?_,by rw [hessian_rank H hH]; exact hr⟩
+  have hP : endpoints b c z = 0 := hz
+  have row : dotProductEquiv K n ((Matrix.of b).mulVecLin z) = 0 := congrArg Prod.fst hP
+  have hb := (dotProductEquiv K n).map_eq_zero_iff.mp row
+  have hc := congrArg Prod.snd hP
+  intro i
+  rw [← first_partial]
+  have sq := square_dvd_line b c D rep z (Pi.single i 1) (fun j ↦ congrFun hb j) (fun j ↦ congrFun hc j)
+  exact X_pow_dvd_iff.mp sq 1 (by decide)
+
+#print axioms normalized_partial_kernel
 #print axioms regular_partial_kernel
 
 #print axioms first_partial

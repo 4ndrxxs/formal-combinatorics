@@ -30,7 +30,7 @@ private theorem deriv_twist (v : I → K) (i : I) (p : MvPolynomial I K) :
       ring
 
 omit [Fintype I] [DecidableEq I] in
-private theorem eval_twist (v z : I → K) (p : MvPolynomial I K) :
+theorem eval_twist (v z : I → K) (p : MvPolynomial I K) :
     MvPolynomial.eval z (twist v p) = MvPolynomial.eval (fun i ↦ v i * z i) p := by
   unfold twist
   rw [MvPolynomial.map_eval₂Hom]
@@ -121,20 +121,23 @@ private def hessianPoly (p : MvPolynomial I K) : Matrix I I (MvPolynomial I K) :
 private theorem eval_hessian (p : MvPolynomial I K) (z : I → K) :
     (MvPolynomial.eval z).mapMatrix (hessianPoly p) = hessian p z := rfl
 
-/-- Every invariant homogeneous quintic with a regular affine determinant
-has a coordinate singular plane satisfying the Hessian inequality, provided
-the diagonal weights are distinct. -/
-theorem coordinate_kernel [Infinite K] (A : Matrix n n K) (F : I → Matrix n n K)
-    (regular : Fintype.card n = A.rank+1) {p : MvPolynomial I K}
-    (rep : p = (affineMatrix A F).det) (hp : p.IsHomogeneous 5)
+/-- Specialize a specified common kernel through the diagonal torus. The
+limiting support retains all polynomial identities valid on its orbit. -/
+theorem coordinate_kernel_of_subspace [Infinite K] (m : ℕ) {p : MvPolynomial I K}
+    (L : Submodule K (I → K)) (prop : ∀ z ∈ L,
+      (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
+      Fintype.card I + (hessian p z).rank + 1 ≤ m + finrank K L)
     (w : I → ℕ) (injective : Function.Injective w)
     (sym : ∀ t : K, t ≠ 0 → ∃ a : K, twist (fun i ↦ t^(w i)) p = C a * p) :
-    ∃ S : Finset I, ∀ z : I → K, (∀ j ∉ S, z j = 0) →
-      (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
-      Fintype.card I + (hessian p z).rank + 1 ≤ Fintype.card n + S.card := by
-  obtain ⟨L,prop⟩ := regular_partial_kernel A F regular rep hp
+    ∃ S : Finset I, S.card = finrank K L ∧
+      (∀ q : MvPolynomial I K,
+        (∀ x ∈ L, ∀ t : K, t ≠ 0 → MvPolynomial.eval (fun j ↦ t^(w j) * x j) q = 0) →
+        ∀ z : I → K, (∀ j ∉ S, z j = 0) → MvPolynomial.eval z q = 0) ∧
+      ∀ z : I → K, (∀ j ∉ S, z j = 0) →
+        (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
+        Fintype.card I + (hessian p z).rank + 1 ≤ m + S.card := by
   obtain ⟨S,card,special⟩ := PermanentDegeneration.coordinate_specialization L w injective
-  refine ⟨S,fun z hz ↦ ?_⟩
+  refine ⟨S,card,special,fun z hz ↦ ?_⟩
   let orbit : Set (I → K) := {y | ∃ x ∈ L, ∃ t : K, t ≠ 0 ∧ y = fun j ↦ t^(w j)*x j}
   have spec (q : MvPolynomial I K) (h : ∀ x ∈ orbit, MvPolynomial.eval x q = 0) :
       MvPolynomial.eval z q = 0 :=
@@ -147,7 +150,7 @@ theorem coordinate_kernel [Infinite K] (A : Matrix n n K) (F : I → Matrix n n 
     have h := scaled_first eq x i
     rw [(prop x hx).1 i,mul_zero] at h
     exact (mul_eq_zero.mp h).resolve_left (pow_ne_zero _ nt)
-  · let r := Fintype.card n + finrank K L - (Fintype.card I + 1)
+  · let r := m + finrank K L - (Fintype.card I + 1)
     have small (x) (hx : x ∈ orbit) : ((MvPolynomial.eval x).mapMatrix (hessianPoly p)).rank ≤ r := by
       obtain ⟨y,hy,t,nt,rfl⟩ := hx
       obtain ⟨a,eq⟩ := sym t nt
@@ -163,6 +166,22 @@ theorem coordinate_kernel [Infinite K] (A : Matrix n n K) (F : I → Matrix n n 
     rw [card]
     omega
 
+/-- Every invariant homogeneous quintic with a regular affine determinant
+has a coordinate singular plane satisfying the Hessian inequality, provided
+the diagonal weights are distinct. -/
+theorem coordinate_kernel [Infinite K] (A : Matrix n n K) (F : I → Matrix n n K)
+    (regular : Fintype.card n = A.rank+1) {p : MvPolynomial I K}
+    (rep : p = (affineMatrix A F).det) (hp : p.IsHomogeneous 5)
+    (w : I → ℕ) (injective : Function.Injective w)
+    (sym : ∀ t : K, t ≠ 0 → ∃ a : K, twist (fun i ↦ t^(w i)) p = C a * p) :
+    ∃ S : Finset I, ∀ z : I → K, (∀ j ∉ S, z j = 0) →
+      (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
+      Fintype.card I + (hessian p z).rank + 1 ≤ Fintype.card n + S.card := by
+  obtain ⟨L,prop⟩ := regular_partial_kernel A F regular rep hp
+  obtain ⟨S,_,_,conditions⟩ := coordinate_kernel_of_subspace (Fintype.card n) L prop w injective sym
+  exact ⟨S,conditions⟩
+
+#print axioms coordinate_kernel_of_subspace
 #print axioms rank_specialization
 #print axioms coordinate_kernel
 end QuinticPencil

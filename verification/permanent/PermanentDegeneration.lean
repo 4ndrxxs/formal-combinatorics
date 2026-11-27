@@ -58,17 +58,41 @@ private theorem pivot_count (L : Submodule K (I → K)) (w : I → ℕ) :
   exact (LinearMap.finrank_le_finrank_of_injective inj).trans_eq
     ((Module.finrank_pi K).trans (Fintype.card_coe _))
 
-/-- All polynomials vanishing on the weighted translates of L vanish on
-a single coordinate subspace of dimension dim L. -/
-theorem coordinate_specialization [Infinite K] (L : Submodule K (I → K))
+/-- Interpolate arbitrary values on leading coordinates, starting with
+the smallest weights. Adjusting a later pivot preserves every earlier value. -/
+private theorem lift_pivots (L : Submodule K (I → K)) (w : I → ℕ)
+    (inj : Function.Injective w) (S : Finset I) (sub : S ⊆ pivots L w) (z : I → K) :
+    ∃ x ∈ L, ∀ i ∈ S, x i = z i := by
+  classical
+  have aux (A : Finset I) (incl : A ⊆ S) : ∃ x ∈ L, ∀ i ∈ A, x i = z i := by
+    induction A using Finset.strongInductionOn with
+    | _ A ih =>
+      by_cases hA : A.Nonempty
+      · obtain ⟨i,hi,top⟩ := A.exists_max_image w hA
+        obtain ⟨x,hx,h⟩ := ih (A.erase i) (Finset.erase_ssubset hi)
+          (fun j hj ↦ incl (Finset.mem_of_mem_erase hj))
+        obtain ⟨v,hv,one,lower⟩ := mem_pivots.mp (sub (incl hi))
+        refine ⟨x + (z i - x i) • v,L.add_mem hx (L.smul_mem _ hv),?_⟩
+        intro j hj
+        by_cases eq : j = i
+        · subst j; simp [one]
+        · have lt : w j < w i := lt_of_le_of_ne (top j hj) (fun e ↦ eq (inj e))
+          simp [lower j lt,h j (Finset.mem_erase.mpr ⟨eq,hj⟩)]
+      · exact ⟨0,L.zero_mem,fun j hj ↦ (hA ⟨j,hj⟩).elim⟩
+  exact aux S (fun _ h ↦ h)
+
+/-- The limiting coordinate plane also has a surjective coordinate
+projection from the original linear space. -/
+theorem coordinate_specialization_with_lift [Infinite K] (L : Submodule K (I → K))
     (w : I → ℕ) (injective : Function.Injective w) :
     ∃ S : Finset I, S.card = finrank K L ∧
+      (∀ z : I → K, ∃ x ∈ L, ∀ i ∈ S, x i = z i) ∧
       ∀ (p : MvPolynomial I K),
         (∀ x ∈ L, ∀ t : K, t ≠ 0 → MvPolynomial.eval (fun j ↦ t^(w j) * x j) p = 0) →
         ∀ z : I → K, (∀ j ∉ S, z j = 0) → MvPolynomial.eval z p = 0 := by
   classical
   obtain ⟨S,subset,card⟩ := Finset.exists_subset_card_eq (pivot_count L w)
-  refine ⟨S,card,?_⟩
+  refine ⟨S,card,lift_pivots L w injective S subset,?_⟩
   intro p invariant z supported
   have leading (i : S) : Pivot L w i := mem_pivots.mp (subset i.property)
   choose v hv one lower using leading
@@ -127,5 +151,17 @@ theorem coordinate_specialization [Infinite K] (L : Submodule K (I → K))
   have endpt := along 0
   simpa only [gz,Polynomial.eval_zero,at_zero] using endpt.symm
 
+/-- All polynomials vanishing on the weighted translates of L vanish on
+a single coordinate subspace of dimension dim L. -/
+theorem coordinate_specialization [Infinite K] (L : Submodule K (I → K))
+    (w : I → ℕ) (injective : Function.Injective w) :
+    ∃ S : Finset I, S.card = finrank K L ∧
+      ∀ (p : MvPolynomial I K),
+        (∀ x ∈ L, ∀ t : K, t ≠ 0 → MvPolynomial.eval (fun j ↦ t^(w j) * x j) p = 0) →
+        ∀ z : I → K, (∀ j ∉ S, z j = 0) → MvPolynomial.eval z p = 0 := by
+  obtain ⟨S,card,_,special⟩ := coordinate_specialization_with_lift L w injective
+  exact ⟨S,card,special⟩
+
+#print axioms coordinate_specialization_with_lift
 #print axioms coordinate_specialization
 end PermanentDegeneration
