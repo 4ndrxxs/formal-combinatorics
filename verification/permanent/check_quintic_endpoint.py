@@ -57,6 +57,11 @@ def main():
     for supp in extremal:
         grad, hessian = derivatives(indicators(supp))
         assert not any(grad) and rank(hessian)==10
+    near_extremal = {frozenset(supp - {cell}) for supp in extremal for cell in supp}
+    assert len(near_extremal) == 300
+    for supp in near_extremal:
+        grad, hessian = derivatives(indicators(supp))
+        assert not any(grad) and rank(hessian) == 10
     three = {0,6,12}
     grad, hessian = derivatives(indicators(three))
     outside = [5*i+j for i in (3,4) for j in (3,4)]
@@ -67,6 +72,7 @@ def main():
     assert grad[24]==1
     print("Direct differentiation of all 120 permutation monomials: a four-edge matching has gradient entry one; "
           "a three-edge matching has Hessian rank four; all 20 extremal three-line supports have Hessian rank ten.")
+    print("All 300 three-line supports with one cell removed have Hessian rank ten at their indicator matrices.")
     print("The checked finite data do not by themselves establish the general affine-pencil reduction.")
 
 

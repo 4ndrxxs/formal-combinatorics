@@ -36,10 +36,16 @@ The Lean theorem works over every field and accepts arbitrary affine coefficient
 
 The proof computes the mixed determinant coefficient using a Schur complement, including the scalar determinant prefactor. Homogeneity then turns the entire series into a single monomial. A bilinear rank argument gives the inequality. [Schur complement](QuinticPencil.lean) · [Homogeneity](QuinticHomogeneous.lean) · [Normalized affine identity](QuinticAffine.lean) · [Rank deduction](QuinticRank.lean) · [Linear algebra](QuinticEndpoint.lean)
 
-The application to the complex permanent of order five also requires a proof that all representations of this particular permanent have corank one at the origin, a coordinate degeneration, and the matching and Hessian arguments on the limiting supports. The Python calculation checks the finite examples by directly differentiating every permanent monomial. The complete numerical lower bound of sixteen is still under formalization.
+## The permanent of order five
+
+Over any characteristic-zero field, a regular affine determinantal expression for the generic five-by-five permanent has size at least sixteen. Here regularity means that the constant matrix of a size-$m$ expression has rank $m-1$. The theorem uses Mathlib's permanent and determinant and quantifies over every choice of affine coefficients. [Formal lower bound](PermanentLowerBound.lean)
+
+The proof rewrites the mixed derivative as the symbolic Hessian. It degenerates the subspace in the quintic estimate to a coordinate subspace and preserves the vanishing of the gradient and the Hessian minors. Every large support then either contains four matching cells or contains explicit points whose Hessian ranks violate the estimate. The finite witnesses are checked by the Lean kernel. [Derivatives](QuinticDerivatives.lean) · [Coordinate degeneration](PermanentDegeneration.lean) · [Hessian rank under degeneration](QuinticTorus.lean) · [Application to the generic permanent](PermanentFive.lean) · [Support counting](PermanentSupports.lean) · [Finite minors](PermanentWitnesses.lean) · [Symmetries](PermanentSymmetry.lean)
+
+For complex coefficients, published results imply that every affine expression for this permanent is regular at the origin. This implication is the remaining step in an end-to-end Lean proof of the unrestricted bound. A separate integer calculation verifies the rank-ten Hessians for all twenty complete three-line supports and all 300 one-cell deletions. [Regularity, Proposition 2.1](https://arxiv.org/html/1505.02205v1) · [Singular locus, Theorem 4.14](https://arxiv.org/html/2402.17839v2#S4.Thmtheorem14)
 
 ```sh
 lake build QuinticPermanent
-lake env leanchecker -v QuinticRegular
+lake env leanchecker -v PermanentLowerBound
 python verification/permanent/check_quintic_endpoint.py
 ```
