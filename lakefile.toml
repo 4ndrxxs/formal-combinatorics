@@ -569,4 +569,5 @@ roots = [
   "PaleyField101",
   "PaleyAllOrders",
   "PaleyRawStatement",
+  "PaleySourceBorders",
 ]

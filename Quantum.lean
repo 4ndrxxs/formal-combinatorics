@@ -12,4 +12,5 @@ import Quantum.Hadamard.ProjectiveSplitSupports
 import Quantum.Hadamard.ProjectiveSupportCorrelations
 import Quantum.Hadamard.ProjectiveFieldModels
 import Quantum.Hadamard.NearHadamardBorders
+import Quantum.Hadamard.ProjectiveSplitComparison
 import Quantum.Hadamard.ConferenceBitCompletion

@@ -140,7 +140,7 @@ def Signs (T : Matrix Bool Bool ℝ) : Prop := ∀i j, (T i j)^2=1
 def Regular {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) : Prop :=
   ∀ a b i j, (∑ k, A (a,i) (b,k))=∑ k, A (a,j) (b,k)
 
-private theorem bulk_gram {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) (T L H : Matrix Bool Bool ℝ)
+theorem bulk_gram {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) (T L H : Matrix Bool Bool ℝ)
     (ht : Signs T) (a : Bool) (i j : Fin m) :
     let M := bordered A T L H
     (M*M.transpose) (bulk a i) (bulk a j)=(A*A.transpose) (a,i) (a,j)+2 := by
@@ -149,7 +149,7 @@ private theorem bulk_gram {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) (T L H : 
   simp only [Matrix.transpose_apply,Fintype.sum_sum_type,bulk,bordered,Fintype.sum_bool]
   rw [←sq,←sq,ht,ht]; ring
 
-private theorem mixed_gram {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) (T L H : Matrix Bool Bool ℝ)
+theorem mixed_gram {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) (T L H : Matrix Bool Bool ℝ)
     (reg : Regular A) (a : Bool) (i j : Fin m) (b : Bool) :
     let M := bordered A T L H
     (M*M.transpose) (bulk a i) (rim b)=(M*M.transpose) (bulk a j) (rim b) := by
@@ -161,7 +161,7 @@ private theorem mixed_gram {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) (T L H :
   intro u _
   simp only [←sum_mul,reg a u i j]
 
-private theorem rim_norm {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) (T L H : Matrix Bool Bool ℝ)
+theorem rim_norm {m : ℕ} (A : Matrix (Core m) (Core m) ℝ) (T L H : Matrix Bool Bool ℝ)
     (hl : Signs L) (hh : Signs H) (b : Bool) :
     let M := bordered A T L H
     (M*M.transpose) (rim b) (rim b)=Fintype.card (Core m)+2 := by

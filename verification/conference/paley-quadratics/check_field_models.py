@@ -217,7 +217,7 @@ def sources():
 
 def verify(project, directory, jobs):
     lake = shutil.which("lake") or str(Path.home() / ".elan/bin" / ("lake.exe" if os.name == "nt" else "lake"))
-    subprocess.run([lake, "build", MODULE], cwd=project, check=True, stdout=subprocess.DEVNULL)
+    subprocess.run([lake, "build", MODULE, "Quantum.Hadamard.ProjectiveSplitComparison"], cwd=project, check=True, stdout=subprocess.DEVNULL)
     command = [lake, "env", sys.executable, "-c", "import json,os;print(json.dumps(dict(os.environ)))"]
     env = json.loads(subprocess.check_output(command, cwd=project, text=True))
     with TemporaryDirectory(prefix="lean-field-models-") as temporary:
@@ -238,8 +238,12 @@ def verify(project, directory, jobs):
                 expected = {name + ".canonical"}
             elif name == "PaleyAllOrders":
                 expected = {"Hadamard.ProjectiveSigning.quadratic_paley_four_fifths_all"}
-            else:
+            elif name == "PaleyRawStatement":
                 expected = {"PaleyQuadraticStatement.verified"}
+            elif name == "PaleySourceBorders":
+                expected = {"Hadamard.MSXCore.source_borders_four_fifths"}
+            else:
+                raise ValueError("Unrecognized certificate module " + name)
             allowed = {"propext", "Classical.choice", "Quot.sound"}
             if {theorem for theorem, _ in reports} != expected or any(
                     set(axioms.split(", ")) - allowed for _, axioms in reports):
@@ -255,6 +259,7 @@ def verify(project, directory, jobs):
             list(pool.map(field, SMALL))
         build("PaleyAllOrders")
         build("PaleyRawStatement")
+        build("PaleySourceBorders")
 
 
 def main():

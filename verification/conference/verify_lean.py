@@ -35,7 +35,7 @@ def main():
         'PaleySecond', 'TorusFrobeniusPaley', 'ProjectiveSplitSupports', 'ConferenceShiftedLog', 'ConferenceShiftedThreshold',
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion',
-        'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations')]
+        'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations', 'ProjectiveSplitComparison')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -62,6 +62,9 @@ def main():
                             ('abs_det_of_border_blocks', 'bordering_rigidity', 'two_circulant_borders')]
             if rel.name == 'ProjectiveSupportCorrelations.lean':
                 expected = ['Hadamard.MSXCore.incidence_gram']
+            if rel.name == 'ProjectiveSplitComparison.lean':
+                expected = ['Hadamard.MSXCore.' + name for name in ('reference_gram', 'compare_incidence_border',
+                            'source_layout_gram', 'compare_source_layout', 'exists_square_enumeration')]
             if expected:
                 compact = ' '.join(out.stdout.split())
                 for theorem in expected:
