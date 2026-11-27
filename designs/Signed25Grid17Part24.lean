@@ -1,0 +1,32 @@
+import Signed25Grid17Data
+
+namespace Signed39.Contraction
+
+set_option maxRecDepth 100000
+set_option maxHeartbeats 0
+
+theorem grid17x25Case24: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 24 := by decide +kernel
+
+theorem grid17x25Case25: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 25 := by decide +kernel
+
+theorem grid17x25Case26: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 26 := by decide +kernel
+
+theorem grid17x25Case27: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 27 := by decide +kernel
+
+theorem grid17x25Case28: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 28 := by decide +kernel
+
+theorem grid17x25Case29: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 29 := by decide +kernel
+
+theorem grid17x25Case30: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 30 := by decide +kernel
+
+theorem grid17x25Case31: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 31 := by decide +kernel
+
+theorem grid17x25Case32: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 32 := by decide +kernel
+
+theorem grid17x25Case33: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 33 := by decide +kernel
+
+theorem grid17x25Case34: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 34 := by decide +kernel
+
+theorem grid17x25Case35: divisorGridSlice 17 25 202 qInputs_17_25 keep_17_25 35 := by decide +kernel
+
+end Signed39.Contraction

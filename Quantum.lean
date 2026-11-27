@@ -3,3 +3,5 @@ import Quantum.Hadamard.Kuperberg
 import Quantum.Hadamard.ArithmeticSingularTripleOrders
 import Quantum.Hadamard.TorusOddCompositeProgressions
 import Quantum.Hadamard.DeterminantRatioEstimateConference
+import Quantum.Hadamard.DeterminantRatioEstimateUnbalanced
+import Quantum.Hadamard.DeterminantRatioEstimateLimit

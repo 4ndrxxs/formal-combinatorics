@@ -4,12 +4,12 @@ This repository collects machine-checked results in combinatorial matrix theory 
 
 ## Modular Hadamard matrices
 
-An order $n$ is supported at modulus $m$ if there is an $n$-by-$n$ integer sign matrix $H$ with $HH^{T} = nI$ modulo $m$. For positive odd $m$, let $Q_m$n$$ mean that $n$ is a sum of `gcd(n, 4)` squares modulo $m$.
+An order $n$ is supported at modulus $m$ if there is a square integer sign matrix of order $n$ $H$ with $HH^{T} = nI$ modulo $m$. For positive odd $m$, let $Q_m(n)$ mean that $n$ is a sum of `gcd(n, 4)` squares modulo $m$.
 
 | Result | Formal statement |
 | --- | --- |
-| Every arithmetic progression through $n$ contains arbitrarily large supported orders if and only if $Q_m$n$$. | [Integer matrix and square-sum statement](Statements/CompositeSquareNormStatement.lean) |
-| For every odd modulus with at most two distinct prime factors, $Q_m$n$$ is necessary and sufficient at each sufficiently large $n$. For any fixed odd modulus the same holds when one of $n,n-1,n-2$ is coprime to it. | [Square-norm theorem](Quantum/Hadamard/CompositeSquareNorms.lean) and [three coprimality conditions](Quantum/Hadamard/ThreeCenterConductor.lean) |
+| Every arithmetic progression through $n$ contains arbitrarily large supported orders if and only if $Q_m(n)$. | [Integer matrix and square-sum statement](Statements/CompositeSquareNormStatement.lean) |
+| For every odd modulus with at most two distinct prime factors, $Q_m(n)$ is necessary and sufficient at each sufficiently large $n$. For any fixed odd modulus the same holds when one of $n,n-1,n-2$ is coprime to it. | [Square-norm theorem](Quantum/Hadamard/CompositeSquareNorms.lean) and [three coprimality conditions](Quantum/Hadamard/ThreeCenterConductor.lean) |
 | For any odd prime $p$, the sufficiently large supported orders are exactly the even orders and the orders that are squares modulo $p$, including zero. | [Kuperberg's conjecture in integer-matrix form](Statements/KuperbergStatement.lean) |
 | Local obstructions and constructive sufficiency at two odd prime powers, with arbitrary exponents. | [Expanded valuation statements](Statements/TwoPrimePowerSpectrumStatement.lean) |
 
@@ -19,7 +19,18 @@ The prime statement is formulated in [Kuperberg, *Hadamard matrices modulo p and
 
 ## Conference matrices and determinants
 
-Let $C$ be a real symmetric conference matrix of even order $n$, and let $D$ be diagonal with equally many entries of each sign. If $n-1$ is at least 674, the absolute determinant of $C+D$ is at least four fifths of the Ehlich–Wojtas expression $(2n-2)(n-2)^{(n-2)/2}$. The precise matrix hypotheses are in [the determinant theorem](Quantum/Hadamard/DeterminantRatioEstimateConference.lean).
+For a real symmetric conference matrix of order $n$, fill its diagonal with signs and let $a_n$ be the fraction of positive signs. When $a_n$ tends to $a$ and $n$ tends to infinity, the absolute determinant divided by $(2n-2)(n-2)^{(n-2)/2}$ tends to $\exp(2a(1-a))/2$. At balance the limit is $\sqrt{e}/2$. If $n-1$ is at least 674, every balanced completion attains at least four fifths of that comparison value. This family theorem does not establish the identification and finite cases required by Problem 15 of the Egan–Kotsireas–London–Ó Catháin survey. [Balanced finite bound](Quantum/Hadamard/DeterminantRatioEstimateConference.lean) · [Limit for arbitrary sign proportions](Quantum/Hadamard/DeterminantRatioEstimateUnbalanced.lean) · [Independent verification](verification/conference/verify_lean.py)
+
+## Other proof families
+
+| Subject | What the formalization establishes | Source |
+| --- | --- | --- |
+| Exact modular Hadamard orders | Every positive multiple of four is supported at each of moduli 17 and 19. The archive contains the complete Lean sources and finite certificate imports for both moduli. | [Self-contained Lean project](certificates/17-and-19-lean.zip) |
+| Quantum Latin squares | For every order at least six, all ray counts from the order to its square are possible except the order plus one. For order six with both diagonals constrained, the precise counts are 6, 8, 10 and 12. | [General theorem](Quantum/Spectrum.lean) · [Order six with diagonal bases](Quantum/DiagonalSixSpectrum.lean) |
+| Quantum Sudoku | For each block side at least five, classical clues can admit a quantum solution even when no classical solution exists. A puzzle with one classical completion may also have a continuum of quantum completions. | [Existence counterexamples](Quantum/FractionalPuzzleOrders.lean) · [Uniqueness counterexamples](Quantum/Activated/Family.lean) · [Selected array statements](Statements/QuantumArrays.lean) |
+| Bipartite quantum walks | Universal perfect edge transfer characterizes paths among finite connected simple bipartite graphs with at least one edge. An individual forward transfer also has an arithmetic criterion for reverse transfer. | [Path characterization](physics/UniversalBipartiteWalk.lean) · [Reverse transfer](physics/EdgeTransferDecision.lean) |
+| Signed difference sets | For finite abelian groups and $k-\lambda=ps$ with $p$ prime dividing the group order, $p$ coprime to $s$, the classification covers $1\leq s\leq30$. | [Classification](designs/SignedThroughThirty.lean) |
+| Complementary sequences | The eight numbered conjectures of Kimberling and Moses are resolved individually, including counterexamples to statements in 6 and 20 and the two readings of the index in 8. | [Combined theorem](sequences/KimberlingSolution.lean) |
 
 ## Reproduce the checks
 
@@ -34,6 +45,17 @@ lake env lean Statements/KuperbergStatement.lean
 lake env leanchecker -v Quantum.Hadamard.CompositeSquareNorms
 lake env leanchecker -v Quantum.Hadamard.DeterminantRatioEstimateConference
 ```
+
+Use the following targets to build additional results individually. The dense finite certificate for moduli 17 and 19 has its own Lake project inside the linked archive.
+
+~~~sh
+lake build Quantum.Spectrum Quantum.DiagonalSixSpectrum
+lake build Quantum.Activated.Family Quantum.FractionalPuzzleOrders
+lake build Walks
+lake build Sequences
+lake build Designs
+python verification/conference/verify_lean.py
+~~~
 
 The standalone statements print their full theorem types and axiom lists. The square-sum endpoints use `propext`, `Classical.choice`, and `Quot.sound`. The source files include earlier constructions and attribute them in the relevant modules. Computational checking establishes the formal statements under the pinned dependencies. Questions of bibliographic priority and journal review are separate.
 
