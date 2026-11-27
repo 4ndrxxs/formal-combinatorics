@@ -7,4 +7,4 @@ import Quantum.Hadamard.DeterminantRatioEstimateUnbalanced
 import Quantum.Hadamard.DeterminantRatioEstimateLimit
 import Quantum.Hadamard.ConferenceBalancedMean
 import Quantum.Hadamard.ConferenceCubicMatrix
-import Quantum.Hadamard.ProjectiveQuadraticBalance
+import Quantum.Hadamard.ProjectivePaleyDeterminant
