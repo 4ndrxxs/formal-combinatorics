@@ -15,12 +15,12 @@ variable {K V T : Type*} [Field K] [CharZero K] [AddCommGroup V] [Module K V]
 
 /-- A polarization of the cubic and quartic transfer identities. All
 multiplications by endomorphisms retain their displayed order. -/
-theorem even_difference (B : V →ₗ[K] Dual K T) (C : V →ₗ[K] T) (D : V →ₗ[K] End K T)
+theorem even_difference_of_lift (B : V →ₗ[K] Dual K T) (C : V →ₗ[K] T) (D : V →ₗ[K] End K T)
     (cubic : ∀ x, B x (D x (C x)) = 0)
     (quartic : ∀ x, B x (D x (D x (C x))) = 0)
     (f : V → K) (quintic : ∀ x, f x = B x (D x (D x (D x (C x)))))
     (z : V) (bz : B z = 0) (cz : C z = 0)
-    (lift : ∀ y, ∃ w, (∀ v, B w v = B y (D z v)) ∧ C w = D z (C y)) (y : V) :
+    (y : V) (lift : ∃ w, (∀ v, B w v = B y (D z v)) ∧ C w = D z (C y)) :
     f (y+z) + f (y-z) = 2 * f y := by
   have first (x : V) : B x (D z (D x (C x))) + B x (D x (D z (C x))) = 0 := by
     have plus := quartic (x+z)
@@ -30,7 +30,7 @@ theorem even_difference (B : V →ₗ[K] Dual K T) (C : V →ₗ[K] T) (D : V �
     have h : 2 * (B x (D z (D x (C x))) + B x (D x (D z (C x)))) = 0 := by
       linear_combination plus - minus
     exact (mul_eq_zero.mp h).resolve_left (by norm_num)
-  obtain ⟨w,bw,cw⟩ := lift y
+  obtain ⟨w,bw,cw⟩ := lift
   have fp := first (y+w)
   have fm := first (y-w)
   have fw := first w
@@ -41,6 +41,16 @@ theorem even_difference (B : V →ₗ[K] Dual K T) (C : V →ₗ[K] T) (D : V �
   simp only [quintic,map_add,map_sub,bz,cz,add_zero,sub_zero,LinearMap.add_apply,
     LinearMap.sub_apply]
   linear_combination fp - fm - 2 * fw - cp - cm + 2 * cy
+
+/-- Universal lifting gives cancellation at every centre. -/
+theorem even_difference (B : V →ₗ[K] Dual K T) (C : V →ₗ[K] T) (D : V →ₗ[K] End K T)
+    (cubic : ∀ x, B x (D x (C x)) = 0)
+    (quartic : ∀ x, B x (D x (D x (C x))) = 0)
+    (f : V → K) (quintic : ∀ x, f x = B x (D x (D x (D x (C x)))))
+    (z : V) (bz : B z = 0) (cz : C z = 0)
+    (lift : ∀ y, ∃ w, (∀ v, B w v = B y (D z v)) ∧ C w = D z (C y)) (y : V) :
+    f (y+z) + f (y-z) = 2 * f y := by
+  exact even_difference_of_lift B C D cubic quartic f quintic z bz cz y (lift y)
 
 omit [CharZero K] in
 /-- In the half-dimensional case a transferred pair of endpoints lifts

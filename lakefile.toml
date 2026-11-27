@@ -19,8 +19,8 @@ globs = ["PermanentCoefficientSigns", "PermanentThreeColour"]
 [[lean_lib]]
 name = "QuinticPermanent"
 srcDir = "verification/permanent"
-roots = ["PermanentSeventeen","PermanentFiveStatement"]
-globs = ["QuinticEndpoint", "QuinticPencil", "QuinticHomogeneous", "QuinticAffine", "QuinticRank", "QuinticKernel", "QuinticCorner", "QuinticRegular", "PermanentDegeneration", "QuinticDerivatives", "QuinticTorus", "PermanentSupports", "PermanentFive", "PermanentWitnesses", "PermanentSymmetry", "PermanentLowerBound", "PermanentSlice", "DeterminantalHeight", "DeterminantalParametrization", "DeterminantalGraph", "DeterminantalColumns", "DeterminantalDerivative", "PermanentOrigin", "PermanentUnrestricted", "QuinticRadial", "QuinticSaturation", "QuinticNormalized", "QuinticEvenTorus", "PermanentCover", "PermanentHoleFit", "PermanentMissingWitness", "PermanentKernelRigidity", "PermanentSeventeen", "PermanentFiveStatement"]
+roots = ["PermanentTwenty", "PermanentFiveStatement"]
+globs = ["QuinticEndpoint", "QuinticPencil", "QuinticHomogeneous", "QuinticAffine", "QuinticRank", "QuinticKernel", "QuinticCorner", "QuinticRegular", "PermanentDegeneration", "QuinticDerivatives", "QuinticTorus", "PermanentSupports", "PermanentFive", "PermanentWitnesses", "PermanentSymmetry", "PermanentLowerBound", "PermanentSlice", "DeterminantalHeight", "DeterminantalParametrization", "DeterminantalGraph", "DeterminantalColumns", "DeterminantalDerivative", "PermanentOrigin", "PermanentUnrestricted", "QuinticRadial", "QuinticSaturation", "QuinticNormalized", "QuinticEvenTorus", "PermanentCover", "PermanentHoleFit", "PermanentMissingWitness", "PermanentKernelRigidity", "PermanentSeventeen", "QuinticDefect", "QuinticDirectional", "QuinticRestricted", "QuinticGramBasics", "QuinticRestrictedTorus", "PermanentPrincipal", "PermanentBlockShapes", "PermanentBlockCover", "PermanentSimultaneous", "PermanentRowPairBlock", "PermanentColPairBlock", "PermanentCrossPairBlock", "PermanentMixedBlock", "PermanentTenBlock", "PermanentTwenty", "PermanentFiveStatement"]
 
 [[lean_lib]]
 name = "Designs"

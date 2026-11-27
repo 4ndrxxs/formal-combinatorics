@@ -1,5 +1,6 @@
 import QuinticDerivatives
 import PermanentDegeneration
+import Mathlib.LinearAlgebra.Matrix.BilinearForm
 
 /-! Diagonal symmetries preserve singularity and Hessian rank. The rank
 condition persists under the polynomial specialization to a coordinate plane. -/
@@ -57,6 +58,19 @@ private theorem scaled_second {p : MvPolynomial I K} {v : I → K} {a : K}
   rw [pderiv_C_mul,pderiv_C_mul,deriv_twist] at h'
   have h'' := congrArg (MvPolynomial.eval z) h'
   simpa [hessian,map_mul,eval_twist,mul_assoc,mul_left_comm,mul_comm] using h''
+
+/-- The Hessian pairing transforms covariantly when its centre and the
+two directions all undergo the same diagonal symmetry. -/
+theorem scaled_hessian_bilin {p : MvPolynomial I K} {v : I → K} {a : K}
+    (sym : twist v p = C a * p) (z u s : I → K) :
+    (hessian p (fun i ↦ v i*z i)).toBilin' (fun i ↦ v i*u i) (fun i ↦ v i*s i) =
+      a * (hessian p z).toBilin' u s := by
+  simp only [Matrix.toBilin'_apply,Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  apply Finset.sum_congr rfl
+  intro j _
+  linear_combination u i * s j * scaled_second sym z i j
 
 private theorem scaled_rank_le {p : MvPolynomial I K} {v : I → K} {a : K}
     (sym : twist v p = C a * p) (nv : ∀ i, v i ≠ 0) (z : I → K) :
@@ -121,23 +135,20 @@ private def hessianPoly (p : MvPolynomial I K) : Matrix I I (MvPolynomial I K) :
 private theorem eval_hessian (p : MvPolynomial I K) (z : I → K) :
     (MvPolynomial.eval z).mapMatrix (hessianPoly p) = hessian p z := rfl
 
-/-- Specialize a specified common kernel through the diagonal torus. The
-limiting support retains all polynomial identities valid on its orbit. -/
-theorem coordinate_kernel_of_subspace [Infinite K] (m : ℕ) {p : MvPolynomial I K}
+/-- Transfer the gradient and ambient Hessian inequalities to a specified
+coordinate plane reached by polynomial paths. -/
+theorem coordinate_kernel_at_support [Infinite K] (m : ℕ) {p : MvPolynomial I K}
     (L : Submodule K (I → K)) (prop : ∀ z ∈ L,
       (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
       Fintype.card I + (hessian p z).rank + 1 ≤ m + finrank K L)
-    (w : I → ℕ) (injective : Function.Injective w)
-    (sym : ∀ t : K, t ≠ 0 → ∃ a : K, twist (fun i ↦ t^(w i)) p = C a * p) :
-    ∃ S : Finset I, S.card = finrank K L ∧
-      (∀ q : MvPolynomial I K,
-        (∀ x ∈ L, ∀ t : K, t ≠ 0 → MvPolynomial.eval (fun j ↦ t^(w j) * x j) q = 0) →
-        ∀ z : I → K, (∀ j ∉ S, z j = 0) → MvPolynomial.eval z q = 0) ∧
-      ∀ z : I → K, (∀ j ∉ S, z j = 0) →
-        (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
-        Fintype.card I + (hessian p z).rank + 1 ≤ m + S.card := by
-  obtain ⟨S,card,special⟩ := PermanentDegeneration.coordinate_specialization L w injective
-  refine ⟨S,card,special,fun z hz ↦ ?_⟩
+    (w : I → ℕ)
+    (sym : ∀ t : K, t ≠ 0 → ∃ a : K, twist (fun i ↦ t^(w i)) p = C a * p)
+    (S : Finset I) (card : S.card = finrank K L)
+    (paths : PermanentDegeneration.HasCoordinatePaths L w S)
+    (z : I → K) (hz : ∀ j ∉ S, z j = 0) :
+    (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
+      Fintype.card I + (hessian p z).rank + 1 ≤ m + S.card := by
+  have special := PermanentDegeneration.specialization_of_paths paths
   let orbit : Set (I → K) := {y | ∃ x ∈ L, ∃ t : K, t ≠ 0 ∧ y = fun j ↦ t^(w j)*x j}
   have spec (q : MvPolynomial I K) (h : ∀ x ∈ orbit, MvPolynomial.eval x q = 0) :
       MvPolynomial.eval z q = 0 :=
@@ -166,6 +177,25 @@ theorem coordinate_kernel_of_subspace [Infinite K] (m : ℕ) {p : MvPolynomial I
     rw [card]
     omega
 
+/-- Specialize a specified common kernel through the diagonal torus. The
+limiting support retains all polynomial identities valid on its orbit. -/
+theorem coordinate_kernel_of_subspace [Infinite K] (m : ℕ) {p : MvPolynomial I K}
+    (L : Submodule K (I → K)) (prop : ∀ z ∈ L,
+      (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
+      Fintype.card I + (hessian p z).rank + 1 ≤ m + finrank K L)
+    (w : I → ℕ) (injective : Function.Injective w)
+    (sym : ∀ t : K, t ≠ 0 → ∃ a : K, twist (fun i ↦ t^(w i)) p = C a * p) :
+    ∃ S : Finset I, S.card = finrank K L ∧
+      (∀ q : MvPolynomial I K,
+        (∀ x ∈ L, ∀ t : K, t ≠ 0 → MvPolynomial.eval (fun j ↦ t^(w j) * x j) q = 0) →
+        ∀ z : I → K, (∀ j ∉ S, z j = 0) → MvPolynomial.eval z q = 0) ∧
+      ∀ z : I → K, (∀ j ∉ S, z j = 0) →
+        (∀ i, MvPolynomial.eval z (pderiv i p) = 0) ∧
+        Fintype.card I + (hessian p z).rank + 1 ≤ m + S.card := by
+  obtain ⟨S,card,_,paths⟩ := PermanentDegeneration.coordinate_paths L w injective
+  exact ⟨S,card,PermanentDegeneration.specialization_of_paths paths,
+    coordinate_kernel_at_support m L prop w sym S card paths⟩
+
 /-- Every invariant homogeneous quintic with a regular affine determinant
 has a coordinate singular plane satisfying the Hessian inequality, provided
 the diagonal weights are distinct. -/
@@ -181,6 +211,8 @@ theorem coordinate_kernel [Infinite K] (A : Matrix n n K) (F : I → Matrix n n 
   obtain ⟨S,_,_,conditions⟩ := coordinate_kernel_of_subspace (Fintype.card n) L prop w injective sym
   exact ⟨S,conditions⟩
 
+#print axioms scaled_hessian_bilin
+#print axioms coordinate_kernel_at_support
 #print axioms coordinate_kernel_of_subspace
 #print axioms rank_specialization
 #print axioms coordinate_kernel

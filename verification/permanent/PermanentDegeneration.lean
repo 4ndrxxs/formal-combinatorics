@@ -81,19 +81,21 @@ private theorem lift_pivots (L : Submodule K (I → K)) (w : I → ℕ)
       · exact ⟨0,L.zero_mem,fun j hj ↦ (hA ⟨j,hj⟩).elim⟩
   exact aux S (fun _ h ↦ h)
 
-/-- The limiting coordinate plane also has a surjective coordinate
-projection from the original linear space. -/
-theorem coordinate_specialization_with_lift [Infinite K] (L : Submodule K (I → K))
+/-- Every vector on the coordinate plane is reached by a polynomial
+trajectory lying in the diagonal translates away from zero. -/
+def HasCoordinatePaths (L : Submodule K (I → K)) (w : I → ℕ) (S : Finset I) : Prop :=
+  ∀ z : I → K, (∀ j ∉ S, z j = 0) → ∃ q : I → K[X],
+    (∀ j, (q j).eval 0 = z j) ∧
+    ∀ t : K, t ≠ 0 → ∃ x ∈ L, ∀ j, (q j).eval t = t^(w j) * x j
+
+theorem coordinate_paths (L : Submodule K (I → K))
     (w : I → ℕ) (injective : Function.Injective w) :
     ∃ S : Finset I, S.card = finrank K L ∧
-      (∀ z : I → K, ∃ x ∈ L, ∀ i ∈ S, x i = z i) ∧
-      ∀ (p : MvPolynomial I K),
-        (∀ x ∈ L, ∀ t : K, t ≠ 0 → MvPolynomial.eval (fun j ↦ t^(w j) * x j) p = 0) →
-        ∀ z : I → K, (∀ j ∉ S, z j = 0) → MvPolynomial.eval z p = 0 := by
+      (∀ z : I → K, ∃ x ∈ L, ∀ i ∈ S, x i = z i) ∧ HasCoordinatePaths L w S := by
   classical
   obtain ⟨S,subset,card⟩ := Finset.exists_subset_card_eq (pivot_count L w)
   refine ⟨S,card,lift_pivots L w injective S subset,?_⟩
-  intro p invariant z supported
+  intro z supported
   have leading (i : S) : Pivot L w i := mem_pivots.mp (subset i.property)
   choose v hv one lower using leading
   let q (j : I) : K[X] := ∑ i : S, C (z i * v i j) * X^(w j - w i)
@@ -130,6 +132,14 @@ theorem coordinate_specialization_with_lift [Infinite K] (L : Submodule K (I →
       rw [factor]
       field_simp
     · simp [lower i j (lt_of_not_ge le)]
+  exact ⟨q,at_zero,away⟩
+
+omit [Fintype I] in
+theorem specialization_of_paths [Infinite K] {L : Submodule K (I → K)} {w : I → ℕ} {S : Finset I}
+    (paths : HasCoordinatePaths L w S) (p : MvPolynomial I K)
+    (invariant : ∀ x ∈ L, ∀ t : K, t ≠ 0 → MvPolynomial.eval (fun j ↦ t^(w j) * x j) p = 0)
+    (z : I → K) (supported : ∀ j ∉ S, z j = 0) : MvPolynomial.eval z p = 0 := by
+  obtain ⟨q,at_zero,away⟩ := paths z supported
   let g := MvPolynomial.eval₂Hom Polynomial.C q p
   have along (t : K) : g.eval t = MvPolynomial.eval (fun j ↦ (q j).eval t) p := by
     change (Polynomial.evalRingHom t) (MvPolynomial.eval₂Hom Polynomial.C q p) = _
@@ -151,6 +161,18 @@ theorem coordinate_specialization_with_lift [Infinite K] (L : Submodule K (I →
   have endpt := along 0
   simpa only [gz,Polynomial.eval_zero,at_zero] using endpt.symm
 
+/-- The limiting coordinate plane also has a surjective coordinate
+projection from the original linear space. -/
+theorem coordinate_specialization_with_lift [Infinite K] (L : Submodule K (I → K))
+    (w : I → ℕ) (injective : Function.Injective w) :
+    ∃ S : Finset I, S.card = finrank K L ∧
+      (∀ z : I → K, ∃ x ∈ L, ∀ i ∈ S, x i = z i) ∧
+      ∀ (p : MvPolynomial I K),
+        (∀ x ∈ L, ∀ t : K, t ≠ 0 → MvPolynomial.eval (fun j ↦ t^(w j) * x j) p = 0) →
+        ∀ z : I → K, (∀ j ∉ S, z j = 0) → MvPolynomial.eval z p = 0 := by
+  obtain ⟨S,card,lift,paths⟩ := coordinate_paths L w injective
+  exact ⟨S,card,lift,specialization_of_paths paths⟩
+
 /-- All polynomials vanishing on the weighted translates of L vanish on
 a single coordinate subspace of dimension dim L. -/
 theorem coordinate_specialization [Infinite K] (L : Submodule K (I → K))
@@ -162,6 +184,8 @@ theorem coordinate_specialization [Infinite K] (L : Submodule K (I → K))
   obtain ⟨S,card,_,special⟩ := coordinate_specialization_with_lift L w injective
   exact ⟨S,card,special⟩
 
+#print axioms coordinate_paths
+#print axioms specialization_of_paths
 #print axioms coordinate_specialization_with_lift
 #print axioms coordinate_specialization
 end PermanentDegeneration

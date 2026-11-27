@@ -171,6 +171,38 @@ private theorem hole_fits (S : Finset Cell) (large : 14 ≤ S.card)
     rintro ⟨i,j⟩ nz
     exact (mem (q i) (v j)).mp (fit i j (active_hole i j nz).1 (active_hole i j nz).2)
 
+/-- The gradient test excludes every matching of size four. -/
+theorem coordinate_matching_bound (S : Finset Cell) (m : ℕ)
+    (adm : ∀ z : Cell → K, (∀ j ∉ S, z j = 0) →
+      (∀ i, MvPolynomial.eval z (pderiv i (per K Idx)) = 0) ∧
+      26 + (hessian (per K Idx) z).rank ≤ m + S.card) (p : Perm Idx) :
+    (univ.filter (fun i ↦ p i ∈ PermanentCover.neighbors S i)).card ≤ 3 := by
+  have hS : Admits S m K := adm
+  have bound : PermanentSupports.hits (board S) p ≤ 3 := by
+    by_contra! four
+    obtain ⟨e,sym,fit⟩ := matching_fits K S p 4 (by rw [count4]; omega)
+    have impossible := (test_point hS sym fit).1 (4,4)
+    rw [four_gradient] at impossible
+    exact one_ne_zero impossible
+  rw [board_hits] at bound
+  simpa [PermanentCover.neighbors,selected] using bound
+
+/-- Any admissible support of fourteen or more cells contains a transported
+three-row one-hole test and has at most fifteen cells. -/
+theorem large_coordinate_test (S : Finset Cell) (m : ℕ)
+    (adm : ∀ z : Cell → K, (∀ j ∉ S, z j = 0) →
+      (∀ i, MvPolynomial.eval z (pderiv i (per K Idx)) = 0) ∧
+      26 + (hessian (per K Idx) z).rank ≤ m + S.card) (large : 14 ≤ S.card) :
+    26 + (hessian (per K Idx) ((Int.castRingHom K) ∘ rowHole)).rank ≤ m + S.card ∧
+      S.card ≤ 15 := by
+  have counts := coordinate_matching_bound S m adm
+  obtain ⟨e,sym,fit⟩ := hole_fits (K:=K) S large (PermanentCover.parallel_lines S 3
+    (Or.inr rfl) (by simpa using large) counts)
+  have maximum := PermanentSupports.size_le (board S) 3 (fun p ↦ by
+    rw [board_hits]
+    simpa [selected,PermanentCover.neighbors] using counts p)
+  exact ⟨(test_point (show Admits S m K from adm) sym fit).2,by rwa [board_size] at maximum⟩
+
 /-- A coordinate support satisfying the size-sixteen endpoint inequalities
 has exactly ten entries. -/
 theorem size_sixteen_support (S : Finset Cell)

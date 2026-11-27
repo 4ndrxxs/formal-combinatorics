@@ -1,5 +1,6 @@
 import QuinticRadial
 import QuinticSaturation
+import QuinticDefect
 
 /-! Endpoints of a normalized quintic pencil and its transfer endomorphisms
 satisfy the polarized cancellation when their range is maximal isotropic. -/
@@ -36,13 +37,12 @@ private theorem word_action (b c : ι → σ → K) (D : ι → ι → σ → K)
   rw [Finset.sum_comm]
   simp [Finset.mul_sum,mul_left_comm]
 
-/-- The determinant itself has zero even second difference along its common
-endpoint kernel whenever the endpoint range has half the ambient dimension. -/
-theorem normalized_even_difference [CharZero K] {p : MvPolynomial σ K} (hp : p.IsHomogeneous 5)
-    (b c : ι → σ → K) (D : ι → ι → σ → K) (rep : p = regularDet b c D)
-    (full : finrank K (endpoints b c).range = Fintype.card ι)
-    (z : σ → K) (hz : z ∈ (endpoints b c).ker) (y : σ → K) :
-    MvPolynomial.eval (y+z) p + MvPolynomial.eval (y-z) p = 2 * MvPolynomial.eval y p := by
+private theorem normalized_laws {p : MvPolynomial σ K} (hp : p.IsHomogeneous 5)
+    (b c : ι → σ → K) (D : ι → ι → σ → K) (rep : p = regularDet b c D) :
+    (∀ x, leftEnd b x (rightEnd c x) = 0) ∧
+    (∀ x, leftEnd b x (operator D x (rightEnd c x)) = 0) ∧
+    (∀ x, leftEnd b x (operator D x (operator D x (rightEnd c x))) = 0) ∧
+    (∀ x, MvPolynomial.eval x p = leftEnd b x (operator D x (operator D x (operator D x (rightEnd c x))))) := by
   let B := leftEnd b
   let C := rightEnd c
   let A := operator D
@@ -56,6 +56,19 @@ theorem normalized_even_difference [CharZero K] {p : MvPolynomial σ K} (hp : p.
     simpa [pow_succ] using words x 2 (by decide)
   have p5 (x : σ → K) : MvPolynomial.eval x p = B x (A x (A x (A x (C x)))) := by
     simpa [pow_succ] using (words x 3 (by decide)).symm
+  exact ⟨q,cu,qu,p5⟩
+
+/-- The determinant itself has zero even second difference along its common
+endpoint kernel whenever the endpoint range has half the ambient dimension. -/
+theorem normalized_even_difference [CharZero K] {p : MvPolynomial σ K} (hp : p.IsHomogeneous 5)
+    (b c : ι → σ → K) (D : ι → ι → σ → K) (rep : p = regularDet b c D)
+    (full : finrank K (endpoints b c).range = Fintype.card ι)
+    (z : σ → K) (hz : z ∈ (endpoints b c).ker) (y : σ → K) :
+    MvPolynomial.eval (y+z) p + MvPolynomial.eval (y-z) p = 2 * MvPolynomial.eval y p := by
+  let B := leftEnd b
+  let C := rightEnd c
+  let A := operator D
+  obtain ⟨q,cu,qu,p5⟩ := normalized_laws hp b c D rep
   have hP : endpoints b c z = 0 := hz
   have bz : B z = 0 := congrArg Prod.fst hP
   have cz : C z = 0 := congrArg Prod.snd hP
@@ -63,5 +76,27 @@ theorem normalized_even_difference [CharZero K] {p : MvPolynomial σ K} (hp : p.
   exact QuinticSaturation.even_difference B C A cu qu _ p5 z bz cz
     (QuinticSaturation.lift_of_half_dimension B C A q cu range z bz cz) y
 
+/-- Through any fixed centre many directions in the common kernel have
+vanishing even second difference. The deficit in endpoint dimension
+bounds the codimension of these directions inside the kernel. -/
+theorem normalized_many_even [CharZero K] {p : MvPolynomial σ K} (hp : p.IsHomogeneous 5)
+    (b c : ι → σ → K) (D : ι → ι → σ → K) (rep : p = regularDet b c D) (y : σ → K) :
+    ∃ J : Submodule K (endpoints b c).ker,
+      finrank K (endpoints b c).ker + finrank K (endpoints b c).range ≤ finrank K J + Fintype.card ι ∧
+      ∀ z ∈ J, MvPolynomial.eval (y+z.val) p + MvPolynomial.eval (y-z.val) p = 2 * MvPolynomial.eval y p := by
+  let B := leftEnd b
+  let C := rightEnd c
+  let A := operator D
+  obtain ⟨q,cu,qu,p5⟩ := normalized_laws hp b c D rep
+  obtain ⟨J,dim,lifts⟩ := QuinticSaturation.many_lifts B C A q cu qu y
+  refine ⟨J,?_,?_⟩
+  · change finrank K (B.prod C).ker + finrank K (B.prod C).range ≤ finrank K J + Fintype.card ι
+    exact dim.trans_eq (congrArg (fun t ↦ finrank K J + t) (Module.finrank_pi K))
+  · intro z hz
+    have hP : endpoints b c z.val = 0 := z.property
+    exact QuinticSaturation.even_difference_of_lift B C A cu qu _ p5 z.val
+      (congrArg Prod.fst hP) (congrArg Prod.snd hP) y (lifts z hz)
+
+#print axioms normalized_many_even
 #print axioms normalized_even_difference
 end QuinticPencil

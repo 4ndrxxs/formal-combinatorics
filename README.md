@@ -17,6 +17,10 @@ For example, modulo 45, every order congruent to 6 modulo 180 is excluded by its
 
 The prime statement is formulated in [Kuperberg, *Hadamard matrices modulo p and small modular Hadamard matrices*](https://doi.org/10.1002/jcd.21522). Kline's November 2026 preprint proves the prime criterion for odd primes outside the class 1 modulo 8 and supplies design extensions used in this development. [Kline, *Modular Hadamard matrices at large orders*](https://doi.org/10.5281/zenodo.24421216)
 
+## Determinantal complexity of the five-by-five permanent
+
+Any affine-linear determinantal representation of the generic five-by-five permanent over a characteristic-zero field has size at least **20**. Grenet's construction gives an upper bound of 31 over the complex numbers. [Lean theorem](verification/permanent/PermanentTwenty.lean) · [Statement over the complex numbers](verification/permanent/PermanentFiveStatement.lean) · [Proof and reproduction commands](verification/permanent/README.md)
+
 ## Determinant and permanent coefficients
 
 For every binary partition of the original variables, the generic determinant and permanent have coefficient matrices related by row and column signs over any commutative ring. At every order from four, an explicit three-way partition obstructs even arbitrary local scalar reweighting in characteristic different from two. [Theorems, proof files and reproduction commands](verification/permanent/README.md)
