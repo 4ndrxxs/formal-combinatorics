@@ -32,7 +32,9 @@ def main():
         'DeterminantRatioEstimateUnbalanced', 'ConferenceDiagonalAverage', 'ConferenceBalancedMean',
         'ConferencePrincipalDet', 'ConferenceCubicEstimate', 'ConferenceCubicThreshold',
         'ConferenceCubicMatrix', 'Basic', 'Paley', 'ProjectiveQuadraticBalance', 'Conference',
-        'PaleySecond', 'TorusFrobeniusPaley', 'ProjectivePaleyDeterminant')]
+        'PaleySecond', 'TorusFrobeniusPaley', 'ConferenceShiftedLog', 'ConferenceShiftedThreshold',
+        'ProjectivePaleyDeterminant',
+        'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -40,7 +42,7 @@ def main():
         checked = []
         audits = ['verifiedConferenceEstimates', 'verifiedProportionEstimate', 'verifiedBalancedLimit',
                   'verifiedProportionLimit', 'verifiedDiagonalGenerating', 'verifiedBalancedMean',
-                  'verifiedAboveLimitAtEveryOrder']
+                  'verifiedAboveLimitAtEveryOrder', 'verifiedAllBalanced110']
         for rel in [*modules, Path('Statement.lean'), Path('Verify.lean')]:
             src = (root if rel in modules else folder) / rel
             dest = tmp / rel

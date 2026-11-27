@@ -1,7 +1,7 @@
 import Statement
 import Quantum.Hadamard.DeterminantRatioEstimateUnbalanced
 import Quantum.Hadamard.ConferenceBalancedMean
-import Quantum.Hadamard.ConferenceCubicMatrix
+import Quantum.Hadamard.ProjectivePaleyDeterminant
 
 open Hadamard.DeterminantRatio
 
@@ -112,6 +112,17 @@ theorem verifiedAboveLimitAtEveryOrder : ConferenceAudit.AboveLimitAtEveryOrder 
     simpa only [h, positiveCount] using balance
   · convert det using 2
     ring
+
+theorem verifiedAllBalanced110 : ConferenceAudit.AllBalanced110 := by
+  intro k C s size sym square diag off balance
+  have n : (110:ℝ) ≤ 2*((k:ℝ)+1) := by exact_mod_cast size
+  have sig (i j) (h : i≠j) : C i j^2=1 := by
+    rcases off i j h with h | h <;> rw [h] <;> norm_num
+  have v := Hadamard.ProjectiveSigning.balanced_signs_on_indices_109 C s k
+    (Fintype.card_fin _) balance (by linarith) (hermitian_of_transpose sym) square diag sig
+  simpa only [ewBound] using v
+
+#print axioms verifiedAllBalanced110
 
 #print axioms verifiedDiagonalGenerating
 #print axioms verifiedBalancedMean

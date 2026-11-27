@@ -75,4 +75,13 @@ def AboveLimitAtEveryOrder : Prop := ∀ (k : ℕ) (C : Matrix (Fin (2*(k+1))) (
       let n := 2*((k:ℝ)+1)
       Real.exp (1/2)/2 * ((2*n-2)*(n-2)^k) < |(C+Matrix.diagonal d).det|
 
+/-- Every balanced sign vector on the original n coordinates from order 110. -/
+def AllBalanced110 : Prop := ∀ (k : ℕ) (C : Matrix (Fin (2*(k+1))) (Fin (2*(k+1))) ℝ)
+    (s : Fin (2*(k+1)) → Bool), 110≤2*(k+1) →
+    C.transpose=C → C*C=(2*(k:ℝ)+1) • 1 → (∀ i, C i i=0) →
+    (∀ i j, i≠j → C i j=1 ∨ C i j= -1) →
+    (Finset.univ.filter (fun i ↦ s i=true)).card=k+1 →
+    let n := 2*((k:ℝ)+1)
+    (4/5:ℝ)*((2*n-2)*(n-2)^k) ≤ |(C+Matrix.diagonal (fun i ↦ if s i then (1:ℝ) else -1)).det|
+
 end ConferenceAudit
