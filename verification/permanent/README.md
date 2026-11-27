@@ -23,3 +23,23 @@ python verification/permanent/check_coefficient_partitions.py
 ```
 
 The finite checker covers every binary colouring through order four and all 19,683 three-colourings in order three. These results concern weights attached to the original variables' local monomials. The affine determinantal complexity of the permanent permits arbitrary mixtures of inputs in a matrix of another size.
+
+## Quintic affine determinants
+
+Let a homogeneous quintic in $N$ variables equal the determinant of a normalized pencil with top blocks $0,-b$ and bottom blocks $c,I-D$. Let $h$ be the order of the lower right block and $L$ the common kernel of the row and column forms. At every point $z$ in $L$, the polynomial vanishes to order at least two along every line through $z$. Its Hessian at $z$ satisfies the following inequality.
+
+```text
+codimension(L) + rank(Hessian at z) ≤ h
+```
+
+The Lean statement uses equality of multivariate polynomials and defines the mixed derivative by extracting the coefficient of the two direction variables. It holds over every field. [Kernel and Hessian theorem](QuinticKernel.lean)
+
+The proof computes the mixed determinant coefficient using a Schur complement, including the scalar determinant prefactor. Homogeneity then turns the entire series into a single monomial. A bilinear rank argument gives the inequality. [Schur complement](QuinticPencil.lean) · [Homogeneity](QuinticHomogeneous.lean) · [Normalized affine identity](QuinticAffine.lean) · [Rank deduction](QuinticRank.lean) · [Linear algebra](QuinticEndpoint.lean)
+
+The application to the complex permanent of order five also requires the reduction of arbitrary representations to this block form, a coordinate degeneration, and the matching and Hessian arguments on the limiting supports. The Python calculation checks the finite examples by directly differentiating every permanent monomial. The complete numerical lower bound of sixteen is still under formalization.
+
+```sh
+lake build QuinticPermanent
+lake env leanchecker -v QuinticKernel
+python verification/permanent/check_quintic_endpoint.py
+```
