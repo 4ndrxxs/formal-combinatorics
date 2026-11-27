@@ -29,6 +29,10 @@ For the order-`m` arrow matrix with identity core, ones on both strips, and corn
 
 For the permanent of a four-by-four matrix over a field, the possible Hessian ranks at smooth rational zeros are 4, 6, and 8 through 16 in characteristic zero or characteristic greater than three. In characteristic three the list ends at 15. In characteristic two the only rank is 8. Over any field of characteristic different from two, every smooth zero of Hessian rank at most 7 has a zero row or a zero column. [Order-four classification and zero-line theorem](verification/permanent/PermanentFourAllFields.lean) · [All orders in characteristic two](verification/permanent/PermanentBinaryFixedOrder.lean)
 
+## Maximum Hessian rank at a smooth permanent zero
+
+For the order-`m` permanent with `m ≥ 2`, the maximum ordinary Hessian rank at a smooth rational zero over an infinite field is `m²` when both 2 and `m−1` are nonzero in the field. It is `m²−1` when the characteristic is odd and divides `m−1`, and `2m` in characteristic two. The proof constructs a polynomial curve of permanent zeros and computes a principal minor of the induced star Laplacian. The characteristic-zero full-rank case is due to Mignon and Ressayre. [Maximum theorem](verification/permanent/PermanentMaximumHessian.lean) · [Corrected second derivative](verification/permanent/PermanentStarCorrection.lean) · [Polynomial specialization](verification/permanent/PermanentRankSpecialization.lean)
+
 ## Hessian ranks of permanents
 
 As the square order varies over a field of characteristic different from two, the Hessian ranks on the permanent hypersurfaces are exactly zero, four, and every integer at least six. In characteristic two they are zero and every even integer at least four. All the positive ranks occur at smooth points. In order three over a field of characteristic different from two the smooth ranks are exactly 4, 6, 7, 8, and 9. [All orders and characteristics](verification/permanent/PermanentSmoothSpectrum.lean) · [Fixed order three](verification/permanent/PermanentOrderThreeSpectrum.lean) · [Rank-four factorization](verification/permanent/HollowGridDisjoint.lean)

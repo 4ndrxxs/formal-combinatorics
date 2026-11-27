@@ -119,6 +119,10 @@ lake env leanchecker -v PencilFourPrime
 python verification/permanent/check_quintic_hessian_curve.py
 ```
 
+## Maximum Hessian rank at a smooth permanent zero
+
+For the order-`m` permanent with `m ≥ 2`, the maximum ordinary Hessian rank at a smooth rational zero over an infinite field is `m²` when both 2 and `m−1` are nonzero in the field. It is `m²−1` when the characteristic is odd and divides `m−1`, and `2m` in characteristic two. The proof constructs a polynomial curve of permanent zeros and computes a principal minor of the induced star Laplacian. The characteristic-zero full-rank case is due to Mignon and Ressayre. [Maximum theorem](PermanentMaximumHessian.lean) · [Corrected second derivative](PermanentStarCorrection.lean) · [Polynomial specialization](PermanentRankSpecialization.lean)
+
 ## Hessian ranks of permanents
 
 A nonzero separately symmetric grid matrix whose entries vanish on equal row or column indices has rank four or at least six. At rank four its entries factor into two symmetrized products, one on row indices and one on column indices. The support refinement applies in characteristic different from two. [Rank gap](HollowGridSmallRank.lean) · [Factorization criterion](HollowGridDisjoint.lean) · [Sharp binary example](HollowGridBinary.lean)
