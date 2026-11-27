@@ -1,5 +1,6 @@
 import Statement
 import Quantum.Hadamard.DeterminantRatioEstimateUnbalanced
+import Quantum.Hadamard.ConferenceBalancedMean
 
 open Hadamard.DeterminantRatio
 
@@ -44,3 +45,73 @@ theorem verifiedProportionEstimate : ConferenceAudit.ProportionEstimate := by
 
 #print axioms verifiedProportionEstimate
 #print axioms Hadamard.DeterminantRatio.conference_proportion_tendsto
+
+private theorem hermitian_of_transpose {I : Type*} {C : Matrix I I ℝ} (h : C.transpose=C) :
+    C.IsHermitian := by
+  change C.conjTranspose=C
+  ext i j
+  exact congrArg (fun A : Matrix I I ℝ ↦ A i j) h
+
+private theorem ratio_eq {a b : ℕ} (k : ℕ) (C : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℝ) :
+    |(C+Matrix.diagonal completionSign).det| / ewBound k = ConferenceAudit.completedRatio k C := by
+  have sig : (completionSign : Fin a ⊕ Fin b → ℝ) = ConferenceAudit.signedDiagonal := by
+    funext s; cases s <;> rfl
+  simp only [sig, ewBound, ConferenceAudit.completedRatio]
+
+theorem verifiedBalancedLimit : ConferenceAudit.BalancedLimit := by
+  intro ι l k grow C sym square diag off
+  have lim := balanced_conference_tendsto l k grow C (fun j ↦ hermitian_of_transpose (sym j))
+    square diag (fun j i s ne ↦ by rcases off j i s ne with h|h <;> rw [h] <;> norm_num)
+  simpa only [ratio_eq] using lim
+
+theorem verifiedProportionLimit : ConferenceAudit.ProportionLimit := by
+  intro ι l k a b z grow count proportion C sym square diag off
+  have lim := conference_proportion_tendsto l k a b grow count proportion C
+    (fun j ↦ hermitian_of_transpose (sym j)) square diag
+    (fun j i s ne ↦ by rcases off j i s ne with h|h <;> rw [h] <;> norm_num)
+  simpa only [ratio_eq] using lim
+
+#print axioms verifiedBalancedLimit
+#print axioms verifiedProportionLimit
+
+open Hadamard.ConferenceAverage
+
+theorem verifiedDiagonalGenerating : ConferenceAudit.DiagonalGenerating := by
+  intro v q z C hq sym square trace
+  exact absolute_generating C v q z (Fintype.card_fin _) hq (hermitian_of_transpose sym) square trace
+
+theorem verifiedBalancedMean : ConferenceAudit.BalancedMean := by
+  intro k C hk sym square zero q
+  have kp : 0<(k:ℝ) := by exact_mod_cast hk
+  have cp : 0<((2*(k+1)).choose (k+1):ℝ) := by exact_mod_cast Nat.centralBinom_pos (k+1)
+  apply (le_div_iff₀ cp).mpr
+  have tr : C.trace=0 := by simp [Matrix.trace, Matrix.diag, zero]
+  have H := balanced_total_lower C (k+1) q (Fintype.card_fin _)
+    (by dsimp [q]; linarith) (by dsimp [q]; push_cast; ring) (hermitian_of_transpose sym) square tr
+  rw [← Finset.sum_filter, mul_comm ((q+1/q)^_) _]
+  refine le_trans H (le_of_eq ?_)
+  apply Finset.sum_congr
+  · ext f
+    simp [signClass, positiveCount]
+    exact Finset.mem_filter.trans (and_iff_right (Finset.mem_univ f))
+  · intro f hf
+    rfl
+
+theorem verifiedAboveLimitAtEveryOrder : ConferenceAudit.AboveLimitAtEveryOrder := by
+  intro k C hk sym square zero _
+  have tr : C.trace=0 := by simp [Matrix.trace, Matrix.diag, zero]
+  obtain ⟨f, balance, det⟩ := exists_balanced_above_limit C k hk (Fintype.card_fin _)
+    (hermitian_of_transpose sym) square tr
+  refine ⟨fun i ↦ signValue (f i), fun i ↦ ?_, ?_, ?_⟩
+  · change (signValue (f i):ℝ)=1 ∨ (signValue (f i):ℝ)= -1
+    cases hb : f i <;> norm_num [signValue, hb]
+  · have h (i) : (signValue (f i):ℝ)=1 ↔ f i=true := by
+      cases hb : f i <;> norm_num [signValue, hb]
+    change (Finset.univ.filter (fun i ↦ (signValue (f i):ℝ)=1)).card = k+1
+    simpa only [h, positiveCount] using balance
+  · convert det using 2
+    ring
+
+#print axioms verifiedDiagonalGenerating
+#print axioms verifiedBalancedMean
+#print axioms verifiedAboveLimitAtEveryOrder

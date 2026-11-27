@@ -1,4 +1,4 @@
-"""Recompile the five research modules in a fresh directory and audit their statements."""
+"""Recompile the research modules and independent statements, then replay their Lean kernels."""
 
 import argparse
 import hashlib
@@ -29,12 +29,15 @@ def main():
     modules = [Path('Quantum/Hadamard') / (name + '.lean') for name in (
         'DeterminantRatioEstimate', 'DeterminantRatioEstimateMatrix',
         'DeterminantRatioEstimateConference', 'DeterminantRatioEstimateLimit',
-        'DeterminantRatioEstimateUnbalanced')]
+        'DeterminantRatioEstimateUnbalanced', 'ConferenceDiagonalAverage', 'ConferenceBalancedMean')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
         env['LEAN_PATH'] = os.pathsep.join([str(tmp), env['LEAN_PATH']])
         checked = []
+        audits = ['verifiedConferenceEstimates', 'verifiedProportionEstimate', 'verifiedBalancedLimit',
+                  'verifiedProportionLimit', 'verifiedDiagonalGenerating', 'verifiedBalancedMean',
+                  'verifiedAboveLimitAtEveryOrder']
         for rel in [*modules, Path('Statement.lean'), Path('Verify.lean')]:
             src = (root if rel in modules else folder) / rel
             dest = tmp / rel
@@ -47,9 +50,21 @@ def main():
             out.check_returncode()
             if 'sorryAx' in out.stdout or 'declaration uses' in out.stdout:
                 raise RuntimeError(f'Unproved declaration in {rel}')
+            if rel == Path('Verify.lean'):
+                compact = ' '.join(out.stdout.split())
+                for theorem in audits:
+                    required = f"'{theorem}' depends on axioms: [propext, Classical.choice, Quot.sound]"
+                    if required not in compact:
+                        raise RuntimeError(f'Unexpected or missing axiom report for {theorem}')
             checked.append(rel)
             print(f'{hashlib.sha256(dest.read_bytes()).hexdigest()}  {rel.as_posix()}', flush=True)
-        print(f'Freshly compiled {len(checked)} sources, including the independent specification and bridge.')
+        checker = shutil.which('leanchecker', path=env['PATH'])
+        if not checker:
+            raise RuntimeError('The Lean kernel checker was not in the Lake environment.')
+        for rel in checked:
+            module = '.'.join(rel.with_suffix('').parts)
+            subprocess.run([checker, '-v', module], cwd=tmp, env=env, check=True)
+        print(f'Freshly compiled and kernel-replayed {len(checked)} sources, including all independent statements.')
 
 
 if __name__ == '__main__':

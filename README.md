@@ -19,7 +19,9 @@ The prime statement is formulated in [Kuperberg, *Hadamard matrices modulo p and
 
 ## Conference matrices and determinants
 
-For a real symmetric conference matrix of order $n$, fill its diagonal with signs and let $a_n$ be the fraction of positive signs. When $a_n$ tends to $a$ and $n$ tends to infinity, the absolute determinant divided by $(2n-2)(n-2)^{(n-2)/2}$ tends to $\exp(2a(1-a))/2$. At balance the limit is $\sqrt{e}/2$. If $n-1$ is at least 674, every balanced completion attains at least four fifths of that comparison value. This family theorem does not establish the identification and finite cases required by Problem 15 of the Egan–Kotsireas–London–Ó Catháin survey. [Balanced finite bound](Quantum/Hadamard/DeterminantRatioEstimateConference.lean) · [Limit for arbitrary sign proportions](Quantum/Hadamard/DeterminantRatioEstimateUnbalanced.lean) · [Independent verification](verification/conference/verify_lean.py)
+Let $C$ be a symmetric conference matrix of order $n=2v>2$ and let $W_n=(2n-2)(n-2)^{v-1}$ be the Ehlich–Wojtas bound. At every such order there is a diagonal with $v$ plus signs and $v$ minus signs for which $|\det(C+D)|>(\sqrt e/2)W_n$. Writing $q=n-1$, the mean over these balanced diagonals is at least $(q+1/q)^v$. More generally, the coefficient of $z^k$ in $((q-1)(1+z)^2+4z)^v$ is the exact sum of the absolute determinants over all diagonals with $k$ positive entries. [Exact generating function](Quantum/Hadamard/ConferenceDiagonalAverage.lean) · [Balanced mean and existence theorem](Quantum/Hadamard/ConferenceBalancedMean.lean)
+
+For individual completions with a fraction of positive signs tending to $a$, the determinant ratio tends to $\exp(2a(1-a))/2$ as the order grows. At balance the limit is $\sqrt e/2$, and every balanced completion attains at least four fifths of $W_n$ when $n-1\ge674$. Problem 15 of Egan, Kotsireas, London and Ó Catháin concerns three specified constructions of Momihara, Suda and Xiang. Their identification with the relevant completions and a finite range of small orders are still open steps in applying these results to that question. [Finite bound for individual balanced completions](Quantum/Hadamard/DeterminantRatioEstimateConference.lean) · [Limit for arbitrary sign proportions](Quantum/Hadamard/DeterminantRatioEstimateUnbalanced.lean) · [Independent Lean statements](verification/conference/Statement.lean)
 
 ## Other proof families
 
@@ -55,6 +57,7 @@ lake build Walks
 lake build Sequences
 lake build Designs
 python verification/conference/verify_lean.py
+python verification/conference/check_diagonal_averages.py
 ~~~
 
 The standalone statements print their full theorem types and axiom lists. The square-sum endpoints use `propext`, `Classical.choice`, and `Quot.sound`. The source files include earlier constructions and attribute them in the relevant modules. Computational checking establishes the formal statements under the pinned dependencies. Questions of bibliographic priority and journal review are separate.
