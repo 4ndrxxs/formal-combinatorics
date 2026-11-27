@@ -90,3 +90,16 @@ lake env leanchecker -v PermanentShapeClassification
 lake env leanchecker -v PermanentEndpointStatement
 python verification/permanent/check_quintic_shapes.py
 ```
+
+## Two-row and three-row kernels
+
+In any size-21 representation, an endpoint kernel of dimension 10 consists of all matrices supported on a fixed pair of rows or a fixed pair of columns. The proof uses five exact cubic identities in the entries of a third row. At dimension 15 the kernel consists of all matrices on three fixed rows or three fixed columns. Every internal transfer along that kernel satisfies $D(z)^4=0$. The earlier dimension-5 theorem gives the corresponding one-line conclusion. [Two-line theorem](PermanentTenKernel.lean) · [Three-line theorem](PermanentFifteenKernel.lean) · [Uniform fourth power](PermanentFifteenNilpotence.lean) · [Explicit complex statement](PermanentStripStatement.lean)
+
+For any regular affine determinant representing a homogeneous polynomial $f$ of degree $d\ge3$, write $a$ for the rank of its two endpoint maps considered together and $m$ for its size. At every point $z$ in their common kernel, $2(m-1)\ge2a+(d-3)\operatorname{rank}\operatorname{Hess}_z(f)$. [General theorem](PencilHomogeneousRank.lean) · [Dimension argument](PencilMomentFlag.lean)
+
+```sh
+lake build QuinticPermanent
+lake env leanchecker -v PermanentStripStatement
+lake env leanchecker -v PencilHomogeneousRank
+python verification/permanent/check_quintic_two_rows.py
+```

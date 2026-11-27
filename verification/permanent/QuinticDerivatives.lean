@@ -75,7 +75,7 @@ def hessian (p : MvPolynomial I R) (z : I → R) : Matrix I I R :=
 
 variable {K n : Type*} [Field K] [Fintype I] [Fintype n] [DecidableEq n]
 
-private lemma hessian_rank {p : MvPolynomial I K} {z : I → K}
+theorem hessian_rank_from_mixed {p : MvPolynomial I K} {z : I → K}
     (H : LinearMap.BilinForm K (I → K)) (hH : ∀ u v, H u v = mixed K (atPoint p z u v)) :
     (hessian p z).rank = finrank K H.range := by
   let e := (dotProductEquiv K I).symm
@@ -101,7 +101,7 @@ theorem regular_partial_kernel (A : Matrix n n K) (F : I → Matrix n n K)
   obtain ⟨L,prop⟩ := regular_quintic_kernel A F regular rep hp
   refine ⟨L,fun z hz ↦ ?_⟩
   obtain ⟨sing,H,hH,rank⟩ := prop z hz
-  refine ⟨fun i ↦ ?_,by rw [hessian_rank H hH]; exact rank⟩
+  refine ⟨fun i ↦ ?_,by rw [hessian_rank_from_mixed H hH]; exact rank⟩
   rw [← first_partial]
   exact X_pow_dvd_iff.mp (sing _) 1 (by decide)
 
@@ -113,7 +113,7 @@ theorem normalized_partial_kernel {p : MvPolynomial I K} (hp : p.IsHomogeneous 5
     (∀ i, MvPolynomial.eval z (MvPolynomial.pderiv i p) = 0) ∧
     Fintype.card I + (hessian p z).rank ≤ Fintype.card n + finrank K (endpoints b c).ker := by
   obtain ⟨H,hH,hr⟩ := quintic_rank hp b c D rep z hz
-  refine ⟨?_,by rw [hessian_rank H hH]; exact hr⟩
+  refine ⟨?_,by rw [hessian_rank_from_mixed H hH]; exact hr⟩
   have hP : endpoints b c z = 0 := hz
   have row : dotProductEquiv K n ((Matrix.of b).mulVecLin z) = 0 := congrArg Prod.fst hP
   have hb := (dotProductEquiv K n).map_eq_zero_iff.mp row

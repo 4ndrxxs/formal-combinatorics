@@ -62,6 +62,9 @@ def labelled_nodes(nodes):
     labels = {}
     for board in nodes:
         if board in SURVIVORS:
+            for k, images in enumerate(orbits):
+                if len(board) < RANKS[k] + 5:
+                    assert not any(cells <= board for cells in images), (board, k)
             labels[board] = ("allowed", SURVIVORS.index(board))
             continue
         for k, images in enumerate(orbits):
