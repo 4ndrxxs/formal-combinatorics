@@ -32,7 +32,7 @@ def main():
         'DeterminantRatioEstimateUnbalanced', 'ConferenceDiagonalAverage', 'ConferenceBalancedMean',
         'ConferencePrincipalDet', 'ConferenceCubicEstimate', 'ConferenceCubicThreshold',
         'ConferenceCubicMatrix', 'Basic', 'Paley', 'ProjectiveQuadraticBalance', 'Conference',
-        'PaleySecond', 'TorusFrobeniusPaley', 'ConferenceShiftedLog', 'ConferenceShiftedThreshold',
+        'PaleySecond', 'TorusFrobeniusPaley', 'ProjectiveSplitSupports', 'ConferenceShiftedLog', 'ConferenceShiftedThreshold',
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
