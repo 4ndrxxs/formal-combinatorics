@@ -243,7 +243,8 @@ def verify(project, directory, jobs):
             elif name == "PaleySourceBorders":
                 expected = {"Hadamard.MSXCore.source_borders_four_fifths"}
             elif name == "PaleyNonsplitTorus":
-                expected = {"Hadamard.NonsplitTorus.torus_four_fifths", "Hadamard.NonsplitTorus.exists_torus_four_fifths"}
+                expected = {"Hadamard.NonsplitTorus.torus_four_fifths", "Hadamard.NonsplitTorus.exists_torus_four_fifths",
+                            "Hadamard.NonsplitTorus.every_field_torus"}
             else:
                 raise ValueError("Unrecognized certificate module " + name)
             allowed = {"propext", "Classical.choice", "Quot.sound"}

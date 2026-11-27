@@ -64,4 +64,29 @@ theorem exists_torus_four_fifths (d : F) [Fact (¬IsSquare d)]
 #print axioms torus_four_fifths
 #print axioms exists_torus_four_fifths
 
+
+/-- Starting with the field and its order alone, construct a nonsquare, a
+generator, and a circulant sign matrix attaining the bound for either sign. -/
+theorem every_field_torus (F : Type) [Field F] [Fintype F] [DecidableEq F]
+    (q4 : Fintype.card F%4=1) (lo : 29≤Fintype.card F) :
+    ∃ d : F, ∃ ns : ¬IsSquare d, letI : Fact (¬IsSquare d) := ⟨ns⟩
+      ∃ h : (Ext d)ˣ, ∃ pos : orderOf h≠0, orderOf h=(Fintype.card F+1)/2 ∧ (h:Ext d).norm=1 ∧
+        ∀ α : ℤ, α^2=1 → letI : NeZero (orderOf h) := ⟨pos⟩
+          (∀ i j, twoCirculant h α i j=1 ∨ twoCirculant h α i j= -1) ∧
+          (4/5:ℝ)*(2*(Fintype.card F:ℝ))*((Fintype.card F:ℝ)-1)^(Fintype.card F/2) ≤
+            |(twoCirculant h α).det| := by
+  have hc : ringChar F≠2 := by
+    intro e; have hn := FiniteField.even_card_of_char_two e; omega
+  have hm : quadraticChar F (-1)=1 := (quadraticChar_one_iff_isSquare (neg_ne_zero.mpr one_ne_zero)).mpr
+    (FiniteField.isSquare_neg_one_iff.mpr (by omega))
+  obtain ⟨d,ns⟩ := FiniteField.exists_nonsquare hc
+  refine ⟨d,ns,?_⟩
+  let _ : Fact (¬IsSquare d) := ⟨ns⟩
+  obtain ⟨h,ho,hn⟩ := norm_one_generator d q4 (by omega)
+  have pos : orderOf h≠0 := by omega
+  let _ : NeZero (orderOf h) := ⟨pos⟩
+  exact ⟨h,pos,ho,hn,fun α unit ↦ ⟨sign_entries q4 hm h ho hn α unit,torus_four_fifths q4 lo h ho hn α unit⟩⟩
+
+#print axioms every_field_torus
+
 end Hadamard.NonsplitTorus
