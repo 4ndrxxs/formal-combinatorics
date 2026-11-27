@@ -10,4 +10,5 @@ import Quantum.Hadamard.ConferenceCubicMatrix
 import Quantum.Hadamard.ProjectivePaleyDeterminant
 import Quantum.Hadamard.ProjectiveSplitSupports
 import Quantum.Hadamard.ProjectiveFieldModels
+import Quantum.Hadamard.NearHadamardBorders
 import Quantum.Hadamard.ConferenceBitCompletion

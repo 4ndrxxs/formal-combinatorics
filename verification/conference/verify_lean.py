@@ -35,7 +35,7 @@ def main():
         'PaleySecond', 'TorusFrobeniusPaley', 'ProjectiveSplitSupports', 'ConferenceShiftedLog', 'ConferenceShiftedThreshold',
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion',
-        'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels')]
+        'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -56,9 +56,13 @@ def main():
             out.check_returncode()
             if 'sorryAx' in out.stdout or 'declaration uses' in out.stdout:
                 raise RuntimeError(f'Unproved declaration in {rel}')
-            if rel == Path('Verify.lean'):
+            expected = audits if rel == Path('Verify.lean') else []
+            if rel.name == 'NearHadamardBorders.lean':
+                expected = ['Hadamard.NearBorder.' + name for name in
+                            ('abs_det_of_border_blocks', 'bordering_rigidity', 'two_circulant_borders')]
+            if expected:
                 compact = ' '.join(out.stdout.split())
-                for theorem in audits:
+                for theorem in expected:
                     required = f"'{theorem}' depends on axioms: [propext, Classical.choice, Quot.sound]"
                     if required not in compact:
                         raise RuntimeError(f'Unexpected or missing axiom report for {theorem}')
