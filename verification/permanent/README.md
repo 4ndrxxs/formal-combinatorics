@@ -78,7 +78,7 @@ python verification/permanent/check_quintic_line_cover.py
 
 ## Possible kernel dimensions and pivot boards
 
-In a normalized size-21 representation, the common kernel of the endpoint maps has dimension in `{5,6,7,8,9,10,11,15}`. For every ordering by distinct weights of the form $a_i+b_j$, the pivot cells belong to one of twelve types up to row and column permutations and transposition. The test considers 58 boards and uses four integral Hessian minors. These are necessary conditions. [Shapes and dimension theorem](PermanentShapeClassification.lean) · [Twelve models](PermanentShapeBoards.lean) · [Deletion proof](PermanentShapeGraph.lean)
+The pivot classification initially gives dimensions 5 through 11 and 15. The degree-fifteen argument below excludes 15. For every ordering by distinct weights of the form $a_i+b_j$, the pivot cells belong to one of twelve types up to row and column permutations and transposition. The test considers 58 boards and uses four integral Hessian minors. These are necessary conditions. [Shapes and dimension theorem](PermanentShapeClassification.lean) · [Twelve models](PermanentShapeBoards.lean) · [Deletion proof](PermanentShapeGraph.lean)
 
 For any sets of rows and columns, the kernel contains at least the smaller of their cardinalities in independent matrices supported on their union. In particular, each of the 25 nine-cell crosses carries a nonzero endpoint relation. [Cross theorem](PermanentCross.lean) · [Complex statement](PermanentEndpointStatement.lean)
 
@@ -93,7 +93,7 @@ python verification/permanent/check_quintic_shapes.py
 
 ## Two-row and three-row kernels
 
-In any size-21 representation, an endpoint kernel of dimension 10 consists of all matrices supported on a fixed pair of rows or a fixed pair of columns. The proof uses five exact cubic identities in the entries of a third row. At dimension 15 the kernel consists of all matrices on three fixed rows or three fixed columns. Every internal transfer along that kernel satisfies $D(z)^4=0$. The earlier dimension-5 theorem gives the corresponding one-line conclusion. [Two-line theorem](PermanentTenKernel.lean) · [Three-line theorem](PermanentFifteenKernel.lean) · [Uniform fourth power](PermanentFifteenNilpotence.lean) · [Explicit complex statement](PermanentStripStatement.lean)
+In any size-21 representation, an endpoint kernel of dimension 10 consists of all matrices supported on a fixed pair of rows or a fixed pair of columns. The proof uses five exact cubic identities in the entries of a third row. Assuming dimension 15 forces a full three-row or three-column strip, with $D(z)^4=0$ on it. These two implications enter the contradiction in the next section. The earlier dimension-5 theorem gives the corresponding one-line conclusion. [Two-line theorem](PermanentTenKernel.lean) · [Three-line theorem](PermanentFifteenKernel.lean) · [Uniform fourth power](PermanentFifteenNilpotence.lean) · [Explicit complex statement](PermanentStripStatement.lean)
 
 For any regular affine determinant representing a homogeneous polynomial $f$ of degree $d\ge3$, write $a$ for the rank of its two endpoint maps considered together and $m$ for its size. At every point $z$ in their common kernel, $2(m-1)\ge2a+(d-3)\operatorname{rank}\operatorname{Hess}_z(f)$. [General theorem](PencilHomogeneousRank.lean) · [Dimension argument](PencilMomentFlag.lean)
 
@@ -102,4 +102,19 @@ lake build QuinticPermanent
 lake env leanchecker -v PermanentStripStatement
 lake env leanchecker -v PencilHomogeneousRank
 python verification/permanent/check_quintic_two_rows.py
+```
+
+## Exclusion of the three-row and three-column case
+
+Every size-21 affine representation over a characteristic-zero field admits a normalization with endpoint kernel dimension between 5 and 11 and combined endpoint rank between 14 and 20. The tests are necessary conditions for a size-21 expression. The known numerical bounds over the complex numbers are 21 and 31. [Affine statement](PermanentEndpointInterval.lean) · [Complex statement](PermanentIntervalStatement.lean)
+
+On a hypothetical three-row strip, a rank-ten Hessian forces the successive transfer ranks 15, 10, 5 and 0. An explicit two-parameter slice of the permanent has a complementary Hessian determinant of degree 15 which is irreducible over the rational function field in its second parameter. A linear nilpotent pencil of order 20 with five full four-step chains at infinity must lose that type at a prime of degree at most 14. Applying the two conclusions to the same linear pencil rules out dimension 15. The proof carries the coordinate kernel to every residue field in question. [Exclusion](PermanentFifteenExclusion.lean) · [Small-prime theorem over any field](PencilFourPrime.lean) · [Exact polynomial and slope](PermanentCurveHessian.lean) · [Scalar extension](PermanentBoardScalarExtension.lean)
+
+The internal transfer restricted to the common endpoint kernel is injective for a normalized permanent representation at every order over a field. A complementary matching realizes each coordinate covector as a gradient. [Transfer injectivity](PermanentTransferFaithful.lean) · [Gradient theorem](PermanentCoordinateGradient.lean)
+
+```sh
+lake build QuinticPermanent
+lake env leanchecker -v PermanentIntervalStatement
+lake env leanchecker -v PencilFourPrime
+python verification/permanent/check_quintic_hessian_curve.py
 ```
