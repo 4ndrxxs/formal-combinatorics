@@ -144,3 +144,14 @@ lake build PermanentFourAllFields
 lake env leanchecker -v PermanentFourAllFields
 lake env leanchecker -v PermanentBinaryFixedOrder
 ```
+
+## The Bedi–Suagee Hessian rank formula
+
+For the order-`m` arrow matrix with identity core, ones on both strips, and corner `1 − m`, the permanent vanishes and its corner derivative is one. In every field of characteristic different from two, the ordinary Hessian has rank exactly `m² − m + 2` for all `m ≥ 2`. Bedi and Suagee recorded this formula as a numerical observation for orders 3 through 25 in Remark 2.2.18 of their ECCC report. [Original remark](https://eccc.weizmann.ac.il/report/2024/015/download/) · [Lean theorem](PermanentArrowRank.lean)
+
+The radical consists of variations whose core is diagonal, whose two strips equal that diagonal, and whose corner and diagonal sum vanish. Attaching a new ordinary index preserves every old Hessian entry. This reduces the entry calculation to matrices of order at most five. The kernel calculation and rank-nullity argument hold at arbitrary order. [Leaf identity](PermanentArrowLeaf.lean) · [Uniform entries](PermanentArrowEntries.lean) · [Kernel](PermanentArrowKernel.lean)
+
+```sh
+lake build PermanentArrowRank
+lake env leanchecker -v PermanentArrowRank
+```
