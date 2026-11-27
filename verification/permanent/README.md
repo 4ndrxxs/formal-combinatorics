@@ -38,14 +38,18 @@ The proof computes the mixed determinant coefficient using a Schur complement, i
 
 ## The permanent of order five
 
-Over any characteristic-zero field, a regular affine determinantal expression for the generic five-by-five permanent has size at least sixteen. Here regularity means that the constant matrix of a size-$m$ expression has rank $m-1$. The theorem uses Mathlib's permanent and determinant and quantifies over every choice of affine coefficients. [Formal lower bound](PermanentLowerBound.lean)
+Over every field of characteristic zero, every affine determinantal expression for the generic five-by-five permanent has size at least **sixteen**. For arbitrary constant matrix $A$ and coefficient matrices $F_{ij}$, the sole hypothesis of `PermanentFive.determinantal_lower_bound` is the polynomial equality
+`permanent(X) = det(A + Σ xᵢⱼ Fᵢⱼ)`. Its conclusion is `16 ≤ Fintype.card n`, where `n` indexes the rows and columns of the representation. Both polynomials use Mathlib's definitions. The theorem rules out sizes through fifteen. Whether sixteen is attainable remains open in this work. [Unrestricted theorem and normalization](PermanentUnrestricted.lean) · [Lower bound for regular representations](PermanentLowerBound.lean)
 
 The proof rewrites the mixed derivative as the symbolic Hessian. It degenerates the subspace in the quintic estimate to a coordinate subspace and preserves the vanishing of the gradient and the Hessian minors. Every large support then either contains four matching cells or contains explicit points whose Hessian ranks violate the estimate. The finite witnesses are checked by the Lean kernel. [Derivatives](QuinticDerivatives.lean) · [Coordinate degeneration](PermanentDegeneration.lean) · [Hessian rank under degeneration](QuinticTorus.lean) · [Application to the generic permanent](PermanentFive.lean) · [Support counting](PermanentSupports.lean) · [Finite minors](PermanentWitnesses.lean) · [Symmetries](PermanentSymmetry.lean)
 
-For complex coefficients, published results imply that every affine expression for this permanent is regular at the origin. This implication is the remaining step in an end-to-end Lean proof of the unrestricted bound. A separate integer calculation verifies the rank-ten Hessians for all twenty complete three-line supports and all 300 one-cell deletions. [Regularity, Proposition 2.1](https://arxiv.org/html/1505.02205v1) · [Singular locus, Theorem 4.14](https://arxiv.org/html/2402.17839v2#S4.Thmtheorem14)
+Regularity at the origin is also proved in Lean. A linear slice with five coordinates meets the zero set of all twenty-five ambient first partials only at the origin. An integer polynomial certificate expresses eight times each sixth power as a combination of the partials. The proof compares this slice with matrices of corank at least two using a parametrization, a chain of prime ideals and Krull's height theorem. In particular a polynomial matrix representing the permanent must have corank one at the origin. The size bound then uses affine linearity. [Slice and polynomial identity](PermanentSlice.lean) · [Height of a point](DeterminantalHeight.lean) · [Parametrization](DeterminantalParametrization.lean) · [Intersection with the graph](DeterminantalGraph.lean) · [First-order vanishing](DeterminantalColumns.lean) · [Derivative of a determinant](DeterminantalDerivative.lean) · [Exclusion of two zero rows](PermanentOrigin.lean)
+
+The general geometric context appears in Proposition 2.1 of Alper, Bogart and Velasco and in von zur Gathen's codimension bound. A separate integer calculation checks the five polynomial identities, and another verifies rank-ten Hessians on all twenty complete three-line supports and all 300 one-cell deletions. [Regularity, Proposition 2.1](https://arxiv.org/html/1505.02205v1) · [Singular locus, Theorem 4.14](https://arxiv.org/html/2402.17839v2#S4.Thmtheorem14)
 
 ```sh
 lake build QuinticPermanent
-lake env leanchecker -v PermanentLowerBound
+lake env leanchecker -v PermanentUnrestricted
 python verification/permanent/check_quintic_endpoint.py
+python verification/permanent/check_quintic_slice.py
 ```
