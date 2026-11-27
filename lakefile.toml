@@ -540,3 +540,34 @@ roots = [
   "UniversalBipartiteWalk"
 ]
 globs = ["EdgeCutWalk", "EdgeTransferDecision", "UniversalBipartiteWalk"]
+
+[[lean_lib]]
+name = "PaleyQuadraticCertificates"
+srcDir = "verification/conference/paley-quadratics/certificates"
+roots = [
+  "PaleyBits29",
+  "PaleyBits37",
+  "PaleyBits41",
+  "PaleyBits49",
+  "PaleyBits53",
+  "PaleyBits61",
+  "PaleyBits73",
+  "PaleyBits81",
+  "PaleyBits89",
+  "PaleyBits97",
+  "PaleyBits101",
+  "PaleyField29",
+  "PaleyField37",
+  "PaleyField41",
+  "PaleyField49",
+  "PaleyField53",
+  "PaleyField61",
+  "PaleyField73",
+  "PaleyField81",
+  "PaleyField89",
+  "PaleyField97",
+  "PaleyField101",
+  "PaleyAllOrders",
+  "PaleyRawStatement",
+]
+globs = ["PaleyRawStatement"]
