@@ -19,8 +19,8 @@ globs = ["PermanentCoefficientSigns", "PermanentThreeColour"]
 [[lean_lib]]
 name = "QuinticPermanent"
 srcDir = "verification/permanent"
-roots = ["QuinticKernel"]
-globs = ["QuinticEndpoint", "QuinticPencil", "QuinticHomogeneous", "QuinticAffine", "QuinticRank", "QuinticKernel"]
+roots = ["QuinticRegular"]
+globs = ["QuinticEndpoint", "QuinticPencil", "QuinticHomogeneous", "QuinticAffine", "QuinticRank", "QuinticKernel", "QuinticCorner", "QuinticRegular"]
 
 [[lean_lib]]
 name = "Designs"

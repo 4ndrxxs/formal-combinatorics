@@ -26,20 +26,20 @@ The finite checker covers every binary colouring through order four and all 19,6
 
 ## Quintic affine determinants
 
-Let a homogeneous quintic in $N$ variables equal the determinant of a normalized pencil with top blocks $0,-b$ and bottom blocks $c,I-D$. Let $h$ be the order of the lower right block and $L$ the common kernel of the row and column forms. At every point $z$ in $L$, the polynomial vanishes to order at least two along every line through $z$. Its Hessian at $z$ satisfies the following inequality.
+Let a homogeneous quintic in $N$ variables equal the determinant of an $m$ by $m$ matrix of affine linear forms. Assume the constant matrix has rank $m-1$. There is a fixed subspace $L$ on which the polynomial vanishes to order at least two along every line through each point. Its Hessian at each $z$ in $L$ satisfies the following inequality.
 
 ```text
-codimension(L) + rank(Hessian at z) ≤ h
+codimension(L) + rank(Hessian at z) ≤ m − 1
 ```
 
-The Lean statement uses equality of multivariate polynomials and defines the mixed derivative by extracting the coefficient of the two direction variables. It holds over every field. [Kernel and Hessian theorem](QuinticKernel.lean)
+The Lean theorem works over every field and accepts arbitrary affine coefficients. Constant changes of bases isolate the invertible block. Homogeneity forces the scalar linear entry in the remaining corner to vanish. The Hessian is specified by extracting the mixed coefficient of two independent direction variables. [Theorem and basis changes](QuinticRegular.lean) · [Removal of the linear corner](QuinticCorner.lean) · [Normalized pencil theorem](QuinticKernel.lean)
 
 The proof computes the mixed determinant coefficient using a Schur complement, including the scalar determinant prefactor. Homogeneity then turns the entire series into a single monomial. A bilinear rank argument gives the inequality. [Schur complement](QuinticPencil.lean) · [Homogeneity](QuinticHomogeneous.lean) · [Normalized affine identity](QuinticAffine.lean) · [Rank deduction](QuinticRank.lean) · [Linear algebra](QuinticEndpoint.lean)
 
-The application to the complex permanent of order five also requires the reduction of arbitrary representations to this block form, a coordinate degeneration, and the matching and Hessian arguments on the limiting supports. The Python calculation checks the finite examples by directly differentiating every permanent monomial. The complete numerical lower bound of sixteen is still under formalization.
+The application to the complex permanent of order five also requires a proof that all representations of this particular permanent have corank one at the origin, a coordinate degeneration, and the matching and Hessian arguments on the limiting supports. The Python calculation checks the finite examples by directly differentiating every permanent monomial. The complete numerical lower bound of sixteen is still under formalization.
 
 ```sh
 lake build QuinticPermanent
-lake env leanchecker -v QuinticKernel
+lake env leanchecker -v QuinticRegular
 python verification/permanent/check_quintic_endpoint.py
 ```
