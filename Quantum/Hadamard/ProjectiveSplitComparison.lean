@@ -249,6 +249,18 @@ private theorem sum_by_coords (e : Fin m ≃ SquareIndex F) (f : F → ℤ) :
     _ = ∑ x ∈ S, f x := (sum_subtype S memS f).symm
     _ = _ := by simp only [S,sum_filter,sumSquares]
 
+
+/-- Exact sums of the two signed support rows in a cyclic enumeration. -/
+theorem source_pair_sums (hc : ringChar F≠2) (q4 : Fintype.card F%4=1)
+    (w : F) (hw : quadraticChar F w= -1) (i j : Bool) (e : Fin m ≃ SquareIndex F) :
+    (∑ t, sourcePair w i j e false t)=(if i then 0 else -2) ∧
+      (∑ t, sourcePair w i j e true t)=0 := by
+  obtain ⟨a,b⟩ := incidence_sums hc q4 hw i j
+  simp only [sourcePair,←Int.cast_sum,sum_by_coords e,a,b,Int.cast_zero,and_true]
+  cases i <;> norm_num [cosetSign]
+
+#print axioms source_pair_sums
+
 theorem source_layout_gram [NeZero m] (w : F) (i j : Bool) (e : Fin m ≃ SquareIndex F)
     (cyc : ∀ k l, (e (k-l)).val=(e k).val/(e l).val) (u : CyclicLayout m)
     (a : Bool) (k l : Fin m) :

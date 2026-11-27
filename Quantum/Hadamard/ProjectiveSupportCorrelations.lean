@@ -145,4 +145,68 @@ theorem incidence_gram {w y z : F} (hc : ringChar F≠2) (q4 : Fintype.card F%4=
 
 #print axioms incidence_gram
 
+
+/-- The row sums of the two signed incidence sequences. The second signed
+sequence is balanced for each choice of its cyclotomic class. -/
+theorem incidence_sums {w : F} (hc : ringChar F≠2) (q4 : Fintype.card F%4=1)
+    (hw : quadraticChar F w= -1) (i j : Bool) :
+    sumSquares (incidence (1:F) i) = -1-cosetSign i ∧ sumSquares (incidence w j)=0 := by
+  let χ := quadraticChar F
+  have minus : χ (-1)=1 :=
+    (quadraticChar_one_iff_isSquare (neg_ne_zero.mpr one_ne_zero)).mpr
+      (FiniteField.isSquare_neg_one_iff.mpr (by omega))
+  have shifted : ∑ x : F, χ (x-1)=0 :=
+    ((Equiv.subRight (1:F)).sum_comp χ).trans (quadraticChar_sum_zero hc)
+  have corr : ∑ x : F, χ x*χ (x-1)= -1 := by
+    simpa only [χ,sub_eq_add_neg,ite_eq_right (neg_ne_zero.mpr (one_ne_zero : (1:F)≠0)),zero_add] using
+      Hadamard.Paley.character_corr hc (-1:F)
+  have term (x : F) :
+      2*(if χ x=1 then χ (x-1) else 0)=
+        χ x*χ (x-1)+χ (x-1)-(if x=0 then 1 else 0) := by
+    by_cases eq : x=0
+    · subst x; simp [χ,show quadraticChar F (-1)=1 from minus]
+    · rcases quadraticChar_dichotomy eq with v|v <;> change χ x=_ at v <;> rw [v] <;> simp [eq]
+      ring
+  have weighted := sum_congr (s₁:=univ) rfl (fun x _ ↦ term x)
+  simp only [sum_sub_distrib,sum_add_distrib,←mul_sum,corr,shifted,add_zero] at weighted
+  have direct : sumSquares (fun x : F ↦ χ (x-1))= -1 := by
+    change (∑ x : F, if χ x=1 then χ (x-1) else 0)= -1
+    simp at weighted
+    omega
+  have rest := sum_split hw (fun x : F ↦ χ (x-1))
+  simp only [direct,shifted,zero_sub,minus] at rest
+  have wn : w≠0 := by intro eq; subst w; simp at hw
+  have one : χ 1=1 := map_one _
+  have first (x : F) (hx : χ x=1) :
+      incidence 1 i x=cosetSign i*χ (x-1)-(if x=1 then 1 else 0) := by
+    simpa only [div_one,one_mul] using incidence_row (s:=1) (y:=1) one_ne_zero hx one i
+  have other (x : F) (hx : χ x=1) : incidence w j x=cosetSign j*χ (x/w-1) := by
+    have ne : x≠w := by intro eq; subst x; change χ w= -1 at hw; omega
+    simpa only [div_one,mul_one,ite_eq_right ne,sub_zero] using incidence_row (y:=1) wn hx one j
+  constructor
+  · have id (x : F) :
+        (if χ x=1 then incidence 1 i x else 0)=
+        cosetSign i*(if χ x=1 then χ (x-1) else 0)-(if x=1 then 1 else 0) := by
+      by_cases hx : χ x=1
+      · simp only [hx,ite_true,first x hx]
+      · have ne : x≠1 := fun eq ↦ hx (eq ▸ one)
+        simp [hx,ne]
+    have s := sum_congr (s₁:=univ) rfl (fun x _ ↦ id x)
+    simp only [sum_sub_distrib,←mul_sum] at s
+    change (∑ x : F, if χ x=1 then incidence 1 i x else 0)=_
+    rw [s,show (∑ x : F, if χ x=1 then χ (x-1) else 0)= -1 from direct]
+    simp; ring
+  · have id (x : F) :
+        (if χ x=1 then incidence w j x else 0)=cosetSign j*(if χ x=1 then χ (x/w-1) else 0) := by
+      by_cases hx : χ x=1 <;> simp [hx,other x]
+    have s := sum_congr (s₁:=univ) rfl (fun x _ ↦ id x)
+    simp only [←mul_sum] at s
+    have total : (∑ x : F, if χ x=1 then χ (x/w-1) else 0)=0 := by
+      change -1+(∑ x : F, if χ x=1 then χ (x/w-1) else 0)=0-1 at rest
+      omega
+    change (∑ x : F, if χ x=1 then incidence w j x else 0)=_
+    rw [s,total,mul_zero]
+
+#print axioms incidence_sums
+
 end Hadamard.MSXCore

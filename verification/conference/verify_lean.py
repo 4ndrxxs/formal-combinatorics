@@ -36,7 +36,7 @@ def main():
         'ProjectivePaleyDeterminant',
         'Goethals', 'GoethalsBits', 'ConferenceBitTrace', 'ConferenceBitBound', 'ConferenceBitCompletion',
         'ProjectivePaleyAction', 'ProjectiveQuadraticOrbits', 'ProjectiveFieldModels', 'NearHadamardBorders', 'ProjectiveSupportCorrelations', 'ProjectiveSplitComparison',
-        'ProjectiveNonsplitTorus')]
+        'ProjectiveNonsplitTorus', 'LinPhoaSourceArray')]
     print(subprocess.check_output([lean, '--version'], cwd=project, env=env, text=True).strip(), flush=True)
     with TemporaryDirectory(prefix='lean-conference-') as temporary:
         tmp = Path(temporary)
@@ -62,13 +62,16 @@ def main():
                 expected = ['Hadamard.NearBorder.' + name for name in
                             ('abs_det_of_border_blocks', 'bordering_rigidity', 'two_circulant_borders')]
             if rel.name == 'ProjectiveSupportCorrelations.lean':
-                expected = ['Hadamard.MSXCore.incidence_gram']
+                expected = ['Hadamard.MSXCore.incidence_gram', 'Hadamard.MSXCore.incidence_sums']
             if rel.name == 'ProjectiveSplitComparison.lean':
                 expected = ['Hadamard.MSXCore.' + name for name in ('reference_gram', 'compare_incidence_border',
-                            'source_layout_gram', 'compare_source_layout', 'exists_square_enumeration')]
+                            'source_layout_gram', 'compare_source_layout', 'source_pair_sums', 'exists_square_enumeration')]
             if rel.name == 'ProjectiveNonsplitTorus.lean':
                 expected = ['Hadamard.NonsplitTorus.' + name for name in ('norm_one_generator', 'projective_chart_bijective',
                             'cyclic_wedge', 'two_circulant_det', 'symmetric_sequences', 'two_circulant_entries', 'sign_entries')]
+            if rel.name == 'LinPhoaSourceArray.lean':
+                expected = ['Hadamard.LinPhoa.' + name for name in
+                            ('bulk_cross', 'source_entry_sign', 'source_partition', 'source_partition_iff')]
             if expected:
                 compact = ' '.join(out.stdout.split())
                 for theorem in expected:
