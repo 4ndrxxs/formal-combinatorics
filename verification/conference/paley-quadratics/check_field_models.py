@@ -245,7 +245,7 @@ def verify(project, directory, jobs):
                 expected = {"Hadamard.MSXCore.source_borders_four_fifths"}
             elif name == "PaleyNonsplitTorus":
                 expected = {"Hadamard.NonsplitTorus.torus_four_fifths", "Hadamard.NonsplitTorus.exists_torus_four_fifths",
-                            "Hadamard.NonsplitTorus.every_field_torus"}
+                            "Hadamard.NonsplitTorus.every_field_torus", "Hadamard.NonsplitTorus.torus_gauss_four_fifths"}
             elif name == "PaleyLinPhoa":
                 expected = {"Hadamard.LinPhoa." + s for s in ("source_array_det", "source_array_four_fifths",
                                                                "every_field_source_array", "two_jacobi_bounds")}
