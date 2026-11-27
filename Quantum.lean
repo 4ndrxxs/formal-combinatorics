@@ -1,0 +1,5 @@
+import Quantum.Hadamard.CompositeSquareNorms
+import Quantum.Hadamard.Kuperberg
+import Quantum.Hadamard.ArithmeticSingularTripleOrders
+import Quantum.Hadamard.TorusOddCompositeProgressions
+import Quantum.Hadamard.DeterminantRatioEstimateConference
