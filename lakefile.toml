@@ -584,4 +584,11 @@ roots = [
   "PaleySourceBorders",
   "PaleyNonsplitTorus",
   "PaleyLinPhoa",
+  "MSXTableCyclic",
+  "MSXTableGaussFactor",
+  "MSXTableJacobi",
+  "MSXTableParameters",
+  "MSXProblem15",
+  "MSXTableExtension",
+  "MSXProblem15Statement",
 ]
