@@ -1,6 +1,6 @@
 # Research questions and proof repositories
 
-All 41 research questions have independently cloneable Git repositories. The table links the 10 hosted project pages currently verified on GitHub. Every row also has a complete portable Git repository, including its English README and build instructions.
+All 41 research questions have independently cloneable Git repositories. The table links the 15 hosted project pages currently verified on GitHub. Every row also has a complete portable Git repository, including its English README and build instructions.
 
 To use a portable copy, download the bundle and clone it locally. For example,
 
@@ -29,7 +29,7 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 | Quadratic signings of the Paley conference matrix | Theorem | [Project page](https://github.com/4ndrxxs/paley-quadratic-signings) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/paley-quadratic-signings.bundle) |
 | Kuperberg’s Conjecture 5.1 on modular Hadamard matrices | Theorem | [Project page](https://github.com/4ndrxxs/kuperberg-modular-hadamard) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kuperberg-modular-hadamard.bundle) |
 | Eventual orders of modular Hadamard matrices at composite moduli | Partial result | [Project page](https://github.com/4ndrxxs/modular-hadamard-composite-orders) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-composite-orders.bundle) |
-| Modular Hadamard orders in arithmetic progressions | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Statements/CompositeSquareNormStatement.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-progressions.bundle) |
+| Modular Hadamard orders in arithmetic progressions | Theorem | [Project page](https://github.com/4ndrxxs/modular-hadamard-progressions) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-progressions.bundle) |
 | Modular Hadamard matrices at every order divisible by four for moduli 17 and 19 | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/certificates/17-and-19-lean.zip) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-17-19.bundle) |
 | Periodic circulant T-systems of orders 271 and 331 | Construction | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/Hadamard/PaleyT271.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/periodic-circulant-t-systems.bundle) |
 | An ordinary Hadamard matrix of order 246,068 | Construction | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/Hadamard/PaleyT246068.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/hadamard-order-246068.bundle) |
@@ -38,7 +38,7 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 
 | Question | Result type | Proof | Portable repository |
 | --- | --- | --- | --- |
-| Ray counts in quantum Latin squares | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/Spectrum.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-latin-square-spectrum.bundle) |
+| Ray counts in quantum Latin squares | Theorem | [Project page](https://github.com/4ndrxxs/quantum-latin-square-spectrum) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-latin-square-spectrum.bundle) |
 | Exceptional orders of diagonal quantum Latin squares | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/DiagonalSixSpectrum.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/diagonal-quantum-latin-squares.bundle) |
 | Existence of pandiagonal quantum Latin squares | Partial result | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/Pandiagonal.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/pandiagonal-quantum-latin-squares.bundle) |
 | Ray counts in small symmetric quantum Latin squares | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/SymmetricSpectrum.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/symmetric-quantum-latin-squares.bundle) |
@@ -60,14 +60,14 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 
 | Question | Result type | Proof | Portable repository |
 | --- | --- | --- | --- |
-| Weber’s two-projection splitting problem | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/WeberSplitting.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/weber-projection-splittings.bundle) |
+| Weber’s two-projection splitting problem | Theorem | [Project page](https://github.com/4ndrxxs/weber-projection-splittings) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/weber-projection-splittings.bundle) |
 | Weber’s quantum permutation completion problem | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/WeberCompletion.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/weber-quantum-permutation-completion.bundle) |
 
 ## Kimberling–Moses sequence conjectures
 
 | Question | Result type | Proof | Portable repository |
 | --- | --- | --- | --- |
-| Kimberling–Moses Conjecture 6 on dilated subscripts | Counterexample | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingGeneral.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-6.bundle) |
+| Kimberling–Moses Conjecture 6 on dilated subscripts | Counterexample | [Project page](https://github.com/4ndrxxs/kimberling-moses-conjecture-6) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-6.bundle) |
 | Kimberling–Moses Conjecture 8 on upper indices | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingIrregular.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-8.bundle) |
 | Kimberling–Moses Conjecture 14 on offset two | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingShifts.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-14.bundle) |
 | Kimberling–Moses Conjecture 15 on offset three | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingShifts.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-15.bundle) |
@@ -80,7 +80,7 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 
 | Question | Result type | Proof | Portable repository |
 | --- | --- | --- | --- |
-| Universal perfect edge transfer in bipartite quantum walks | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/physics/UniversalBipartiteWalk.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/universal-bipartite-edge-transfer.bundle) |
+| Universal perfect edge transfer in bipartite quantum walks | Theorem | [Project page](https://github.com/4ndrxxs/universal-bipartite-edge-transfer) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/universal-bipartite-edge-transfer.bundle) |
 | Reversibility of perfect edge transfer | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/physics/EdgeTransferDecision.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/reverse-bipartite-edge-transfer.bundle) |
 | Edge cuts and perfect transfer at minimum degree three | Partial result | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/physics/EdgeCutWalk.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/bipartite-edge-transfer-cuts.bundle) |
 
