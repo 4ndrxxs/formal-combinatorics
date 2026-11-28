@@ -1,6 +1,6 @@
 # Research questions and proof repositories
 
-All 41 research questions have independently cloneable Git repositories. The table links the 15 hosted project pages currently verified on GitHub. Every row also has a complete portable Git repository, including its English README and build instructions.
+All 41 research questions have independently cloneable Git repositories. The table links the 20 hosted project pages currently verified on GitHub. Every row also has a complete portable Git repository, including its English README and build instructions.
 
 To use a portable copy, download the bundle and clone it locally. For example,
 
@@ -30,7 +30,7 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 | Kuperberg’s Conjecture 5.1 on modular Hadamard matrices | Theorem | [Project page](https://github.com/4ndrxxs/kuperberg-modular-hadamard) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kuperberg-modular-hadamard.bundle) |
 | Eventual orders of modular Hadamard matrices at composite moduli | Partial result | [Project page](https://github.com/4ndrxxs/modular-hadamard-composite-orders) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-composite-orders.bundle) |
 | Modular Hadamard orders in arithmetic progressions | Theorem | [Project page](https://github.com/4ndrxxs/modular-hadamard-progressions) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-progressions.bundle) |
-| Modular Hadamard matrices at every order divisible by four for moduli 17 and 19 | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/certificates/17-and-19-lean.zip) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-17-19.bundle) |
+| Modular Hadamard matrices at every order divisible by four for moduli 17 and 19 | Theorem | [Project page](https://github.com/4ndrxxs/modular-hadamard-17-19) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-17-19.bundle) |
 | Periodic circulant T-systems of orders 271 and 331 | Construction | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/Hadamard/PaleyT271.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/periodic-circulant-t-systems.bundle) |
 | An ordinary Hadamard matrix of order 246,068 | Construction | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/Hadamard/PaleyT246068.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/hadamard-order-246068.bundle) |
 
@@ -49,7 +49,7 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 | Question | Result type | Proof | Portable repository |
 | --- | --- | --- | --- |
 | Ray counts in quantum Sudoku | Partial result | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/SudokuSpectrum.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-cardinality-spectrum.bundle) |
-| Quantum Sudoku completion from classical clues | Counterexample | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/FractionalPuzzleOrders.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-existence-conjecture.bundle) |
+| Quantum Sudoku completion from classical clues | Counterexample | [Project page](https://github.com/4ndrxxs/quantum-sudoku-existence-conjecture) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-existence-conjecture.bundle) |
 | Quantum Sudoku uniqueness from classical clues | Counterexample | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/Activated/Family.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-uniqueness-conjecture.bundle) |
 | Reconstructing quantum Sudoku from complete blocks | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/SudokuBlocks.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-block-reconstruction.bundle) |
 | Quantum Sudoku measured in its first block | Counterexample | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/FractionalBlockAll.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-block-measurements.bundle) |
@@ -61,7 +61,7 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 | Question | Result type | Proof | Portable repository |
 | --- | --- | --- | --- |
 | Weber’s two-projection splitting problem | Theorem | [Project page](https://github.com/4ndrxxs/weber-projection-splittings) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/weber-projection-splittings.bundle) |
-| Weber’s quantum permutation completion problem | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/Quantum/WeberCompletion.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/weber-quantum-permutation-completion.bundle) |
+| Weber’s quantum permutation completion problem | Theorem | [Project page](https://github.com/4ndrxxs/weber-quantum-permutation-completion) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/weber-quantum-permutation-completion.bundle) |
 
 ## Kimberling–Moses sequence conjectures
 
@@ -69,7 +69,7 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 | --- | --- | --- | --- |
 | Kimberling–Moses Conjecture 6 on dilated subscripts | Counterexample | [Project page](https://github.com/4ndrxxs/kimberling-moses-conjecture-6) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-6.bundle) |
 | Kimberling–Moses Conjecture 8 on upper indices | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingIrregular.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-8.bundle) |
-| Kimberling–Moses Conjecture 14 on offset two | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingShifts.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-14.bundle) |
+| Kimberling–Moses Conjecture 14 on offset two | Theorem | [Project page](https://github.com/4ndrxxs/kimberling-moses-conjecture-14) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-14.bundle) |
 | Kimberling–Moses Conjecture 15 on offset three | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingShifts.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-15.bundle) |
 | Kimberling–Moses Conjecture 16 on offset five | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingShifts.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-16.bundle) |
 | Kimberling–Moses Conjecture 18 on gaps between good indices | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/sequences/KimberlingGaps.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-18.bundle) |
@@ -88,7 +88,7 @@ The [download manifest](https://github.com/4ndrxxs/formal-combinatorics/blob/sta
 
 | Question | Result type | Proof | Portable repository |
 | --- | --- | --- | --- |
-| Signed difference sets with norm cofactor at most 30 | Theorem | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/designs/SignedThroughThirty.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/signed-difference-set-cofactors.bundle) |
+| Signed difference sets with norm cofactor at most 30 | Theorem | [Project page](https://github.com/4ndrxxs/signed-difference-set-cofactors) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/signed-difference-set-cofactors.bundle) |
 | A product construction for signed difference sets | Construction | [Original proof](https://github.com/4ndrxxs/formal-combinatorics/blob/1024b8d59eca29300691c87cb92c1c1fa51940c6/designs/SignedProduct.lean) | [Git bundle](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/signed-difference-set-product.bundle) |
 
 ## How related questions fit together
