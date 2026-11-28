@@ -23,6 +23,16 @@ cd verification/conference/paley-quadratics
 uv run --no-project --with python-flint python check_msx_table.py --raw
 ```
 
+The supplementary Lean check constructs the field tower, all characters and the generator in one record for every eligible integer order. A separate script expands the original Gauss and Jacobi character sums in exact cyclotomic rings for all eleven small orders used by the Lean proof. All 44 products, including both choices of the quartic phase, agree with the determinant resultants. [Witness construction](audits/MSXPrintedInputs.lean) · [Direct cyclotomic calculation](audits/check_msx_raw_cyclotomic.py)
+
+From the repository root run
+
+```sh
+lake build MSXProblem15Statement
+lake env lean verification/conference/paley-quadratics/audits/MSXPrintedInputs.lean
+uv run --no-project --with python-flint python verification/conference/paley-quadratics/audits/check_msx_raw_cyclotomic.py
+```
+
 For each prime power (q) congruent to one modulo four, index the matrix by the finite field and a point at infinity. Its finite entries are the quadratic character of the difference of the points. Its border entries are positive and its diagonal is zero. The three positive sets in this check are the nonzero squares together with zero, the nonsquares together with zero, and the finite points where the character of x²−d is negative, for a fixed nonsquare d. Each complement is included. The two possible nonsplit orientations may exchange labels when the field model or d changes.
 
 The file determinants.csv gives 384 exact determinants and Ehlich–Wojtas bounds at the 64 eligible prime powers from 29 through 673. Run the following commands in the directory containing this file.
