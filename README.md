@@ -1,6 +1,6 @@
 # Formal combinatorics in Lean
 
-The collection is moving to one repository per research question. The [problem index](by-problem.md) links all 41 questions and identifies the 10 standalone repositories published so far. The complete collection is preserved on the [archive branch](https://github.com/4ndrxxs/formal-combinatorics/tree/legacy-monorepo).
+The [problem index](by-problem.md) links 41 independently cloneable proof repositories. Each has its own English README and build instructions. There are 10 dedicated GitHub project pages published so far. All 41 portable repositories are available now in the [Git bundle collection](https://github.com/4ndrxxs/formal-combinatorics/tree/standalone-bundles).
 
 This repository collects machine-checked results in combinatorial matrix theory and related discrete mathematics. Proof files and build instructions are in English. The project pins Lean 4.36.0 and mathlib in the Lake manifest.
 
