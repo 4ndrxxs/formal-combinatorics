@@ -1,106 +1,56 @@
-# Formal combinatorics in Lean
+# Standalone proof repositories
 
-This repository collects machine-checked results in combinatorial matrix theory and related discrete mathematics. Proof files and build instructions are in English. The project pins Lean 4.36.0 and mathlib in the Lake manifest.
+This snapshot contains 41 independent Git repositories. Each download includes a complete project for one question with its own English README, source files and build instructions. The files originate from the [pinned public collection](https://github.com/4ndrxxs/formal-combinatorics/tree/1024b8d59eca29300691c87cb92c1c1fa51940c6).
 
-## Modular Hadamard matrices
-
-An order $n$ is supported at modulus $m$ if there is a square integer sign matrix of order $n$ $H$ with $HH^{T} = nI$ modulo $m$. For positive odd $m$, let $Q_m(n)$ mean that $n$ is a sum of `gcd(n, 4)` squares modulo $m$.
-
-| Result | Formal statement |
-| --- | --- |
-| Every arithmetic progression through $n$ contains arbitrarily large supported orders if and only if $Q_m(n)$. | [Integer matrix and square-sum statement](Statements/CompositeSquareNormStatement.lean) |
-| For every odd modulus with at most two distinct prime factors, $Q_m(n)$ is necessary and sufficient at each sufficiently large $n$. For any fixed odd modulus the same holds when one of $n,n-1,n-2$ is coprime to it. | [Square-norm theorem](Quantum/Hadamard/CompositeSquareNorms.lean) and [three coprimality conditions](Quantum/Hadamard/ThreeCenterConductor.lean) |
-| For any odd prime $p$, the sufficiently large supported orders are exactly the even orders and the orders that are squares modulo $p$, including zero. | [Kuperberg's conjecture in integer-matrix form](Statements/KuperbergStatement.lean) |
-| Local obstructions and constructive sufficiency at two odd prime powers, with arbitrary exponents. | [Expanded valuation statements](Statements/TwoPrimePowerSpectrumStatement.lean) |
-
-For example, modulo 45, every order congruent to 6 modulo 180 is excluded by its 3-adic valuation. Every sufficiently large order congruent to 18 modulo 180 is supported since $18=3^2+3^2$. The second conclusion has a threshold depending on the modulus. For moduli with more than two prime divisors, the progression theorem alone does not imply pointwise existence.
-
-The prime statement is formulated in [Kuperberg, *Hadamard matrices modulo p and small modular Hadamard matrices*](https://doi.org/10.1002/jcd.21522). Kline's November 2026 preprint proves the prime criterion for odd primes outside the class 1 modulo 8 and supplies design extensions used in this development. [Kline, *Modular Hadamard matrices at large orders*](https://doi.org/10.5281/zenodo.24421216)
-
-## Determinantal complexity of the five-by-five permanent
-
-Any affine-linear determinantal representation of the generic five-by-five permanent over a characteristic-zero field has size at least **21**. Grenet's construction gives an upper bound of 31 over the complex numbers. At size 21, the common endpoint kernel must project surjectively onto a whole input row or column. [Endpoint theorem](verification/permanent/PermanentFullLine.lean). The endpoint kernel has dimension **5 through 11**, so the combined endpoint map has rank **14 through 20**. In dimension 10 the kernel is exactly two fixed rows or two fixed columns. [Endpoint interval](verification/permanent/PermanentEndpointInterval.lean) · [Exclusion of dimension 15](verification/permanent/PermanentFifteenExclusion.lean) · [Two-line theorem](verification/permanent/PermanentTenKernel.lean). [Lean theorem](verification/permanent/PermanentTwentyOne.lean) · [Statement over the complex numbers](verification/permanent/PermanentFiveStatement.lean) · [Proof and reproduction commands](verification/permanent/README.md)
-
-## The Bedi–Suagee Hessian rank formula
-
-For the order-`m` arrow matrix with identity core, ones on both strips, and corner `1 − m`, the permanent vanishes and its corner derivative is one. In every field of characteristic different from two, the ordinary Hessian has rank exactly `m² − m + 2` for all `m ≥ 2`. Bedi and Suagee recorded this formula as a numerical observation for orders 3 through 25 in Remark 2.2.18 of their ECCC report. [Original remark](https://eccc.weizmann.ac.il/report/2024/015/download/) · [Lean theorem](verification/permanent/PermanentArrowRank.lean)
-
-## Hessian ranks in order four
-
-For the permanent of a four-by-four matrix over a field, the possible Hessian ranks at smooth rational zeros are 4, 6, and 8 through 16 in characteristic zero or characteristic greater than three. In characteristic three the list ends at 15. In characteristic two the only rank is 8. Over any field of characteristic different from two, every smooth zero of Hessian rank at most 7 has a zero row or a zero column. [Order-four classification and zero-line theorem](verification/permanent/PermanentFourAllFields.lean) · [All orders in characteristic two](verification/permanent/PermanentBinaryFixedOrder.lean)
-
-## Maximum Hessian rank at a smooth permanent zero
-
-For the order-`m` permanent with `m ≥ 2`, the maximum ordinary Hessian rank at a smooth rational zero over an infinite field is `m²` when both 2 and `m−1` are nonzero in the field. It is `m²−1` when the characteristic is odd and divides `m−1`, and `2m` in characteristic two. The proof constructs a polynomial curve of permanent zeros and computes a principal minor of the induced star Laplacian. The characteristic-zero full-rank case is due to Mignon and Ressayre. [Maximum theorem](verification/permanent/PermanentMaximumHessian.lean) · [Corrected second derivative](verification/permanent/PermanentStarCorrection.lean) · [Polynomial specialization](verification/permanent/PermanentRankSpecialization.lean)
-
-## Hessian ranks of permanents
-
-As the square order varies over a field of characteristic different from two, the Hessian ranks on the permanent hypersurfaces are exactly zero, four, and every integer at least six. In characteristic two they are zero and every even integer at least four. All the positive ranks occur at smooth points. In order three over a field of characteristic different from two the smooth ranks are exactly 4, 6, 7, 8, and 9. [All orders and characteristics](verification/permanent/PermanentSmoothSpectrum.lean) · [Fixed order three](verification/permanent/PermanentOrderThreeSpectrum.lean) · [Rank-four factorization](verification/permanent/HollowGridDisjoint.lean)
-
-## Determinant and permanent coefficients
-
-For every binary partition of the original variables, the generic determinant and permanent have coefficient matrices related by row and column signs over any commutative ring. At every order from four, an explicit three-way partition obstructs even arbitrary local scalar reweighting in characteristic different from two. [Theorems, proof files and reproduction commands](verification/permanent/README.md)
-
-## Problem 15 on near-Hadamard determinants
-
-For every prime power $q\equiv1\pmod4$ with $q\ge29$, all three determinant products in rows (4), (5), and (6) of Theorem 1.6 of Momihara, Suda and Xiang are at least $4W_{q+1}/5$. The Lean theorem handles every quadratic extension of the base field and every permitted choice of generator and characters. The published theorem identifies the three products with the absolute determinants of the specified matrices. [Problem 15](https://arxiv.org/html/2610.27175v2#Thmproblem15) · [Literal Lean theorem](verification/conference/paley-quadratics/certificates/MSXProblem15Statement.lean) · [Formulas and reproduction commands](verification/conference/paley-quadratics/README.md#the-three-determinant-products-in-problem-15)
-
-## Conference matrices and determinants
-
-Let $C$ be a symmetric conference matrix of order $n=2v>2$ and let $W_n=(2n-2)(n-2)^{v-1}$ be the Ehlich–Wojtas bound. At every such order there is a diagonal with $v$ plus signs and $v$ minus signs for which $|\det(C+D)|>(\sqrt e/2)W_n$. Writing $q=n-1$, the mean over these balanced diagonals is at least $(q+1/q)^v$. More generally, the coefficient of $z^k$ in $((q-1)(1+z)^2+4z)^v$ is the exact sum of the absolute determinants over all diagonals with $k$ positive entries. [Exact generating function](Quantum/Hadamard/ConferenceDiagonalAverage.lean) · [Balanced mean and existence theorem](Quantum/Hadamard/ConferenceBalancedMean.lean)
-
-For individual completions with a fraction of positive signs tending to $a$, the determinant ratio tends to $\exp(2a(1-a))/2$ as the order grows. At balance the limit is $\sqrt e/2$, and every balanced completion attains at least four fifths of $W_n$ from order 110. The 30 intermediate even orders through 168 are covered by uniform rational moment bounds. For smaller orders starting at 30, one integer inequality involving the cubic trace of the positive principal block suffices. For the Paley matrix, this gives the same bound at every eligible order at least 30 for signings defined by nonsingular projective binary quadratic forms. For the 108 explicit small matrices from 18 fields, Lean checks the full row correlations, the positive principal block and a lower bound for the determinant of the full matrix. Lean reduces every nonsingular form to six signings, verifies the exact field coordinates in all eleven necessary small fields, and transfers their bounds to every finite field of the same size. The theorem covers every eligible order from 30 with opposite signs at the two roots of a split form. [All-order theorem](verification/conference/paley-quadratics/certificates/PaleyAllOrders.lean) · [Independent statement with literal matrix entries](verification/conference/paley-quadratics/certificates/PaleyRawStatement.lean) The four sets used in Theorem 4.1 of Momihara, Suda and Xiang determine the positive and negative entries of two finite Paley blocks. For regular cores with constant sign borders and a near-Hadamard row Gram partition, equality of the two within-class core Gram blocks gives equal absolute determinants when their off-diagonal entries avoid −2. For cores built from two circulant blocks per block row, matching the sum of their sequence autocorrelations suffices. For all four pairings of the signed sets in Theorem 4.1, the sum of their autocorrelations matches one of the two split Paley cores in every finite field under consideration. Every two-circulant layout made from any one set in each column has the four-fifths bound at every eligible order from 30, for all independent signs, shifts and reversals and every class-constant sign border satisfying the two-class Gram condition. The cyclic ordering of the square coordinates is proved to exist. Matching the published layouts in classes (5) and (6) to this construction and relating class (4) remain open. [All-order bound for the assembled signed-incidence layouts](verification/conference/paley-quadratics/certificates/PaleySourceBorders.lean) [Explicit correlations of the four published sets](Quantum/Hadamard/ProjectiveSupportCorrelations.lean) [Border and two-circulant theorems](Quantum/Hadamard/NearHadamardBorders.lean) · [Exact enumeration of borders](verification/conference/paley-quadratics/check_split_borders.py) [Four support identities](Quantum/Hadamard/ProjectiveSplitSupports.lean) · [Original 2022 construction](https://www.sciencedirect.com/science/article/abs/pii/S0024379522003123) · [Survey question](https://arxiv.org/html/2610.27175v2#Thmproblem15) · [Uniform bound from order 110](Quantum/Hadamard/ConferenceShiftedThreshold.lean) · [Cubic trace criterion](Quantum/Hadamard/ConferenceCubicMatrix.lean) · [Determinant on the original projective coordinates](Quantum/Hadamard/ProjectivePaleyDeterminant.lean) · [Quadratic character balance](Quantum/Hadamard/ProjectiveQuadraticBalance.lean) · [108 determinant proofs](verification/conference/paley-quadratics/certificates/) · [How to reproduce the matrices and bounds](verification/conference/paley-quadratics/README.md) · [Independent Lean statements](verification/conference/Statement.lean)
-
-A second explicit construction takes the quadratic characters of the real and imaginary coordinates of powers of a norm-one element of order $(q+1)/2$. The two resulting symmetric circulants $A,B$, with either sign at the origin of $A$, give a matrix with block rows $(A,B)$ and $(B,-A)$. Its absolute determinant is at least $4W_{q+1}/5$ for every eligible $q$ from 29. Starting only from the field and the two conditions on its size, Lean constructs a nonsquare and a suitable generator, checks each block as a formula in its cyclic indices, and verifies all entries are signs. The two-circulant form of the underlying zero-diagonal Paley matrix was established by Goethals and Seidel in 1967. At order 30 the negative orientation reproduces the rounded ratio for class (4) in the 2022 paper. [Two-circulant theorem](verification/conference/paley-quadratics/certificates/PaleyNonsplitTorus.lean) · [Goethals and Seidel, Theorem 2.3](https://doi.org/10.4153/CJM-1967-091-8) · [Projective coordinates and literal matrix entries](Quantum/Hadamard/ProjectiveNonsplitTorus.lean) · [Independent finite-field checker](verification/conference/paley-quadratics/check_nonsplit_torus.py)
-
-Insert the signed supports from Theorem 4.1 of Momihara, Suda and Xiang into the two circulants in equation (3.1) of Lin and Phoa (2016), choosing +1 on each support. Of the eight choices of the two coset indices and the corner sign, exactly six satisfy the near-Hadamard Gram condition. For every prime power $q\equiv1\pmod4$ with $q\ge29$, all six have determinant magnitude at least four fifths of the Ehlich–Wojtas bound. The magnitude depends only on the first coset index. At order 30 the two ratios round to the published values for classes (5) and (6). [Full statement and proof](verification/conference/paley-quadratics/certificates/PaleyLinPhoa.lean) · [Border and signs](Quantum/Hadamard/LinPhoaSourceArray.lean) · [Lin and Phoa, equation (3.1)](https://www3.stat.sinica.edu.tw/statistica/oldpdf/A26n117.pdf#page=5)
-
-For each of these arrays, Lean proves an exact determinant formula as a product of paired Jacobi sums. The proof extends every character of the squares to the field, diagonalizes a core Gram block in the character basis, and eliminates the two border rows. The final identity in the complex numbers includes the sign of the product. Its two admissible prefactors are $(q-1)^2$ and $(q+1)^2+4$, and both products attain at least four fifths of the Ehlich–Wojtas bound at every eligible order from 30. A separate integer calculation compares all eight signs-and-support choices in each of 18 fields with direct elimination. [Complete Jacobi product](Quantum/Hadamard/LinPhoaCharacterProduct.lean) · [Product bounds](verification/conference/paley-quadratics/certificates/PaleyLinPhoa.lean) · [Exact determinant comparison](verification/conference/paley-quadratics/check_split_jacobi.py)
-
-For the norm-one torus, the determinant is an exact product of differences of extension-field Gauss sums. A character on the torus extends simultaneously with the base quadratic character. Its phase at twice the square root of the chosen nonsquare has square minus one. The product over all characters, including the trivial character, equals the absolute determinant for either diagonal orientation. Both products attain four fifths of the Ehlich–Wojtas bound at every eligible order from 30. An exact integer check covers 820 characters and 36 full determinants in 18 fields. [Gauss determinant formula](Quantum/Hadamard/NonsplitCharacterProduct.lean) · [Four-fifths bound](verification/conference/paley-quadratics/certificates/PaleyNonsplitTorus.lean)
-
-## Other proof families
-
-| Subject | What the formalization establishes | Source |
-| --- | --- | --- |
-| Exact modular Hadamard orders | Every positive multiple of four is supported at each of moduli 17 and 19. The archive contains the complete Lean sources and finite certificate imports for both moduli. | [Self-contained Lean project](certificates/17-and-19-lean.zip) |
-| Quantum Latin squares | For every order at least six, all ray counts from the order to its square are possible except the order plus one. For order six with both diagonals constrained, the precise counts are 6, 8, 10 and 12. | [General theorem](Quantum/Spectrum.lean) · [Order six with diagonal bases](Quantum/DiagonalSixSpectrum.lean) |
-| Quantum Sudoku | For each block side at least five, classical clues can admit a quantum solution even when no classical solution exists. A puzzle with one classical completion may also have a continuum of quantum completions. | [Existence counterexamples](Quantum/FractionalPuzzleOrders.lean) · [Uniqueness counterexamples](Quantum/Activated/Family.lean) · [Selected array statements](Statements/QuantumArrays.lean) |
-| Bipartite quantum walks | Universal perfect edge transfer characterizes paths among finite connected simple bipartite graphs with at least one edge. An individual forward transfer also has an arithmetic criterion for reverse transfer. | [Path characterization](physics/UniversalBipartiteWalk.lean) · [Reverse transfer](physics/EdgeTransferDecision.lean) |
-| Ordinary Hadamard matrix | An explicit construction gives an integer sign matrix with exactly orthogonal rows at order 246,068. | [Integer Gram identity](Quantum/Hadamard/PaleyT246068.lean) · [Skew signed projection at length 271](Quantum/Hadamard/PaleyT271Skew.lean) · [Length 331](Quantum/Hadamard/PaleyT331.lean) |
-| Quantum contextuality | In dimension seven an arrangement with 46,656 rays and as many specified orthonormal bases admits transitive actions on each set and a quantum–classical gap. | [Operator identities and classical obstruction](Quantum/FractionalLCSOperators.lean) · [Modular criterion for translated equations](Quantum/FractionalLCSAbelian.lean) |
-| Hilbert space projections | A parametrization describes the splittings of two projections. For commuting partial quantum permutation matrices, any completion implies existence of a commuting completion, and uniqueness among commuting completions implies uniqueness among all completions. | [Splittings](Quantum/WeberSplitting.lean) · [Existence](Quantum/WeberCompletion.lean) · [Uniqueness](Quantum/WeberUniqueness.lean) |
-| Signed difference sets | For finite abelian groups and $k-\lambda=ps$ with $p$ prime dividing the group order, $p$ coprime to $s$, the classification covers $1\leq s\leq30$. | [Classification](designs/SignedThroughThirty.lean) |
-| Complementary sequences | The eight numbered conjectures of Kimberling and Moses are resolved individually, including counterexamples to statements in 6 and 20 and the two readings of the index in 8. | [Combined theorem](sequences/KimberlingSolution.lean) |
-
-## Reproduce the checks
-
-Install [elan](https://github.com/leanprover/elan) and Git. Run these commands from a checkout.
-
-```sh
-lake exe cache get
-lake build
-lake env lean Statements/CompositeSquareNormStatement.lean
-lake env lean Statements/TwoPrimePowerSpectrumStatement.lean
-lake env lean Statements/KuperbergStatement.lean
-lake env leanchecker -v Quantum.Hadamard.CompositeSquareNorms
-lake env leanchecker -v Quantum.Hadamard.ConferenceCubicMatrix
-```
-
-Use the following targets to build additional results individually. The dense finite certificate for moduli 17 and 19 has its own Lake project inside the linked archive.
+Download a bundle from the table and clone it locally. For example, after downloading the bundle for Kimberling–Moses Conjecture 14, run
 
 ~~~sh
-lake build Quantum.Spectrum Quantum.DiagonalSixSpectrum
-lake build Quantum.Activated.Family Quantum.FractionalPuzzleOrders
-lake build Walks
-lake build Sequences
-lake build Designs
-python verification/conference/verify_lean.py
-python verification/conference/check_diagonal_averages.py
-python verification/conference/paley-quadratics/check_trace.py
-python verification/conference/paley-quadratics/check_field_models.py --jobs 3
+git clone kimberling-moses-conjecture-14.bundle kimberling-moses-conjecture-14
+cd kimberling-moses-conjecture-14
 ~~~
 
-The standalone statements print their full theorem types and axiom lists. The square-sum endpoints use `propext`, `Classical.choice`, and `Quot.sound`. The source files include earlier constructions and attribute them in the relevant modules. Computational checking establishes the formal statements under the pinned dependencies. Questions of bibliographic priority and journal review are separate.
+The file hash and the Git tree hash of each checkout are recorded in the [checksum manifest](manifest.json). The [current migration index](https://github.com/4ndrxxs/formal-combinatorics/blob/main/README.md) lists the hosted repositories.
 
-AI tools assisted with proofs and exposition. Public theorem names, assumptions, and source files are provided so readers can check them independently.
+| Question | Git bundle |
+| --- | --- |
+| Determinantal complexity of the five-by-five permanent | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/permanent-five-determinantal-complexity.bundle) |
+| Determinant and permanent coefficient signs | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/permanent-determinant-coefficient-signs.bundle) |
+| Hessian rank spectra of permanents | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/permanent-hessian-rank-spectrum.bundle) |
+| Maximum Hessian rank at a smooth permanent zero | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/permanent-maximum-hessian-rank.bundle) |
+| The Bedi–Suagee arrow-matrix Hessian rank | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/bedi-suagee-arrow-hessian.bundle) |
+| Problem 15 on the determinants of three near-Hadamard families | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/near-hadamard-problem-15.bundle) |
+| Determinants of diagonal sign completions of symmetric conference matrices | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/conference-diagonal-determinants.bundle) |
+| Quadratic signings of the Paley conference matrix | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/paley-quadratic-signings.bundle) |
+| Kuperberg’s Conjecture 5.1 on modular Hadamard matrices | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kuperberg-modular-hadamard.bundle) |
+| Eventual orders of modular Hadamard matrices at composite moduli | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-composite-orders.bundle) |
+| Modular Hadamard orders in arithmetic progressions | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-progressions.bundle) |
+| Modular Hadamard matrices at every order divisible by four for moduli 17 and 19 | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/modular-hadamard-17-19.bundle) |
+| Periodic circulant T-systems of orders 271 and 331 | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/periodic-circulant-t-systems.bundle) |
+| An ordinary Hadamard matrix of order 246,068 | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/hadamard-order-246068.bundle) |
+| Ray counts in quantum Latin squares | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-latin-square-spectrum.bundle) |
+| Exceptional orders of diagonal quantum Latin squares | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/diagonal-quantum-latin-squares.bundle) |
+| Existence of pandiagonal quantum Latin squares | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/pandiagonal-quantum-latin-squares.bundle) |
+| Ray counts in small symmetric quantum Latin squares | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/symmetric-quantum-latin-squares.bundle) |
+| Maximal quantum Latin hypercubes | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/maximal-quantum-latin-hypercubes.bundle) |
+| Ray counts in quantum Sudoku | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-cardinality-spectrum.bundle) |
+| Quantum Sudoku completion from classical clues | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-existence-conjecture.bundle) |
+| Quantum Sudoku uniqueness from classical clues | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-uniqueness-conjecture.bundle) |
+| Reconstructing quantum Sudoku from complete blocks | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-block-reconstruction.bundle) |
+| Quantum Sudoku measured in its first block | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/quantum-sudoku-block-measurements.bundle) |
+| The single-basis measurement image of quantum Sudoku | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/fractional-sudoku-measurement-image.bundle) |
+| Transitive contextuality in prime dimension | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/transitive-quantum-contextuality.bundle) |
+| Weber’s two-projection splitting problem | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/weber-projection-splittings.bundle) |
+| Weber’s quantum permutation completion problem | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/weber-quantum-permutation-completion.bundle) |
+| Kimberling–Moses Conjecture 6 on dilated subscripts | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-6.bundle) |
+| Kimberling–Moses Conjecture 8 on upper indices | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-8.bundle) |
+| Kimberling–Moses Conjecture 14 on offset two | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-14.bundle) |
+| Kimberling–Moses Conjecture 15 on offset three | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-15.bundle) |
+| Kimberling–Moses Conjecture 16 on offset five | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-16.bundle) |
+| Kimberling–Moses Conjecture 18 on gaps between good indices | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-18.bundle) |
+| Kimberling–Moses Conjecture 19 on the density of good indices | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-19.bundle) |
+| Kimberling–Moses Conjecture 20 on the offset threshold for uniqueness | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/kimberling-moses-conjecture-20.bundle) |
+| Universal perfect edge transfer in bipartite quantum walks | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/universal-bipartite-edge-transfer.bundle) |
+| Reversibility of perfect edge transfer | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/reverse-bipartite-edge-transfer.bundle) |
+| Edge cuts and perfect transfer at minimum degree three | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/bipartite-edge-transfer-cuts.bundle) |
+| Signed difference sets with norm cofactor at most 30 | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/signed-difference-set-cofactors.bundle) |
+| A product construction for signed difference sets | [Download](https://raw.githubusercontent.com/4ndrxxs/formal-combinatorics/standalone-bundles/projects/signed-difference-set-product.bundle) |

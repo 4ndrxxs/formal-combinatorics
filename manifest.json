@@ -1,0 +1,289 @@
+[
+  {
+    "project": "permanent-five-determinantal-complexity",
+    "file": "projects/permanent-five-determinantal-complexity.bundle",
+    "bytes": 269869,
+    "sha256": "e627fdc125c09f36e9a17ae3eb1bbd485b63a33b81d808b72490aeebfd5e8418",
+    "gitTree": "a223f1ee948ba7cad47c2a1590de418707fd450a"
+  },
+  {
+    "project": "permanent-determinant-coefficient-signs",
+    "file": "projects/permanent-determinant-coefficient-signs.bundle",
+    "bytes": 13948,
+    "sha256": "35775c337a36c071bee52cc8c0ae2018879f4181e90559cc037c20a6a452435a",
+    "gitTree": "7ca1f21265e30cda0a6092aba9f79742337ab34d"
+  },
+  {
+    "project": "permanent-hessian-rank-spectrum",
+    "file": "projects/permanent-hessian-rank-spectrum.bundle",
+    "bytes": 120736,
+    "sha256": "b0b261f3d503409e034f5e5d2f8a3c2017b5fcda64e314c9a7ddee321130190e",
+    "gitTree": "f387f5248edb495cc1d876bcfaa2b6293de88ffa"
+  },
+  {
+    "project": "permanent-maximum-hessian-rank",
+    "file": "projects/permanent-maximum-hessian-rank.bundle",
+    "bytes": 129300,
+    "sha256": "1b08ec3d3575fc5a6d437578900f6aac0ad5acac0ba224b0d363a50b2dff06c1",
+    "gitTree": "e32d100e2fe9c5b95e7484c40b31358c3f4246f2"
+  },
+  {
+    "project": "bedi-suagee-arrow-hessian",
+    "file": "projects/bedi-suagee-arrow-hessian.bundle",
+    "bytes": 59896,
+    "sha256": "20a353d23a08d6243d44fb596872b9bc1fd512c00111822314cda8029f8ac3a7",
+    "gitTree": "91ab3663941dce5da4be9521ba6c6e26d1ec9161"
+  },
+  {
+    "project": "near-hadamard-problem-15",
+    "file": "projects/near-hadamard-problem-15.bundle",
+    "bytes": 455853,
+    "sha256": "bc38d0e249fa61df23a2afbd5fb3544bc69c039316767e17393d7a08b2cfc335",
+    "gitTree": "2581710963457d0c56101458bbe6d8e4fb6a3d18"
+  },
+  {
+    "project": "conference-diagonal-determinants",
+    "file": "projects/conference-diagonal-determinants.bundle",
+    "bytes": 62134,
+    "sha256": "180c49e580d2168db75b007ce0d622c83eb8088510253053fa1c5e154a6dafdf",
+    "gitTree": "f24bc318b87ca37da88c15597ea6a49a8314e1e9"
+  },
+  {
+    "project": "paley-quadratic-signings",
+    "file": "projects/paley-quadratic-signings.bundle",
+    "bytes": 366265,
+    "sha256": "8fbc2f871387ac3aa08939d5d22c9a33adaeeede7b104fa77d373681d4d8fe2e",
+    "gitTree": "e4b086cc818edb0fbf5c83aef36c7b1ee7fed7b0"
+  },
+  {
+    "project": "kuperberg-modular-hadamard",
+    "file": "projects/kuperberg-modular-hadamard.bundle",
+    "bytes": 47993,
+    "sha256": "2468711606a51e923c2abe6116c304c8ff9f56d974c7e2ca00c8593604394103",
+    "gitTree": "49334f16ebb3e00860884a923db34d5215927fdd"
+  },
+  {
+    "project": "modular-hadamard-composite-orders",
+    "file": "projects/modular-hadamard-composite-orders.bundle",
+    "bytes": 152356,
+    "sha256": "87aff4abab75ccff2eaa5222d0d61d2ec2c8cb651b2c65cc94caaecd7cbf42dc",
+    "gitTree": "b99b7eb86fd7ee574abf181d67694c52c0efc4d1"
+  },
+  {
+    "project": "modular-hadamard-progressions",
+    "file": "projects/modular-hadamard-progressions.bundle",
+    "bytes": 147267,
+    "sha256": "dc2fa8850e0df999d62b8244b5bf3a0d15deba3d835ad492ae2db77f7408d6bd",
+    "gitTree": "ab305205a2d10a41691ed91ec0fd098d94c1550f"
+  },
+  {
+    "project": "modular-hadamard-17-19",
+    "file": "projects/modular-hadamard-17-19.bundle",
+    "bytes": 1938860,
+    "sha256": "76e7167fe209e516d0fe6bd43eac6ffa4aef8dfbbbf19865a80afc66d9890ca1",
+    "gitTree": "858829a39e1f4040184476f7a19c244df7cd5bec"
+  },
+  {
+    "project": "periodic-circulant-t-systems",
+    "file": "projects/periodic-circulant-t-systems.bundle",
+    "bytes": 8102,
+    "sha256": "e8a48d40ddb7c379c7da9e670b818262b57f36fdf53ef887694dd9026febacc9",
+    "gitTree": "35fac4ab74bd0af4fc03b177177987ad2082a5c9"
+  },
+  {
+    "project": "hadamard-order-246068",
+    "file": "projects/hadamard-order-246068.bundle",
+    "bytes": 16050,
+    "sha256": "9cab423f4105195d2d15204df89d3f2f4b4405c0e3e3b8b3d3b62f64acca005c",
+    "gitTree": "5b162d41d93e8c492c9dc944dcfc753d7ecc7806"
+  },
+  {
+    "project": "quantum-latin-square-spectrum",
+    "file": "projects/quantum-latin-square-spectrum.bundle",
+    "bytes": 494761,
+    "sha256": "678069713e0272dc61cbf57701d5c6e55c6fe5e172280687076241c002c02cbc",
+    "gitTree": "2aca506da844ac5941c6dfc001f65875620c3081"
+  },
+  {
+    "project": "diagonal-quantum-latin-squares",
+    "file": "projects/diagonal-quantum-latin-squares.bundle",
+    "bytes": 37601,
+    "sha256": "e5b2fa9beab82d587d4848c19682b175bc17575141736f5b694cba9fd4be3e30",
+    "gitTree": "41d115fa6f1654cfcda0a9a0d4eef235519a6c34"
+  },
+  {
+    "project": "pandiagonal-quantum-latin-squares",
+    "file": "projects/pandiagonal-quantum-latin-squares.bundle",
+    "bytes": 18334,
+    "sha256": "216a7997cf2fc5e916939861e4bfaa56e9e987eaf73060ae1c3a98749733fb78",
+    "gitTree": "013111f50033ca954d17f7ed763a0893d2dfa4d9"
+  },
+  {
+    "project": "symmetric-quantum-latin-squares",
+    "file": "projects/symmetric-quantum-latin-squares.bundle",
+    "bytes": 26424,
+    "sha256": "ea237b3b1a2ee1cf8de41105c6560aedb322c7a244604dab81ffb09d70ab6545",
+    "gitTree": "7b8dfc30e37a818f5ca0cba6a2907c4fc42d7ff7"
+  },
+  {
+    "project": "maximal-quantum-latin-hypercubes",
+    "file": "projects/maximal-quantum-latin-hypercubes.bundle",
+    "bytes": 13583,
+    "sha256": "d4d69821f46f3f73ca629c5c92b4796e2ffc01b490d53de9ad3dc30b45eef933",
+    "gitTree": "92946f52afca0d43b351ce8d55bf2a4eeec33c4c"
+  },
+  {
+    "project": "quantum-sudoku-cardinality-spectrum",
+    "file": "projects/quantum-sudoku-cardinality-spectrum.bundle",
+    "bytes": 593517,
+    "sha256": "4e3bccccbce437867b0856d46b1d203528c77c23cf36a64564647e38266a948d",
+    "gitTree": "83cc9486795895e9f2504f7b93363dcb56fd13c7"
+  },
+  {
+    "project": "quantum-sudoku-existence-conjecture",
+    "file": "projects/quantum-sudoku-existence-conjecture.bundle",
+    "bytes": 331973,
+    "sha256": "1bcdfdf0a166d45a5e9cf64fafc36bb4482baf24b6dd1037b6ae6f297e79d7be",
+    "gitTree": "247a3e71c68be9307c9a4c0796248ee71ddfcfe0"
+  },
+  {
+    "project": "quantum-sudoku-uniqueness-conjecture",
+    "file": "projects/quantum-sudoku-uniqueness-conjecture.bundle",
+    "bytes": 625834,
+    "sha256": "ef09ece5c9845dbc8a2302d029f7e485a5571780c187ba32f0442ed306b4efcb",
+    "gitTree": "1257d915dcafc17f85e31d56058b4af8084273ac"
+  },
+  {
+    "project": "quantum-sudoku-block-reconstruction",
+    "file": "projects/quantum-sudoku-block-reconstruction.bundle",
+    "bytes": 13935,
+    "sha256": "062c5ad34b0bfdf2d23a8781b5bf089bf48f761201cf7703a692b5fbe8d7f722",
+    "gitTree": "f16399bcdfc38054003d022f6663e4d7013615b8"
+  },
+  {
+    "project": "quantum-sudoku-block-measurements",
+    "file": "projects/quantum-sudoku-block-measurements.bundle",
+    "bytes": 73494,
+    "sha256": "02ce6d1171f967d0047f5f9cd7a8c5d2facb8e5305ef6e4b3dccae93d82ca093",
+    "gitTree": "f7357c1d435dbf26e77d2942a1d8a1b8c4cf0066"
+  },
+  {
+    "project": "fractional-sudoku-measurement-image",
+    "file": "projects/fractional-sudoku-measurement-image.bundle",
+    "bytes": 78833,
+    "sha256": "172cf49324492cace21a3ba2f18a4b5dc58ee71669081f89e0bc4496c8bcc58d",
+    "gitTree": "09cfaf1a13d380d30bc337093388545f329f4161"
+  },
+  {
+    "project": "transitive-quantum-contextuality",
+    "file": "projects/transitive-quantum-contextuality.bundle",
+    "bytes": 15699,
+    "sha256": "e14e69d089428833ab376bf6a0b0acfbb257a794182b456c21b17ccfa7f671db",
+    "gitTree": "b37de193a6765a40040b447ec9ed7c7b7d8c8c7f"
+  },
+  {
+    "project": "weber-projection-splittings",
+    "file": "projects/weber-projection-splittings.bundle",
+    "bytes": 6533,
+    "sha256": "db701f8097d88980a907a7b6804f9f3e0382aa00c3f0e6c87e25bff8dfe2cae8",
+    "gitTree": "e169c25633eef4efb7a9140176c8b35c7d1159e3"
+  },
+  {
+    "project": "weber-quantum-permutation-completion",
+    "file": "projects/weber-quantum-permutation-completion.bundle",
+    "bytes": 11677,
+    "sha256": "0d98d7b0c2205641c16e44d88ee3260a2ba28d97e754d1371a7c4bc09775f4bb",
+    "gitTree": "339ac1aba7a5e83d191385f31efea29b1537d4de"
+  },
+  {
+    "project": "kimberling-moses-conjecture-6",
+    "file": "projects/kimberling-moses-conjecture-6.bundle",
+    "bytes": 20657,
+    "sha256": "8cd17a62cb1fff2cba115a196194f3364f91cad1bb91f01104fc01d3bff7b84a",
+    "gitTree": "d7953ab1d89763321ea3defd4bc64e1dc1cdb2e0"
+  },
+  {
+    "project": "kimberling-moses-conjecture-8",
+    "file": "projects/kimberling-moses-conjecture-8.bundle",
+    "bytes": 11124,
+    "sha256": "2aa92733efb6dadcd291504465a588ff887cf6c0439b5422df9aaf42237a1295",
+    "gitTree": "020405642b8becd6ed6e7d52cc01e8dbed2769ed"
+  },
+  {
+    "project": "kimberling-moses-conjecture-14",
+    "file": "projects/kimberling-moses-conjecture-14.bundle",
+    "bytes": 7185,
+    "sha256": "1d107c938da4c947c3e778a34b6ba0e42e0ab8b8d719d31af6f8128aa46447d8",
+    "gitTree": "44f02b0fa8c6975a5101a30ab37c3e8a9fb1faaf"
+  },
+  {
+    "project": "kimberling-moses-conjecture-15",
+    "file": "projects/kimberling-moses-conjecture-15.bundle",
+    "bytes": 7186,
+    "sha256": "b8b011f40b64a3ca4154b2655f2ad80359e058389adf7af755e99318678f5f92",
+    "gitTree": "c25bb066758c3eb89c0f58b783496b91d7407449"
+  },
+  {
+    "project": "kimberling-moses-conjecture-16",
+    "file": "projects/kimberling-moses-conjecture-16.bundle",
+    "bytes": 7184,
+    "sha256": "27d7155aec3d9419b7d1a85b2932afc01b9f8c93fc7665fac58fab1262b564be",
+    "gitTree": "74cab1358950141f03d31bbbcc62c68e1e316cc6"
+  },
+  {
+    "project": "kimberling-moses-conjecture-18",
+    "file": "projects/kimberling-moses-conjecture-18.bundle",
+    "bytes": 5638,
+    "sha256": "89f3cd481cf55b0df2caa672bbd60dbe184a37dc04fa4334bbb0d9a06fe65b52",
+    "gitTree": "7d741e32093478f25788df01e899f24ea937cb1f"
+  },
+  {
+    "project": "kimberling-moses-conjecture-19",
+    "file": "projects/kimberling-moses-conjecture-19.bundle",
+    "bytes": 7307,
+    "sha256": "0f38ecd4fc2bca08026cc8fd5421f247e2a882a3f58697d73a10ae0d55e52741",
+    "gitTree": "1eb8b0052e5314c846fada8b23637f63828db9ab"
+  },
+  {
+    "project": "kimberling-moses-conjecture-20",
+    "file": "projects/kimberling-moses-conjecture-20.bundle",
+    "bytes": 7874,
+    "sha256": "bc5f308decf8ee259d3345841792e40f3117158ffe3836045e7c3b631540f714",
+    "gitTree": "1a2cffca58ac8bdd79205f6d7cc7e6683b356dfc"
+  },
+  {
+    "project": "universal-bipartite-edge-transfer",
+    "file": "projects/universal-bipartite-edge-transfer.bundle",
+    "bytes": 12312,
+    "sha256": "370c7663fa324e6dc098d53cc529963a37d2fdefbedef212c5db1d4746cb2a6a",
+    "gitTree": "812122c289b1858e41f012e4a679ec6f1cbc8772"
+  },
+  {
+    "project": "reverse-bipartite-edge-transfer",
+    "file": "projects/reverse-bipartite-edge-transfer.bundle",
+    "bytes": 24869,
+    "sha256": "896e5b2ab0aad22e0c19dc3573a5d7c0f2362350d479c8c508ee76684360acc4",
+    "gitTree": "7f096013d8f41d25cf7f9eb963b20378ce8dc305"
+  },
+  {
+    "project": "bipartite-edge-transfer-cuts",
+    "file": "projects/bipartite-edge-transfer-cuts.bundle",
+    "bytes": 22145,
+    "sha256": "1b0e00f86c7b63a3c44e30783bd15f54d2139f162cc3d55b83e158fe2b1a50e4",
+    "gitTree": "3626c53354d1f3f27cfbceaba8b5ef6edaba7d7f"
+  },
+  {
+    "project": "signed-difference-set-cofactors",
+    "file": "projects/signed-difference-set-cofactors.bundle",
+    "bytes": 519008,
+    "sha256": "a53f3ad3e598caecdcd24b3c5800173a4a93bfba2bd30d600d694167442c75cd",
+    "gitTree": "c3a1119710384c6f0ecc30231dd16bb89f2ef077"
+  },
+  {
+    "project": "signed-difference-set-product",
+    "file": "projects/signed-difference-set-product.bundle",
+    "bytes": 6550,
+    "sha256": "c85085446155b56ea5659fc22be5df1ac370a61c53e12d7922266fae5bac95e5",
+    "gitTree": "f3240bcdc3a784262df5e9a4db2ecc2de917f278"
+  }
+]
